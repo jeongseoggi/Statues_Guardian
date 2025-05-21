@@ -7,6 +7,7 @@ using System.IO;
 using Unity.EditorCoroutines.Editor;
 using SimpleJSON;
 using Unity.VisualScripting;
+using UnityEditor.VersionControl;
 
 public class StageImpoterWindow : EditorWindow
 {
@@ -144,9 +145,44 @@ public class StageImpoterWindow : EditorWindow
             Directory.CreateDirectory(directory);
         }
 
-        itemDataList.itemData.Add(data);
-        EditorUtility.SetDirty(itemDataList);  // 에디터에서 dirty 플래그 설정
-        AssetDatabase.SaveAssets();             // 변경사항 저장
+        string path = $"{directory}/Item/{data.spriteName}.asset";
+
+        //파일이 있다면 해당 경로로 가서 리스트에 넣어주기
+        if (File.Exists(path))
+        {
+            Debug.LogWarning($"[StageImporter] 파일 중복으로 생성 건너뜀: {path}");
+            var existing = AssetDatabase.LoadAssetAtPath<ItemData>(path);
+            if (existing != null)
+            {
+                itemDataList.itemData.Add(existing);
+                EditorUtility.SetDirty(itemDataList);  // 에디터에서 dirty 플래그 설정
+                AssetDatabase.SaveAssets();             // 변경사항 저장
+            }
+            return;
+        }
+
+        //파일이 없다면 만든 후 저장하고 리스트에 저장하기(생성 후 저장이 중요함)
+        var asset = SetItemData(data);
+
+        // 타입에 따라 생성되는 스크립터블 오브젝트 변경
+        asset.itemName = data.itemName;
+        asset.itemDesc = data.itemDesc;
+        asset.itemType = data.itemType;
+        asset.itemUseStrategy = data.itemUseStrategy;
+        asset.price = data.price;
+        asset.spriteName = data.spriteName;
+
+        AssetDatabase.CreateAsset(asset, path);
+        AssetDatabase.SaveAssets(); // 저장 꼭 해주기
+
+
+        var loadedAsset = AssetDatabase.LoadAssetAtPath<ItemData>(path);
+        if (loadedAsset != null)
+        {
+            itemDataList.itemData.Add(loadedAsset);
+            EditorUtility.SetDirty(itemDataList);  // 에디터에서 dirty 플래그 설정
+            AssetDatabase.SaveAssets();             // 변경사항 저장
+        }
     }
 
     /// <summary>
@@ -197,19 +233,6 @@ public class StageImpoterWindow : EditorWindow
                 case ItemType.Buff:
                     break;
             }
-            //ItemData data = new ItemData();
-            //data.itemName = json[i]["ItemName"];
-            //data.itemDesc = json[i]["Description"];
-            //data.price = json[i]["Price"].AsInt;
-            //data.spriteName = json[i]["SpriteName"];
-            //data.itemType = (ItemType)json[i]["ItemType"].AsInt;
-
-            //if(data.itemType == ItemType.Heal)
-            //{
-            //    //힐량 설정
-            //    data.healRatio = json[i]["HealRatio"].AsFloat;
-            //}
-            //itemDataList.Add(data);
         }
         return itemDataList;
     }
@@ -313,6 +336,34 @@ public class StageImpoterWindow : EditorWindow
         else
         {
             itemDataList.Add(itemData);
+        }
+    }
+
+    public static ItemData SetItemData(ItemData data)
+    {
+        switch (data.itemType)
+        {
+            case ItemType.Heal:
+                HealItemData healTypeAsset = ScriptableObject.CreateInstance<HealItemData>();
+                if(data is HealItemData healItemData)
+                {
+                    healTypeAsset.healType = healItemData.healType;
+                    healTypeAsset.healRatio = healItemData.healRatio;
+                }
+                return healTypeAsset;
+            case ItemType.Upgrade:
+                UpgradeItemData upgradeTypeAsset = ScriptableObject.CreateInstance<UpgradeItemData>();
+                if (data is UpgradeItemData upgradeItemData)
+                {
+                    upgradeTypeAsset.upgradeType = upgradeItemData.upgradeType;
+                }
+                return upgradeTypeAsset;
+            case ItemType.Gamble:
+                GambleItemData gambleTypeAsset = ScriptableObject.CreateInstance<GambleItemData>();
+                return gambleTypeAsset;
+            default:
+                Debug.LogError($"[CreateItemDataSO] 알 수 없는 ItemType: {data.itemType}");
+                return null;
         }
     }
 }

@@ -22,8 +22,7 @@ public class DataManager : SingleTon<DataManager>
     /// <returns></returns>
     public ItemData GetItemData(string itemName)
     {
-        ItemData data = ItemDataBase.itemData.Find((x) => x.itemName.Equals(itemName));
-        return data;
+        return ItemDataBase.itemData.Find((x) => x.itemName.Equals(itemName));
     }
 
     /// <summary>
@@ -32,7 +31,7 @@ public class DataManager : SingleTon<DataManager>
     public void ItemInit()
     {
         //타입에 맞는 아이템 전략을 넣어줌
-        foreach (ItemData itemData in ItemDataBase.itemData)
+        foreach (var itemData in ItemDataBase.itemData)
         {
             switch(itemData.itemType)
             {
@@ -46,6 +45,18 @@ public class DataManager : SingleTon<DataManager>
 
         }
 
+    }
+
+
+    /// <summary>
+    /// 코루틴 사용이 불가능한 클래스에서 사용 가능하도록 만든 함수
+    /// </summary>
+    /// <param name="apiName"></param>
+    /// <param name="form"></param>
+    /// <param name="successAction"></param>
+    public void GameConnectHelper(string apiName, WWWForm form, UnityAction<string> successAction)
+    {
+        StartCoroutine(GameConnect(apiName, form, successAction));
     }
     
     /// <summary>
@@ -73,5 +84,10 @@ public class DataManager : SingleTon<DataManager>
                 Debug.LogError($"[GameConnect] 서버 통신 실패: {request.error}");
             }
         }
+    }
+
+    public IEnumerator ItemUse(string apiName, WWWForm form, UnityAction<string> successAction)
+    {
+        yield return StartCoroutine(GameConnect(apiName, form, successAction));
     }
 }

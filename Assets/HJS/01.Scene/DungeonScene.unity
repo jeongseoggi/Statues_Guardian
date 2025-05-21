@@ -789,12 +789,7 @@ MonoBehaviour:
   inventoryIndex: 5
   itemImage: {fileID: 921743287}
   itemCountText: {fileID: 1307366023}
-  itemData:
-    itemName: 
-    itemDesc: 
-    price: 0
-    spriteName: 
-    itemType: 0
+  itemData: {fileID: 0}
 --- !u!114 &104953102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1061,12 +1056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ef812d0f34bae84c9bed5b939c1ef8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectItemData:
-    itemName: 
-    itemDesc: 
-    price: 0
-    spriteName: 
-    itemType: 0
+  selectItemData: {fileID: 0}
   itemImage: {fileID: 826336328}
   itemName: {fileID: 781739866}
   itemCountText: {fileID: 74065648}
@@ -1277,12 +1267,7 @@ MonoBehaviour:
   inventoryIndex: 7
   itemImage: {fileID: 186412500}
   itemCountText: {fileID: 521925173}
-  itemData:
-    itemName: 
-    itemDesc: 
-    price: 0
-    spriteName: 
-    itemType: 0
+  itemData: {fileID: 0}
 --- !u!114 &145429733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1543,12 +1528,7 @@ MonoBehaviour:
   inventoryIndex: 6
   itemImage: {fileID: 553350032}
   itemCountText: {fileID: 1214379439}
-  itemData:
-    itemName: 
-    itemDesc: 
-    price: 0
-    spriteName: 
-    itemType: 0
+  itemData: {fileID: 0}
 --- !u!114 &174559997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3739,12 +3719,7 @@ MonoBehaviour:
   inventoryIndex: 4
   itemImage: {fileID: 506226879}
   itemCountText: {fileID: 764606399}
-  itemData:
-    itemName: 
-    itemDesc: 
-    price: 0
-    spriteName: 
-    itemType: 0
+  itemData: {fileID: 0}
 --- !u!114 &487358054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3927,12 +3902,7 @@ MonoBehaviour:
   inventoryIndex: 9
   itemImage: {fileID: 151473536}
   itemCountText: {fileID: 1783729587}
-  itemData:
-    itemName: 
-    itemDesc: 
-    price: 0
-    spriteName: 
-    itemType: 0
+  itemData: {fileID: 0}
 --- !u!114 &506332085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4213,12 +4183,7 @@ MonoBehaviour:
   inventoryIndex: 0
   itemImage: {fileID: 365116455}
   itemCountText: {fileID: 633159418}
-  itemData:
-    itemName: 
-    itemDesc: 
-    price: 0
-    spriteName: 
-    itemType: 0
+  itemData: {fileID: 0}
 --- !u!114 &522339505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19551,12 +19516,7 @@ MonoBehaviour:
   inventoryIndex: 8
   itemImage: {fileID: 1261172511}
   itemCountText: {fileID: 2029267394}
-  itemData:
-    itemName: 
-    itemDesc: 
-    price: 0
-    spriteName: 
-    itemType: 0
+  itemData: {fileID: 0}
 --- !u!114 &1182296345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21277,12 +21237,7 @@ MonoBehaviour:
   inventoryIndex: 2
   itemImage: {fileID: 731093766}
   itemCountText: {fileID: 481052792}
-  itemData:
-    itemName: 
-    itemDesc: 
-    price: 0
-    spriteName: 
-    itemType: 0
+  itemData: {fileID: 0}
 --- !u!114 &1499942590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24338,12 +24293,7 @@ MonoBehaviour:
   inventoryIndex: 1
   itemImage: {fileID: 277522011}
   itemCountText: {fileID: 670450202}
-  itemData:
-    itemName: 
-    itemDesc: 
-    price: 0
-    spriteName: 
-    itemType: 0
+  itemData: {fileID: 0}
 --- !u!114 &1834745405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24824,12 +24774,7 @@ MonoBehaviour:
   inventoryIndex: 3
   itemImage: {fileID: 1519231169}
   itemCountText: {fileID: 655969635}
-  itemData:
-    itemName: 
-    itemDesc: 
-    price: 0
-    spriteName: 
-    itemType: 0
+  itemData: {fileID: 0}
 --- !u!114 &1899192696
 MonoBehaviour:
   m_ObjectHideFlags: 0

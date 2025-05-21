@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[System.Serializable]
-public class ItemData
+
+public abstract class ItemData : ScriptableObject
 {
     public string itemName;
     public string itemDesc;
@@ -10,14 +10,12 @@ public class ItemData
     public IItemUseStrategy itemUseStrategy;
     public ItemType itemType;
 
-    public virtual void Use(IUseable user)
-    {
-
-    }
+    public abstract void Use(IUseable user);
 
 }
 
 [System.Serializable]
+[CreateAssetMenu(menuName = "Item/UpgradeItem")]
 public class UpgradeItemData : ItemData
 {
     public UpgradeType upgradeType;
@@ -29,6 +27,7 @@ public class UpgradeItemData : ItemData
 }
 
 [System.Serializable]
+[CreateAssetMenu(menuName = "Item/HealItem")]
 public class HealItemData : ItemData
 {
     public HealType healType;
@@ -41,6 +40,7 @@ public class HealItemData : ItemData
 }
 
 [System.Serializable]
+[CreateAssetMenu(menuName = "Item/GambleItem")]
 public class GambleItemData : ItemData
 {
     public override void Use(IUseable user)

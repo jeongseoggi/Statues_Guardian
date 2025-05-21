@@ -1,9 +1,10 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
+public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerClickHandler
 {
 
     #region private
@@ -100,5 +101,13 @@ public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBegi
         ItemSetting(ItemData);
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if(eventData.button == PointerEventData.InputButton.Right)
+        {
+
+            UIManager.Instance.dropDownAnimator.ActiveDropDownObject(eventData.position, eventData.pressEventCamera);
+        }
+    }
 }
 

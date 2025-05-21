@@ -64,7 +64,7 @@ public class GameManager : SingleTon<GameManager>
             if (json["id"] != null)
             {
                 PlayerData = new PlayerData(json["id"].AsInt, json["level"].AsInt, json["name"], json["stage"].AsInt, json["gold"].AsInt);
-                OnPlayerDataReady.Invoke(PlayerData.GetMyGold());
+                OnPlayerDataReady?.Invoke(PlayerData.GetMyGold());
                 StartCoroutine(LoadMyInventoryData());
             }
         }));
@@ -118,7 +118,7 @@ public class GameManager : SingleTon<GameManager>
                 PlayerStatData.Atk = json["stats"]["atk"].AsFloat;
                 PlayerStatData.Def = json["stats"]["def"].AsFloat;
                 PlayerStatData.Speed = json["stats"]["speed"].AsFloat;
-                OnPlayerStatDataReady.Invoke();
+                OnPlayerStatDataReady?.Invoke();
             }
             else
             {

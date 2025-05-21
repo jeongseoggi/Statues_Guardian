@@ -15,8 +15,41 @@ public class Player : Character, IUseable
         {
             base.Atk = value;
             weapon.damage = Atk;
+            GameManager.Instance.PlayerStatData.Atk = value;
         }
     }
+
+    public override float Def
+    {
+        get => base.Def;
+        set
+        {
+            base.Def = value;
+            GameManager.Instance.PlayerStatData.Def = value;
+        }
+    }
+
+    public override float Hp
+    {
+        get => base.Hp;
+        set
+        {
+            base.Hp = value;
+            GameManager.Instance.PlayerStatData.Hp = value;
+        }
+    }
+
+    public override float Mp
+    {
+        get => base.Mp;
+        set
+        {
+            base.Mp = value;
+            GameManager.Instance.PlayerStatData.Mp = value;
+        }
+    }
+
+
     #endregion
 
     private void Awake()
@@ -100,12 +133,10 @@ public class Player : Character, IUseable
         if(upgradeType == UpgradeType.Atk)
         {
             Atk += 1;
-            Debug.Log("공격력 업그레이드" + Atk);
         }
         else if(upgradeType == UpgradeType.Def)
         {
             Def += 1;
-            Debug.Log("방어력 업그레이드" + Def);
         }
     }
 

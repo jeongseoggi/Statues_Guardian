@@ -8,6 +8,7 @@ public class UIManager : SingleTon<UIManager>
 {
     public QuickSlotManager quickSlotManager;
     public Inventory inventory;
+    public DropDownAnimator dropDownAnimator;
 
     private void OnEnable()
     {
