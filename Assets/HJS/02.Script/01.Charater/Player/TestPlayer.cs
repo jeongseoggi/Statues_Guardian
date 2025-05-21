@@ -32,6 +32,11 @@ public class TestPlayer : MonoBehaviour, IUseable
         }
     }
 
+    public void Upgrade(UpgradeType upgradeType)
+    {
+
+    }
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Alpha1))

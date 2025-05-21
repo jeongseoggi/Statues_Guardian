@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
-using Newtonsoft.Json;
 using System.IO;
 using Unity.EditorCoroutines.Editor;
 using SimpleJSON;
-using UnityEngine.Rendering;
-using System.Data;
-using UnityEditor.VersionControl;
+using Unity.VisualScripting;
 
 public class StageImpoterWindow : EditorWindow
 {
@@ -186,19 +183,33 @@ public class StageImpoterWindow : EditorWindow
 
         for (int i = 0; i < json.Count; i++)
         {
-            ItemData data = new ItemData();
-            data.itemName = json[i]["ItemName"];
-            data.itemDesc = json[i]["Description"];
-            data.price = json[i]["Price"].AsInt;
-            data.spriteName = json[i]["SpriteName"];
-            data.itemType = (ItemType)json[i]["ItemType"].AsInt;
-
-            if(data.itemType == ItemType.Heal)
+            switch((ItemType)json[i]["ItemType"].AsInt)
             {
-                //힐량 설정
-                data.healRatio = json[i]["HealRatio"].AsFloat;
+                case ItemType.Heal:
+                    AddItemDataList(new HealItemData(), itemDataList, json, i);
+                    break;
+                case ItemType.Upgrade:
+                    AddItemDataList(new UpgradeItemData(), itemDataList, json, i);
+                    break;
+                case ItemType.Gamble:
+                    AddItemDataList(new GambleItemData(), itemDataList, json, i);
+                    break;
+                case ItemType.Buff:
+                    break;
             }
-            itemDataList.Add(data);
+            //ItemData data = new ItemData();
+            //data.itemName = json[i]["ItemName"];
+            //data.itemDesc = json[i]["Description"];
+            //data.price = json[i]["Price"].AsInt;
+            //data.spriteName = json[i]["SpriteName"];
+            //data.itemType = (ItemType)json[i]["ItemType"].AsInt;
+
+            //if(data.itemType == ItemType.Heal)
+            //{
+            //    //힐량 설정
+            //    data.healRatio = json[i]["HealRatio"].AsFloat;
+            //}
+            //itemDataList.Add(data);
         }
         return itemDataList;
     }
@@ -264,5 +275,44 @@ public class StageImpoterWindow : EditorWindow
             itemDataList = AssetDatabase.LoadAssetAtPath<ItemScriptableObject>(path);
         }
         itemDataList.Initalize();
+    }
+
+    public void AddItemDataList(ItemData itemData, List<ItemData> itemDataList, JSONNode jsonData, int index)
+    {
+        itemData.itemName = jsonData[index]["ItemName"];
+        itemData.itemDesc = jsonData[index]["Description"];
+        itemData.price = jsonData[index]["Price"].AsInt;
+        itemData.spriteName = jsonData[index]["SpriteName"];
+        itemData.itemType = (ItemType)jsonData[index]["ItemType"].AsInt;
+
+        if (itemData is HealItemData healItemData)
+        {
+            healItemData.healRatio = jsonData[index]["HealRatio"].AsFloat;
+            if(itemData.itemName.Contains("HP"))
+            {
+                healItemData.healType = HealType.HP;
+            }
+            else
+            {
+                healItemData.healType = HealType.MP;
+            }
+            itemDataList.Add(healItemData);
+        }
+        else if(itemData is UpgradeItemData upgradeItemData)
+        {
+            if (itemData.itemName.Contains("공격력"))
+            {
+                upgradeItemData.upgradeType = UpgradeType.Atk;
+            }
+            else
+            {
+                upgradeItemData.upgradeType = UpgradeType.Def;
+            }
+            itemDataList.Add(upgradeItemData);
+        }
+        else
+        {
+            itemDataList.Add(itemData);
+        }
     }
 }

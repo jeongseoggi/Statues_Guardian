@@ -32,19 +32,27 @@ public class Player : Character, IUseable
 
     public override void Init()
     {
-        MaxHp = 100;
-        MaxMp = 100;
-        Hp = MaxHp;
-        Mp = MaxMp;
-        Atk = 50;
-        Def = 5;
-        weapon.SetOwner(this);
+        //MaxHp = 100;
+        //MaxMp = 100;
+        //Hp = MaxHp;
+        //Mp = MaxMp;
+        //Atk = 50;
+        //Def = 5;
+
+        MaxHp = GameManager.Instance.PlayerStatData.MaxHp;
+        MaxMp = GameManager.Instance.PlayerStatData.MaxMp;
+        Hp = GameManager.Instance.PlayerStatData.Hp;
+        Mp = GameManager.Instance.PlayerStatData.Mp;
+        Atk = GameManager.Instance.PlayerStatData.Atk;
+        Def = GameManager.Instance.PlayerStatData.Def;
+        Speed = GameManager.Instance.PlayerStatData.Speed;
+        weapon.SetOwner(this); 
     }
 
     protected override void Start()
     {
         base.Start();
-        Init();
+        GameManager.OnPlayerStatDataReady += Init;
     }
 
     public override void AttackOn()
@@ -87,6 +95,20 @@ public class Player : Character, IUseable
 
     }
 
+    public void Upgrade(UpgradeType upgradeType)
+    {
+        if(upgradeType == UpgradeType.Atk)
+        {
+            Atk += 1;
+            Debug.Log("공격력 업그레이드" + Atk);
+        }
+        else if(upgradeType == UpgradeType.Def)
+        {
+            Def += 1;
+            Debug.Log("방어력 업그레이드" + Def);
+        }
+    }
+
     public float GetMaxHp()
     {
         return MaxHp;
@@ -95,5 +117,10 @@ public class Player : Character, IUseable
     public float GetMaxMp()
     {
         return Mp;
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnPlayerStatDataReady -= Init;
     }
 }

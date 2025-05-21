@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e97cff40f802bf439ab0c41b8126016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursorTexture: {fileID: 2800000, guid: 2d18e23e3ce249b4489b8bcdd02d3f48, type: 3}
+  cursorTexture: {fileID: 2800000, guid: 2e71a8202d3b4a3448ec85ced5a40265, type: 3}
   hotSpot: {x: 0, y: 0}
   cursorMode: 0
 --- !u!4 &18130133
@@ -795,7 +795,6 @@ MonoBehaviour:
     price: 0
     spriteName: 
     itemType: 0
-    healRatio: 0
 --- !u!114 &104953102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1068,7 +1067,6 @@ MonoBehaviour:
     price: 0
     spriteName: 
     itemType: 0
-    healRatio: 0
   itemImage: {fileID: 826336328}
   itemName: {fileID: 781739866}
   itemCountText: {fileID: 74065648}
@@ -1285,7 +1283,6 @@ MonoBehaviour:
     price: 0
     spriteName: 
     itemType: 0
-    healRatio: 0
 --- !u!114 &145429733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1552,7 +1549,6 @@ MonoBehaviour:
     price: 0
     spriteName: 
     itemType: 0
-    healRatio: 0
 --- !u!114 &174559997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3749,7 +3745,6 @@ MonoBehaviour:
     price: 0
     spriteName: 
     itemType: 0
-    healRatio: 0
 --- !u!114 &487358054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3938,7 +3933,6 @@ MonoBehaviour:
     price: 0
     spriteName: 
     itemType: 0
-    healRatio: 0
 --- !u!114 &506332085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4225,7 +4219,6 @@ MonoBehaviour:
     price: 0
     spriteName: 
     itemType: 0
-    healRatio: 0
 --- !u!114 &522339505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18381,7 +18374,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1011907740}
-  speed: 5
   player: {fileID: 1011907744}
   rb: {fileID: 1011907741}
   cam: {fileID: 1582391520}
@@ -19565,7 +19557,6 @@ MonoBehaviour:
     price: 0
     spriteName: 
     itemType: 0
-    healRatio: 0
 --- !u!114 &1182296345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21292,7 +21283,6 @@ MonoBehaviour:
     price: 0
     spriteName: 
     itemType: 0
-    healRatio: 0
 --- !u!114 &1499942590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24354,7 +24344,6 @@ MonoBehaviour:
     price: 0
     spriteName: 
     itemType: 0
-    healRatio: 0
 --- !u!114 &1834745405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24841,7 +24830,6 @@ MonoBehaviour:
     price: 0
     spriteName: 
     itemType: 0
-    healRatio: 0
 --- !u!114 &1899192696
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
 {
     #region 변수
     [SerializeField] Animator animator; // 애니메이터
-    [SerializeField] float speed; // 기본 이동 속도 
     [SerializeField] Player player; 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] Camera cam;
@@ -33,7 +32,6 @@ public class PlayerController : MonoBehaviour
 
     #region 프로퍼티
     public Animator Animator => animator;
-    public float Speed { get => speed; set => speed = value; }
     #endregion
 
     void Start()
@@ -69,6 +67,12 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if(Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            UIManager.Instance.quickSlotManager.quickSlots[3].ItemData?.Use(player);
+        }
+
+
         if (moveVelocity.x != 0 || moveVelocity.y != 0)
         {
             player.StateMachine.SetState(STATE.MOVE);
@@ -82,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-         rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime * speed);
+         rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime * player.Speed);
     }
 
     void OnMove(InputValue inputValue)

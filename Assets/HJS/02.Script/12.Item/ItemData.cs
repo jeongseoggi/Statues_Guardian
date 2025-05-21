@@ -10,10 +10,40 @@ public class ItemData
     public IItemUseStrategy itemUseStrategy;
     public ItemType itemType;
 
-    [Header("HealItemOnly")]
+    public virtual void Use(IUseable user)
+    {
+
+    }
+
+}
+
+[System.Serializable]
+public class UpgradeItemData : ItemData
+{
+    public UpgradeType upgradeType;
+
+    public override void Use(IUseable user)
+    {
+        itemUseStrategy?.Use(user, this);
+    }
+}
+
+[System.Serializable]
+public class HealItemData : ItemData
+{
+    public HealType healType;
     public float healRatio;
 
-    public void Use(IUseable user)
+    public override void Use(IUseable user)
+    {
+        itemUseStrategy?.Use(user, this);
+    }
+}
+
+[System.Serializable]
+public class GambleItemData : ItemData
+{
+    public override void Use(IUseable user)
     {
         itemUseStrategy?.Use(user, this);
     }

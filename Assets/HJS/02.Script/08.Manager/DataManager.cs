@@ -39,6 +39,9 @@ public class DataManager : SingleTon<DataManager>
                 case ItemType.Heal:
                     itemData.itemUseStrategy = new HealItemStrategy();
                     break;
+                case ItemType.Upgrade:
+                    itemData.itemUseStrategy = new UpgradeItemStrategy();
+                    break;
             }
 
         }
@@ -62,6 +65,7 @@ public class DataManager : SingleTon<DataManager>
 
             if (request.result == UnityWebRequest.Result.Success)
             {
+                Debug.Log($"Server Data => {request.downloadHandler.text}");
                 successAction?.Invoke(request.downloadHandler.text);
             }
             else

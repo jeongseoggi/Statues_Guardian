@@ -22,26 +22,24 @@ public class GameManager : SingleTon<GameManager>
     public WaveManager WaveManager { get => waveManager; }
     public PlayerData PlayerData { get; private set; }
     public PlayerInventoryData PlayerInventoryData { get; private set; }
+    public PlayerStatData PlayerStatData { get; private set; }
     #endregion
 
 
     public static event Action<PlayerInventoryData> OnInventoryDataReady;
     public static event Action<int> OnPlayerDataReady;
+    public static event Action OnPlayerStatDataReady;
 
     protected override void Awake()
     {
         base.Awake();
-        PlayerData = new PlayerData(1,1, "테스트", 1, 10000000);
-
-        StartCoroutine(SavePlayerData());
-        OnPlayerDataReady.Invoke(PlayerData.GetMyGold());
-        StartCoroutine(LoadMyInventoryData());
+        StartCoroutine(LoadPlayerData());
     }
 
     IEnumerator SavePlayerData()
     {
         WWWForm form = new WWWForm();
-        form.AddField("id",PlayerData.ID);
+        form.AddField("id", PlayerData.ID);
         form.AddField("level", PlayerData.Level);
         form.AddField("name", PlayerData.NickName);
         form.AddField("stage", PlayerData.Stage);
@@ -55,6 +53,25 @@ public class GameManager : SingleTon<GameManager>
         }));
     }
 
+    IEnumerator LoadPlayerData()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("id", 1); //임시 값
+
+        yield return StartCoroutine(DataManager.GameConnect("player/load", form, data =>
+        {
+            JSONNode json = JSONNode.Parse(data);
+            if (json["id"] != null)
+            {
+                PlayerData = new PlayerData(json["id"].AsInt, json["level"].AsInt, json["name"], json["stage"].AsInt, json["gold"].AsInt);
+                OnPlayerDataReady.Invoke(PlayerData.GetMyGold());
+                StartCoroutine(LoadMyInventoryData());
+            }
+        }));
+    }
+
+
+
     IEnumerator LoadMyInventoryData()
     {
         WWWForm form = new WWWForm();
@@ -63,7 +80,6 @@ public class GameManager : SingleTon<GameManager>
         yield return StartCoroutine(DataManager.GameConnect("inventory/load", form, data =>
         {
             JSONNode json = JSONNode.Parse(data);
-            Debug.Log(json);
             PlayerInventoryData = new PlayerInventoryData();
 
             if (json["items"].Count == 0)
@@ -79,6 +95,35 @@ public class GameManager : SingleTon<GameManager>
             }
 
             OnInventoryDataReady?.Invoke(PlayerInventoryData);
+            StartCoroutine(LoadPlayerStatData());
+        }));
+    }
+
+
+    IEnumerator LoadPlayerStatData()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("id", PlayerData.ID);
+
+        yield return StartCoroutine(DataManager.GameConnect("playerStat/load", form, data =>
+        {
+            JSONNode json = JSONNode.Parse(data);
+            if (json["success"].AsBool)
+            {
+                PlayerStatData = new PlayerStatData();
+                PlayerStatData.Hp = json["stats"]["hp"].AsFloat;
+                PlayerStatData.Mp = json["stats"]["hp"].AsFloat;
+                PlayerStatData.MaxHp = json["stats"]["MaxpHp"].AsFloat;
+                PlayerStatData.MaxMp = json["stats"]["MaxMp"].AsFloat;
+                PlayerStatData.Atk = json["stats"]["atk"].AsFloat;
+                PlayerStatData.Def = json["stats"]["def"].AsFloat;
+                PlayerStatData.Speed = json["stats"]["speed"].AsFloat;
+                OnPlayerStatDataReady.Invoke();
+            }
+            else
+            {
+                Debug.Log(json["message"]);
+            }
         }));
     }
 }

@@ -1,5 +1,8 @@
+using Newtonsoft.Json;
 using NUnit.Framework.Interfaces;
+using SimpleJSON;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,6 +41,11 @@ public class ItemDetail : SingleTonDestory<ItemDetail>
     /// </summary>
     public void OnClickUpCountArrow()
     {
+        if(selectItemData == null || string.IsNullOrEmpty(selectItemData.itemName))
+        {
+            return;
+        }
+
         ItemCount = int.Parse(itemCountText.text);
         ItemCount++;
         itemCountText.text = ItemCount.ToString();
@@ -48,6 +56,11 @@ public class ItemDetail : SingleTonDestory<ItemDetail>
     /// </summary>
     public void OnClickDownCountArrow()
     {
+        if (selectItemData == null || string.IsNullOrEmpty(selectItemData.itemName))
+        {
+            return;
+        }
+
         ItemCount = int.Parse(itemCountText.text);
         if (ItemCount <= 0)
             return;
@@ -103,10 +116,15 @@ public class ItemDetail : SingleTonDestory<ItemDetail>
     }
     public void BuyItemSetPopup()
     {
+        if (selectItemData == null || string.IsNullOrEmpty(selectItemData.itemName) || ItemCount == 0)
+        {
+            return;
+        }
+
         PopupManager.Instance.Init(string.Format("{0} 을 {1} 개 구매하시겠습니까?\n 가격은 {2}원 입니다.",
             itemName.text, itemCount, totalBuyPrice.text), ()=>
             {
-                BuyItem();
+                StartCoroutine(BuyItem());
             }, 
             true,
             () =>
@@ -115,21 +133,49 @@ public class ItemDetail : SingleTonDestory<ItemDetail>
             });
     }
 
-    public void BuyItem()
-    {
-        Debug.Log("호출");
-        if(GameManager.Instance.PlayerData.GetMyGold() < int.Parse(totalBuyPrice.text))
+    public IEnumerator BuyItem()
+    { 
+        WWWForm form = new WWWForm();
+        form.AddField("id", GameManager.Instance.PlayerData.ID);
+        form.AddField("amount", int.Parse(totalBuyPrice.text));
+
+        yield return StartCoroutine(DataManager.GameConnect("player/buyItem", form, data =>
         {
-            PopupManager.Instance.Init("보유한 골드가 부족합니다!", ()=> PopupManager.Instance.PopupActive(false));
-        }
-        else
-        {
-            GameManager.Instance.PlayerInventoryData.AddItem(selectItemData, ItemCount);
-            GameManager.Instance.PlayerData.Gold -= int.Parse(totalBuyPrice.text);
-            PopupManager.Instance.Init("구매가 완료되었습니다.", ()=>
+
+            JSONNode json = JSONNode.Parse(data);
+            Debug.Log(json);
+
+            if (json["success"].AsBool)
             {
-                PopupManager.Instance.PopupActive(false);
-            });
-        }
+                GameManager.Instance.PlayerInventoryData.AddItem(selectItemData, ItemCount);
+                GameManager.Instance.PlayerData.Gold = json["gold"];
+                PopupManager.Instance.Init("구매가 완료되었습니다.", () =>
+                {
+                    PopupManager.Instance.PopupActive(false);
+                });
+            }
+            else
+            {
+                PopupManager.Instance.Init(json["message"], () => PopupManager.Instance.PopupActive(false));
+            }
+        }));
+
+
+
+
+
+        //if(GameManager.Instance.PlayerData.GetMyGold() < int.Parse(totalBuyPrice.text))
+        //{
+        //    PopupManager.Instance.Init("보유한 골드가 부족합니다!", ()=> PopupManager.Instance.PopupActive(false));
+        //}
+        //else
+        //{
+        //    GameManager.Instance.PlayerInventoryData.AddItem(selectItemData, ItemCount);
+        //    GameManager.Instance.PlayerData.Gold -= int.Parse(totalBuyPrice.text);
+        //    PopupManager.Instance.Init("구매가 완료되었습니다.", ()=>
+        //    {
+        //        PopupManager.Instance.PopupActive(false);
+        //    });
+        //}
     }
 }

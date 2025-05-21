@@ -7,7 +7,7 @@ public class StageDataList : ScriptableObject
 {
     int stageIndex;  
     public List<StageData> gameStageDataList;
-    public int StageIndex { get => GameManager.Instance.PlayerData.GetCurStage(); }
+    public int StageIndex { get => GameManager.Instance.PlayerData.GetCurStage() - 1; }
 
     public void Initalize()
     {

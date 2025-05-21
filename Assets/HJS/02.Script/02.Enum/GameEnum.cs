@@ -61,5 +61,14 @@ public enum HealType
     MP
 }
 
+/// <summary>
+/// 업그레이드 타입
+/// </summary>
+public enum UpgradeType
+{
+    Atk,
+    Def
+}
+
 
 

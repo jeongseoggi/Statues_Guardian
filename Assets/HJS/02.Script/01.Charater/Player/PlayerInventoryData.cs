@@ -26,6 +26,7 @@ public class PlayerInventoryData
         {
             itemDict.Add(itemData.itemName, new InventoryData(itemData, addCount));
         }
+        itemCountChanged?.Invoke(itemData.itemName);
     }
 
     /// <summary>

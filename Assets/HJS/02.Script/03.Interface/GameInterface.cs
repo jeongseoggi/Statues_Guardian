@@ -40,6 +40,7 @@ public interface IObjectPool<T>
 
 public interface IUseable
 {
+    void Upgrade(UpgradeType upgradeType);
     void Heal(float amount, HealType healType);
     float GetMaxHp();
     float GetMaxMp();

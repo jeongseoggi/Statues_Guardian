@@ -58,6 +58,7 @@ public abstract class Character : MonoBehaviour
             }
         }
     }
+    [SerializeField]
     public virtual float Atk { get => atk; set => atk = value; }     //ATK 프로퍼티
     public virtual float Def { get => def; set => def = value; }    //DEF 프로퍼티
     public virtual float MaxHp { get => maxHp; set => maxHp = value; }    //MaxHp 프로퍼티
