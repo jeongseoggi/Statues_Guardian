@@ -145,7 +145,7 @@ public class StageImpoterWindow : EditorWindow
             Directory.CreateDirectory(directory);
         }
 
-        string path = $"{directory}/Item/{data.spriteName}.asset";
+        string path = $"{directory}Item/{data.spriteName}.asset";
 
         //파일이 있다면 해당 경로로 가서 리스트에 넣어주기
         if (File.Exists(path))

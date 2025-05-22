@@ -10,26 +10,27 @@ public class AmountInputPopup : MonoBehaviour
     public void OnClickApply()
     {
         int count = 0;
+        NoticePopup noticePopup = PopupManager.Instance.noticePopup;
         if (Int32.TryParse(amountInputField.text, out count))
         {
             if (count < 0)
             {
-                PopupManager.Instance.Init("0 이상의 값을 입력해주세요!",
-              () =>
-              {
-                  PopupManager.Instance.PopupActive(false);
-              }, true);
+                noticePopup.Init("0 이상의 값을 입력해주세요!",
+                () =>
+                {
+                    noticePopup.Close();
+                }, true);
 
                 return;
             }
         }
         else
         {
-            PopupManager.Instance.Init("정확한 값을 입력해주세요!",
-              () =>
-              {
-                  PopupManager.Instance.PopupActive(false);
-              }, true);
+            noticePopup.Init("정확한 값을 입력해주세요!",
+            () =>
+            {
+                noticePopup.Close();
+            }, true);
 
             return;
         }

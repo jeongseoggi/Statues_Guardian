@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class HealItemStrategy : IItemUseStrategy
 {
-    public void Use(IUseable user, ItemData itemData)
+    public void Use(IUseable user, ItemData itemData, int useCount = 1)
     {
         if (itemData is HealItemData healItem)
         {
@@ -11,15 +11,15 @@ public class HealItemStrategy : IItemUseStrategy
             switch (healItem.healType)
             {
                 case HealType.HP:
-                    healAmount = user.GetMaxHp() * healItem.healRatio;
+                    healAmount = user.GetMaxHp() * healItem.healRatio * useCount;
                     break;
                 case HealType.MP:
-                    healAmount = user.GetMaxMp() * healItem.healRatio;
+                    healAmount = user.GetMaxMp() * healItem.healRatio * useCount;
                     break;
             }
 
             user.Heal(healAmount, healItem.healType);
-            GameManager.Instance.PlayerInventoryData.UseItem(itemData);
+            GameManager.Instance.PlayerInventoryData.UseItem(itemData, useCount);
         }
     }
 }

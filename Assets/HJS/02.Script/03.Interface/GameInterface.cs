@@ -40,7 +40,7 @@ public interface IObjectPool<T>
 
 public interface IUseable
 {
-    void Upgrade(UpgradeType upgradeType);
+    void Upgrade(UpgradeType upgradeType, int useCount = 1);
     void Heal(float amount, HealType healType);
     float GetMaxHp();
     float GetMaxMp();
@@ -48,5 +48,5 @@ public interface IUseable
 
 public interface IItemUseStrategy
 {
-    void Use(IUseable user, ItemData itemData);
+    void Use(IUseable user, ItemData itemData, int useCount = 1);
 }

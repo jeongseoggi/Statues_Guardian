@@ -32,7 +32,7 @@ public class TestPlayer : MonoBehaviour, IUseable
         }
     }
 
-    public void Upgrade(UpgradeType upgradeType)
+    public void Upgrade(UpgradeType upgradeType, int useCount)
     {
 
     }

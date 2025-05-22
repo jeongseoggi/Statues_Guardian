@@ -105,8 +105,19 @@ public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBegi
     {
         if(eventData.button == PointerEventData.InputButton.Right)
         {
+            if (this.ItemData == null || string.IsNullOrEmpty(this.ItemData.itemName))
+                return;
 
-            UIManager.Instance.dropDownAnimator.ActiveDropDownObject(eventData.position, eventData.pressEventCamera);
+            DropDownAnimator dropDownAnimator = UIManager.Instance.dropDownAnimator;
+
+
+            if (!dropDownAnimator.isClickCurData(this))
+            {
+                dropDownAnimator.curInvenSlot = this;
+                dropDownAnimator.gameObject.SetActive(false);
+            }
+
+            dropDownAnimator.ActiveDropDownObject(eventData.position, eventData.pressEventCamera);
         }
     }
 }

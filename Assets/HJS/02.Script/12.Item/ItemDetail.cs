@@ -121,16 +121,18 @@ public class ItemDetail : SingleTonDestory<ItemDetail>
             return;
         }
 
-        PopupManager.Instance.Init(string.Format("{0} 을 {1} 개 구매하시겠습니까?\n 가격은 {2}원 입니다.",
-            itemName.text, itemCount, totalBuyPrice.text), ()=>
-            {
-                StartCoroutine(BuyItem());
-            }, 
-            true,
-            () =>
-            {
-                PopupManager.Instance.PopupActive(false);
-            });
+        NoticePopup noticePopup = PopupManager.Instance.noticePopup;
+
+        noticePopup.Init(string.Format("{0} 을 {1} 개 구매하시겠습니까?\n 가격은 {2}원 입니다.",
+        itemName.text, itemCount, totalBuyPrice.text), ()=>
+        {
+            StartCoroutine(BuyItem());
+        }, 
+        true,
+        () =>
+        {
+            noticePopup.Close();
+        });
     }
 
     public IEnumerator BuyItem()
@@ -138,6 +140,8 @@ public class ItemDetail : SingleTonDestory<ItemDetail>
         WWWForm form = new WWWForm();
         form.AddField("id", GameManager.Instance.PlayerData.ID);
         form.AddField("amount", int.Parse(totalBuyPrice.text));
+
+        NoticePopup noticePopup = PopupManager.Instance.noticePopup;
 
         yield return StartCoroutine(DataManager.GameConnect("player/buyItem", form, data =>
         {
@@ -149,33 +153,16 @@ public class ItemDetail : SingleTonDestory<ItemDetail>
             {
                 GameManager.Instance.PlayerInventoryData.AddItem(selectItemData, ItemCount);
                 GameManager.Instance.PlayerData.Gold = json["gold"];
-                PopupManager.Instance.Init("구매가 완료되었습니다.", () =>
+                noticePopup.Init("구매가 완료되었습니다.", () =>
                 {
-                    PopupManager.Instance.PopupActive(false);
+                    noticePopup.Close();
                 });
             }
             else
             {
-                PopupManager.Instance.Init(json["message"], () => PopupManager.Instance.PopupActive(false));
+                noticePopup.Init(json["message"], () => PopupManager.Instance.noticePopup.Close());
             }
         }));
 
-
-
-
-
-        //if(GameManager.Instance.PlayerData.GetMyGold() < int.Parse(totalBuyPrice.text))
-        //{
-        //    PopupManager.Instance.Init("보유한 골드가 부족합니다!", ()=> PopupManager.Instance.PopupActive(false));
-        //}
-        //else
-        //{
-        //    GameManager.Instance.PlayerInventoryData.AddItem(selectItemData, ItemCount);
-        //    GameManager.Instance.PlayerData.Gold -= int.Parse(totalBuyPrice.text);
-        //    PopupManager.Instance.Init("구매가 완료되었습니다.", ()=>
-        //    {
-        //        PopupManager.Instance.PopupActive(false);
-        //    });
-        //}
     }
 }

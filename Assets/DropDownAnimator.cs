@@ -1,16 +1,14 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 public class DropDownAnimator : MonoBehaviour
 {
     public GameObject[] targets;             // 연출할 대상 오브젝트 5개
     public float fadeDuration = 0.2f;        // 각 오브젝트 페이드 시간
     public float interval = 0.15f;            // 다음 오브젝트로 넘어가는 간격
-
-    private void OnEnable()
-    {
-        StartFadeSequence();
-    }
+    public InventorySlot curInvenSlot;
 
     public void ActiveDropDownObject(Vector2 mousePoint, Camera pressEventCamera)
     {
@@ -27,25 +25,36 @@ public class DropDownAnimator : MonoBehaviour
 
     }
 
-    public void StartFadeSequence()
+    public bool isClickCurData(InventorySlot invenSlot)
     {
-        for (int i = 0; i < targets.Length; i++)
-        {
-            var target = targets[i];
-            var canvasGroup = target.GetComponent<CanvasGroup>();
+        if (curInvenSlot == null)
+            return false;
 
-            if (canvasGroup == null)
+        return curInvenSlot.ItemData.itemName.Equals(invenSlot.ItemData.itemName);
+    }
+
+    public void ItemUseButton()
+    {
+        curInvenSlot.ItemData?.Use(GameManager.Instance.GetPlayer());
+        gameObject.SetActive(false);
+    }
+
+    public void ItemBundleUseButton()
+    {
+        InputPopup inputPopup = PopupManager.Instance.inputPopup;
+
+        inputPopup.Init(
+            () => 
             {
-                canvasGroup = target.AddComponent<CanvasGroup>();
-            }
-
-            canvasGroup.alpha = 0f;       // 처음엔 투명
-            target.SetActive(true);       // 오브젝트 활성화
-
-            // DOTween으로 지연 후 fade-in
-            canvasGroup.DOFade(1f, fadeDuration)
-                .SetDelay(i * interval)
-                .SetEase(Ease.OutCubic);
-        }
+                int count = inputPopup.inputCount();
+                if (count <= 0)
+                {
+                    inputPopup.Close();
+                    return;
+                }
+                curInvenSlot.ItemData?.Use(GameManager.Instance.GetPlayer(), count);
+                inputPopup.Close();
+            }, 
+            () => { inputPopup.Close(); });
     }
 }

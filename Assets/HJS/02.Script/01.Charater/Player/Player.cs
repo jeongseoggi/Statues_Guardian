@@ -35,7 +35,11 @@ public class Player : Character, IUseable
         set
         {
             base.Hp = value;
-            GameManager.Instance.PlayerStatData.Hp = value;
+            if(base.Hp > base.MaxHp)
+            {
+                base.Hp = base.MaxHp;
+            }
+            GameManager.Instance.PlayerStatData.Hp = base.Hp;
         }
     }
 
@@ -45,7 +49,13 @@ public class Player : Character, IUseable
         set
         {
             base.Mp = value;
-            GameManager.Instance.PlayerStatData.Mp = value;
+
+            if (base.Mp > base.MaxMp)
+            {
+                base.Mp = base.MaxMp;
+            }
+
+            GameManager.Instance.PlayerStatData.Mp = base.Mp;
         }
     }
 
@@ -65,13 +75,6 @@ public class Player : Character, IUseable
 
     public override void Init()
     {
-        //MaxHp = 100;
-        //MaxMp = 100;
-        //Hp = MaxHp;
-        //Mp = MaxMp;
-        //Atk = 50;
-        //Def = 5;
-
         MaxHp = GameManager.Instance.PlayerStatData.MaxHp;
         MaxMp = GameManager.Instance.PlayerStatData.MaxMp;
         Hp = GameManager.Instance.PlayerStatData.Hp;
@@ -128,15 +131,15 @@ public class Player : Character, IUseable
 
     }
 
-    public void Upgrade(UpgradeType upgradeType)
+    public void Upgrade(UpgradeType upgradeType, int useCount)
     {
         if(upgradeType == UpgradeType.Atk)
         {
-            Atk += 1;
+            Atk += useCount;
         }
         else if(upgradeType == UpgradeType.Def)
         {
-            Def += 1;
+            Def += useCount;
         }
     }
 

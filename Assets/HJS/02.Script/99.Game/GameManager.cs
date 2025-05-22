@@ -113,8 +113,8 @@ public class GameManager : SingleTon<GameManager>
                 PlayerStatData = new PlayerStatData();
                 PlayerStatData.Hp = json["stats"]["hp"].AsFloat;
                 PlayerStatData.Mp = json["stats"]["hp"].AsFloat;
-                PlayerStatData.MaxHp = json["stats"]["MaxpHp"].AsFloat;
-                PlayerStatData.MaxMp = json["stats"]["MaxMp"].AsFloat;
+                PlayerStatData.MaxHp = json["stats"]["max_hp"].AsFloat;
+                PlayerStatData.MaxMp = json["stats"]["max_mp"].AsFloat;
                 PlayerStatData.Atk = json["stats"]["atk"].AsFloat;
                 PlayerStatData.Def = json["stats"]["def"].AsFloat;
                 PlayerStatData.Speed = json["stats"]["speed"].AsFloat;
