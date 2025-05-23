@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 using System.IO;
 using Unity.EditorCoroutines.Editor;
 using SimpleJSON;
-using Unity.VisualScripting;
+using System;
 using UnityEditor.VersionControl;
 
 public class StageImpoterWindow : EditorWindow
@@ -91,97 +91,107 @@ public class StageImpoterWindow : EditorWindow
     }
 
     /// <summary>
-    /// SO 생성 중복된 파일은 건너뜀
+    /// 스테이지 데이터 추가 함수
     /// </summary>
     /// <param name="data"></param>
     private static void CreateStageWaveSO(StageData data)
     {
-        if (!Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
-
-        string path = $"{directory}/{data.stageName}.asset";
-
-        //파일이 있다면 해당 경로로 가서 리스트에 넣어주기
-        if (File.Exists(path))
-        {
-            Debug.LogWarning($"[StageImporter] 파일 중복으로 생성 건너뜀: {path}");
-            var existing = AssetDatabase.LoadAssetAtPath<StageData>(path);
-            if (existing != null)
+        CreateOrLoadSO<StageData>(data.stageName, "Stage",
+            () => ScriptableObject.CreateInstance<StageData>(),
+            (so) =>
             {
-                stageDataList.gameStageDataList.Add(existing);
-                EditorUtility.SetDirty(stageDataList);  // 에디터에서 dirty 플래그 설정
-                AssetDatabase.SaveAssets();             // 변경사항 저장
-            }
-            return;
-        }
+                so.stageName = data.stageName;
+                so.totalWave = data.totalWave;
+                so.monstersPerWave = data.monstersPerWave;
+                so.spawnMonsterType = data.spawnMonsterType;
+            },
+            stageDataList.gameStageDataList,
+            stageDataList);
+    }
 
-        //파일이 없다면 만든 후 저장하고 리스트에 저장하기(생성 후 저장이 중요함)
-        var asset = ScriptableObject.CreateInstance<StageData>();
-        asset.stageName = data.stageName;
-        asset.totalWave = data.totalWave;
-        asset.monstersPerWave = data.monstersPerWave;
-        asset.spawnMonsterType = data.spawnMonsterType;
-
-        AssetDatabase.CreateAsset(asset, path);
-        AssetDatabase.SaveAssets(); // 저장 꼭 해주기
-
-        var loadedAsset = AssetDatabase.LoadAssetAtPath<StageData>(path); 
-        if (loadedAsset != null)
+    /// <summary>
+    /// 아이템 데이터 추가 함수
+    /// </summary>
+    /// <param name="data"></param>
+    private static void CreateItemDataSO(ItemData data)
+    {
+        CreateOrLoadSO<ItemData>(data.spriteName, "Item",
+        () =>
         {
-            stageDataList.gameStageDataList.Add(loadedAsset);
-            EditorUtility.SetDirty(stageDataList);  // 에디터에서 dirty 플래그 설정
-            AssetDatabase.SaveAssets();             // 변경사항 저장
-        }
+            if(data is HealItemData)
+            {
+                return ScriptableObject.CreateInstance<HealItemData>();
+            }
+            else if(data is UpgradeItemData)
+            {
+                return ScriptableObject.CreateInstance<UpgradeItemData>();
+            }
+            else
+            {
+                return ScriptableObject.CreateInstance<GambleItemData>();
+            }
+        },
+        (so) =>
+        {
+            so.itemName = data.itemName;
+            so.itemDesc = data.itemDesc;
+            so.itemType = data.itemType;
+            so.itemUseStrategy = data.itemUseStrategy;
+            so.price = data.price;
+            so.spriteName = data.spriteName;
+        },
+        itemDataList.itemData,
+        itemDataList);
+
 
     }
 
 
-    private static void CreateItemDataSO(ItemData data)
+    /// <summary>
+    /// 스크립터블 오브젝트 생성 통합 함수
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="fileName"></param>
+    /// <param name="subFolderName"></param>
+    /// <param name="createFunc"></param>
+    /// <param name="copyData"></param>
+    /// <param name="addList"></param>
+    public static void CreateOrLoadSO<T>(string fileName, string subFolderName, Func<T> createFunc,  Action<T> copyData, List<T> addList, UnityEngine.Object soListClass) where T : ScriptableObject
     {
-        if (!Directory.Exists(directory))
+        string fullPath = Path.Combine(directory, subFolderName);
+
+        if (!Directory.Exists(fullPath))
         {
-            Directory.CreateDirectory(directory);
+            Directory.CreateDirectory(fullPath);
         }
 
-        string path = $"{directory}Item/{data.spriteName}.asset";
+        string itemPath = $"{fullPath}/{fileName}.asset";
 
-        //파일이 있다면 해당 경로로 가서 리스트에 넣어주기
-        if (File.Exists(path))
+        if (File.Exists(itemPath))
         {
-            Debug.LogWarning($"[StageImporter] 파일 중복으로 생성 건너뜀: {path}");
-            var existing = AssetDatabase.LoadAssetAtPath<ItemData>(path);
+            Debug.LogWarning($"[SO Importer] 파일 중복으로 생성 건너뜀: {itemPath}");
+            var existing = AssetDatabase.LoadAssetAtPath<T>(itemPath);
             if (existing != null)
             {
-                itemDataList.itemData.Add(existing);
-                EditorUtility.SetDirty(itemDataList);  // 에디터에서 dirty 플래그 설정
-                AssetDatabase.SaveAssets();             // 변경사항 저장
+                addList.Add(existing);
+                EditorUtility.SetDirty(soListClass);  // ScriptableObject로 캐스팅해서 처리
+                AssetDatabase.SaveAssets();
             }
             return;
         }
 
-        //파일이 없다면 만든 후 저장하고 리스트에 저장하기(생성 후 저장이 중요함)
-        var asset = SetItemData(data);
+        var asset = createFunc.Invoke();
+        copyData?.Invoke(asset);
 
-        // 타입에 따라 생성되는 스크립터블 오브젝트 변경
-        asset.itemName = data.itemName;
-        asset.itemDesc = data.itemDesc;
-        asset.itemType = data.itemType;
-        asset.itemUseStrategy = data.itemUseStrategy;
-        asset.price = data.price;
-        asset.spriteName = data.spriteName;
+        AssetDatabase.CreateAsset(asset, itemPath);
+        AssetDatabase.SaveAssets();
 
-        AssetDatabase.CreateAsset(asset, path);
-        AssetDatabase.SaveAssets(); // 저장 꼭 해주기
-
-
-        var loadedAsset = AssetDatabase.LoadAssetAtPath<ItemData>(path);
-        if (loadedAsset != null)
+        var loaded = AssetDatabase.LoadAssetAtPath<T>(itemPath);
+        if (loaded != null)
         {
-            itemDataList.itemData.Add(loadedAsset);
-            EditorUtility.SetDirty(itemDataList);  // 에디터에서 dirty 플래그 설정
-            AssetDatabase.SaveAssets();             // 변경사항 저장
+            addList.Add(loaded);
+            EditorUtility.SetDirty(soListClass);
+            AssetDatabase.SaveAssets();
         }
     }
 
@@ -300,6 +310,13 @@ public class StageImpoterWindow : EditorWindow
         itemDataList.Initalize();
     }
 
+    /// <summary>
+    /// 아이템 데이터 추가
+    /// </summary>
+    /// <param name="itemData"></param>
+    /// <param name="itemDataList"></param>
+    /// <param name="jsonData"></param>
+    /// <param name="index"></param>
     public void AddItemDataList(ItemData itemData, List<ItemData> itemDataList, JSONNode jsonData, int index)
     {
         itemData.itemName = jsonData[index]["ItemName"];
