@@ -6,7 +6,7 @@ public class Weapon : MonoBehaviour, IAttackable
     public CircleCollider2D weaponCol;
     public float damage;
     public Character owner;
-    private int[] comboDmgData = new int[] { 300, 500, 1000 };
+    private int[] comboDmgData = new int[] { 3, 5, 10 };
 
     public void Attack(IHitable target)
     {

@@ -70,5 +70,26 @@ public enum UpgradeType
     Def
 }
 
+/// <summary>
+/// 스킬 타입
+/// </summary>
+public enum SkillType
+{
+    Passive,
+    Active
+}
+
+
+/// <summary>
+/// 데미지 타입
+/// </summary>
+public enum DamageType
+{
+    SpeedUp,
+    Dot,
+    AoE,
+    AttackUp
+}
+
 
 

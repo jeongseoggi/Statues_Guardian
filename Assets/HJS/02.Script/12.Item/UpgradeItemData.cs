@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-[CreateAssetMenu(menuName = "Item/UpgradeItem")]
+[CreateAssetMenu(fileName = "UpgradeItemData", menuName = "Item/UpgradeItem")]
 public class UpgradeItemData : ItemData
 {
     public UpgradeType upgradeType;

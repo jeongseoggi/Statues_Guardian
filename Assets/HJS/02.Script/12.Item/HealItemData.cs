@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-[CreateAssetMenu(menuName = "Item/HealItem")]
+[CreateAssetMenu(fileName = "HealItemData", menuName = "Item/HealItem")]
 public class HealItemData : ItemData
 {
     public HealType healType;

@@ -46,7 +46,20 @@ public interface IUseable
     float GetMaxMp();
 }
 
+public interface ISkillUable
+{
+    void SpeedUpApply(float speedUpAmount, float duration, int mpCost);
+    void AttackUpApply(float attackUpAmount, float duration, int mpCost);
+    void AoEApply(float duration, int mpCost);
+    void DotDamageApply(float curseDamage, float duration, int mpCost);
+}
+
 public interface IItemUseStrategy
 {
     void Use(IUseable user, ItemData itemData, int useCount = 1);
+}
+
+public interface ISkillUseStrategy
+{
+    void SkillUse(ISkillUable user, SkillData skillData);
 }

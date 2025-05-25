@@ -39,7 +39,7 @@ public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBegi
         {
             itemImage.enabled = true;
             ItemData = itemData;
-            itemImage.sprite = SpriteManager.Instance.GetSprite(itemData.spriteName);
+            itemImage.sprite = SpriteManager.Instance.GetItemSprite(itemData.spriteName);
             itemCountText.text = UIManager.Instance.quickSlotManager.GetItemCount(itemData.itemName).ToString();
         }
         else

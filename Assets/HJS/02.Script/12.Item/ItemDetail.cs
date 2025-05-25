@@ -78,7 +78,7 @@ public class ItemDetail : SingleTonDestory<ItemDetail>
         selectItemData = itemData;
         ResetUIData();
 
-        itemImage.sprite = SpriteManager.Instance.GetSprite(itemData.spriteName);
+        itemImage.sprite = SpriteManager.Instance.GetItemSprite(itemData.spriteName);
         itemImage.enabled = true;
         itemName.text = itemData.itemName;
         itemDesc.text = itemData.itemDesc;

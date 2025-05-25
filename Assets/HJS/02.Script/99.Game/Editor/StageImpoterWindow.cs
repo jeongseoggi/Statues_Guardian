@@ -8,15 +8,18 @@ using Unity.EditorCoroutines.Editor;
 using SimpleJSON;
 using System;
 using UnityEditor.VersionControl;
+using UnityEngine.Experimental.AI;
+using Unity.VisualScripting;
 
 public class StageImpoterWindow : EditorWindow
 {
     private string sheetUrl = "https://script.google.com/macros/s/AKfycbxL_PJlFo4U4ko1xq14aEVnyYbS3OLwRI8EpZkqHZ-AdK1J7jMCoQSFNYYWqUu1SLyvwg/exec";
     private static StageDataList stageDataList;
     private static ItemScriptableObject itemDataList;
+    private static SkillDataList skillDataList;
 
     private static string directory = "Assets/HJS/06.SciptableObject/";
-    private string[] options = { "스테이지", "아이템" };
+    private string[] options = { "스테이지", "아이템" , "스킬" };
     private int selectedIndex = 0;
     private string type;
 
@@ -46,7 +49,12 @@ public class StageImpoterWindow : EditorWindow
 
     private IEnumerator ImportStageDataFromSheet(string url)
     {
-        type = selectedIndex  == 0 ? "stage" : "item";
+        if (selectedIndex == 0)
+            type = "stage";
+        else if (selectedIndex == 1)
+            type = "item";
+        else
+            type = "skill";
 
         string urlAddType = $"{url}?type={type}";
         UnityWebRequest www = UnityWebRequest.Get(urlAddType);
@@ -73,7 +81,7 @@ public class StageImpoterWindow : EditorWindow
                 CreateStageWaveSO(stage);
             }
         }
-        else
+        else if(selectedIndex == 1)
         {
             GetItemDataList();
             JSONNode jsonData = JSONNode.Parse(json);
@@ -82,6 +90,17 @@ public class StageImpoterWindow : EditorWindow
             foreach (var item in itemDataList)
             {
                 CreateItemDataSO(item);
+            }
+        }
+        else
+        {
+            GetSkillDataList();
+            JSONNode jsonData = JSONNode.Parse(json);
+            List<SkillData> skillDataList = JsonParseSkillData(jsonData);
+
+            foreach (var skill in skillDataList)
+            {
+                CreateSkillDataSO(skill);
             }
         }
 
@@ -144,6 +163,38 @@ public class StageImpoterWindow : EditorWindow
         itemDataList);
 
 
+    }
+
+    public static void CreateSkillDataSO(SkillData data)
+    {
+        CreateOrLoadSO<SkillData>(data.assetName, "Skill",
+            () =>
+            {
+                if(data is PassiveSkill)
+                {
+                    return ScriptableObject.CreateInstance<PassiveSkill>();
+                }
+                else
+                {
+                    return ScriptableObject.CreateInstance<ActiveSkill>();
+                }
+            },
+            (so)=>
+            {
+                so.skillName = data.skillName;
+                so.skillDescription = data.skillDescription;
+                so.coolTime = data.coolTime;
+                so.mpCost = data.mpCost;
+                so.spriteName = data.spriteName;
+                so.skillType = data.skillType;
+                so.damageType = data.damageType;
+                so.damage = data.damage;
+                so.duration = data.duration;
+                so.increase = data.increase;
+                so.assetName = data.assetName;
+            },
+            skillDataList.skillDatas,
+            skillDataList);
     }
 
 
@@ -232,19 +283,39 @@ public class StageImpoterWindow : EditorWindow
             switch((ItemType)json[i]["ItemType"].AsInt)
             {
                 case ItemType.Heal:
-                    AddItemDataList(new HealItemData(), itemDataList, json, i);
+                    AddItemDataList(ScriptableObject.CreateInstance<HealItemData>(), itemDataList, json, i);
                     break;
                 case ItemType.Upgrade:
-                    AddItemDataList(new UpgradeItemData(), itemDataList, json, i);
+                    AddItemDataList(ScriptableObject.CreateInstance<UpgradeItemData>(), itemDataList, json, i);
                     break;
                 case ItemType.Gamble:
-                    AddItemDataList(new GambleItemData(), itemDataList, json, i);
+                    AddItemDataList(ScriptableObject.CreateInstance<GambleItemData>(), itemDataList, json, i);
                     break;
                 case ItemType.Buff:
                     break;
             }
         }
         return itemDataList;
+    }
+
+    public List<SkillData> JsonParseSkillData(JSONNode json)
+    {
+        List<SkillData> skillDataList = new List<SkillData>();
+
+        for (int i = 0; i < json.Count; i++)
+        {
+            switch ((SkillType)json[i]["SkillType"].AsInt)
+            {
+                case SkillType.Passive:
+                    AddSkillDataList(ScriptableObject.CreateInstance<PassiveSkill>(), skillDataList, json, i);
+                    break;
+                case SkillType.Active:
+                    AddSkillDataList(ScriptableObject.CreateInstance<ActiveSkill>(), skillDataList, json, i);
+                    break;
+            }
+        }
+
+        return skillDataList;
     }
 
     /// <summary>
@@ -310,6 +381,25 @@ public class StageImpoterWindow : EditorWindow
         itemDataList.Initalize();
     }
 
+    public void GetSkillDataList()
+    {
+        string path = $"{directory}/{type}/SkillDataList.asset";
+
+
+        if (!File.Exists(path))
+        {
+            var asset = ScriptableObject.CreateInstance<SkillDataList>();
+            AssetDatabase.CreateAsset(asset, path);
+            AssetDatabase.SaveAssets();
+            skillDataList = asset;
+        }
+        else
+        {
+            skillDataList = AssetDatabase.LoadAssetAtPath<SkillDataList>(path);
+        }
+        skillDataList.Initalize();
+    }
+
     /// <summary>
     /// 아이템 데이터 추가
     /// </summary>
@@ -319,11 +409,13 @@ public class StageImpoterWindow : EditorWindow
     /// <param name="index"></param>
     public void AddItemDataList(ItemData itemData, List<ItemData> itemDataList, JSONNode jsonData, int index)
     {
-        itemData.itemName = jsonData[index]["ItemName"];
-        itemData.itemDesc = jsonData[index]["Description"];
-        itemData.price = jsonData[index]["Price"].AsInt;
-        itemData.spriteName = jsonData[index]["SpriteName"];
-        itemData.itemType = (ItemType)jsonData[index]["ItemType"].AsInt;
+        itemData.Init(
+            jsonData[index]["ItemName"], 
+            jsonData[index]["Description"], 
+            jsonData[index]["Price"].AsInt,
+            jsonData[index]["SpriteName"], 
+            (ItemType)jsonData[index]["ItemType"].AsInt);
+
 
         if (itemData is HealItemData healItemData)
         {
@@ -356,31 +448,22 @@ public class StageImpoterWindow : EditorWindow
         }
     }
 
-    public static ItemData SetItemData(ItemData data)
+    public void AddSkillDataList(SkillData skillData, List<SkillData> skillDatas, JSONNode jsonData, int index)
     {
-        switch (data.itemType)
-        {
-            case ItemType.Heal:
-                HealItemData healTypeAsset = ScriptableObject.CreateInstance<HealItemData>();
-                if(data is HealItemData healItemData)
-                {
-                    healTypeAsset.healType = healItemData.healType;
-                    healTypeAsset.healRatio = healItemData.healRatio;
-                }
-                return healTypeAsset;
-            case ItemType.Upgrade:
-                UpgradeItemData upgradeTypeAsset = ScriptableObject.CreateInstance<UpgradeItemData>();
-                if (data is UpgradeItemData upgradeItemData)
-                {
-                    upgradeTypeAsset.upgradeType = upgradeItemData.upgradeType;
-                }
-                return upgradeTypeAsset;
-            case ItemType.Gamble:
-                GambleItemData gambleTypeAsset = ScriptableObject.CreateInstance<GambleItemData>();
-                return gambleTypeAsset;
-            default:
-                Debug.LogError($"[CreateItemDataSO] 알 수 없는 ItemType: {data.itemType}");
-                return null;
-        }
+        skillData.Init(
+            jsonData[index]["SkillName"],
+            jsonData[index]["SkillDescription"],
+            jsonData[index]["CoolTime"].AsInt,
+            jsonData[index]["MpCost"].AsInt,
+            jsonData[index]["Damage"].AsFloat,
+            jsonData[index]["Duration"].AsFloat,
+            jsonData[index]["Increase"].AsFloat,
+            jsonData[index]["SpriteName"],
+            jsonData[index]["AssetName"],
+            (SkillType)jsonData[index]["SkillType"].AsInt,
+            (DamageType)jsonData[index]["DamageType"].AsInt
+            );
+
+        skillDatas.Add(skillData);
     }
 }

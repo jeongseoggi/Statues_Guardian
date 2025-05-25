@@ -11,7 +11,7 @@ public class Item : MonoBehaviour
 
     private void OnEnable()
     {
-        itemImage.sprite = SpriteManager.Instance.GetSprite(itemData.spriteName);
+        itemImage.sprite = SpriteManager.Instance.GetItemSprite(itemData.spriteName);
     }
 
     public void OnClickItemDetailSet()

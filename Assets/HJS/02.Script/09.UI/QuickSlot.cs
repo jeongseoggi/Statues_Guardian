@@ -66,7 +66,7 @@ public class QuickSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
             else
             {
                 itemImage.enabled = true;
-                itemImage.sprite = SpriteManager.Instance.GetSprite(itemData.spriteName);
+                itemImage.sprite = SpriteManager.Instance.GetItemSprite(itemData.spriteName);
             }
             itemCountText.text = itemCount == 0 ? string.Empty : itemCount.ToString();
         }

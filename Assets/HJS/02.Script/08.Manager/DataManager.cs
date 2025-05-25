@@ -8,12 +8,15 @@ public class DataManager : SingleTon<DataManager>
     private static string ServerURL = "http://localhost:3000/";
 
     [SerializeField] ItemScriptableObject itemDataBase;
+    [SerializeField] SkillDataList skillDatabase;
 
     public ItemScriptableObject ItemDataBase { get => itemDataBase; }
+    public SkillDataList SkillDataBase { get=> skillDatabase; }
 
     private void Start()
     {
         ItemInit();
+        SkillInit();
     }
     /// <summary>
     /// 아이템 DB에서 아이템 데이터를 반환합니다.
@@ -23,6 +26,11 @@ public class DataManager : SingleTon<DataManager>
     public ItemData GetItemData(string itemName)
     {
         return ItemDataBase.itemData.Find((x) => x.itemName.Equals(itemName));
+    }
+
+    public SkillData GetSkillData(string assetName)
+    {
+        return SkillDataBase.skillDatas.Find((x)=> x.assetName.Equals(assetName));
     }
 
     /// <summary>
@@ -45,6 +53,31 @@ public class DataManager : SingleTon<DataManager>
 
         }
 
+    }
+
+    /// <summary>
+    /// 스킬 타입에 따른 스킬 전략 설정
+    /// </summary>
+    public void SkillInit()
+    {
+        foreach(var skillData in SkillDataBase.skillDatas)
+        {
+            switch(skillData.damageType)
+            {
+                case DamageType.SpeedUp:
+                    skillData.skillStarategy = new SpeedUpStrategy();
+                    break;
+                case DamageType.AttackUp:
+                    skillData.skillStarategy = new AttackUpStrategy();
+                    break;
+                case DamageType.Dot:
+                    skillData.skillStarategy = new DotDamageStrategy();
+                    break;
+                case DamageType.AoE:
+                    skillData.skillStarategy = new AoEStrategy();
+                    break;
+            }
+        }
     }
 
 

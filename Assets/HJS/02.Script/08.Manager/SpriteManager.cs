@@ -3,10 +3,16 @@ using UnityEngine.U2D;
 
 public class SpriteManager : SingleTon<SpriteManager>
 {
-    [SerializeField] SpriteAtlas spriteAltas;
+    [SerializeField] SpriteAtlas itemSpriteAltas;
+    [SerializeField] SpriteAtlas skillSpriteAltas;
 
-    public Sprite GetSprite(string spriteName)
+    public Sprite GetItemSprite(string spriteName)
     {
-        return spriteAltas.GetSprite(spriteName);
+        return itemSpriteAltas.GetSprite(spriteName);
+    }
+
+    public Sprite GetSkillSprite(string spriteName)
+    {
+        return skillSpriteAltas.GetSprite(spriteName);
     }
 }

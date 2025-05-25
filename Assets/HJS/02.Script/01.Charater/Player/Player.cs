@@ -18,7 +18,6 @@ public class Player : Character, IUseable
             GameManager.Instance.PlayerStatData.Atk = value;
         }
     }
-
     public override float Def
     {
         get => base.Def;
@@ -28,7 +27,6 @@ public class Player : Character, IUseable
             GameManager.Instance.PlayerStatData.Def = value;
         }
     }
-
     public override float Hp
     {
         get => base.Hp;
@@ -42,7 +40,6 @@ public class Player : Character, IUseable
             GameManager.Instance.PlayerStatData.Hp = base.Hp;
         }
     }
-
     public override float Mp
     {
         get => base.Mp;
@@ -58,8 +55,6 @@ public class Player : Character, IUseable
             GameManager.Instance.PlayerStatData.Mp = base.Mp;
         }
     }
-
-
     #endregion
 
     private void Awake()
