@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
+using UnityEditor.SceneTemplate;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.Rendering;
 
 public class MonsterBehaviour : MonoBehaviour
 {
@@ -14,6 +18,7 @@ public class MonsterBehaviour : MonoBehaviour
         monster.trackingAction += TrackingTarget;
         monster.attackAction += OnAttack;
         monster.onDieEffect += DieActionChain;
+        monster.aoeAction += OnAoeAction;
     }
 
 
@@ -29,8 +34,7 @@ public class MonsterBehaviour : MonoBehaviour
 
     public void TrackingTarget()
     {
-        monster.StateMachine.SetState(STATE.MOVE);
-        trackingCor = StartCoroutine(TrackingTargetCor());
+        trackingCor = StartCoroutine(TrackingTargetCo());
     }
 
     private void OnAttack(bool isAttack)
@@ -38,6 +42,24 @@ public class MonsterBehaviour : MonoBehaviour
         monster.IsAttacking = isAttack;
         if (monster.IsAttacking)
             monster.StateMachine.SetState(STATE.ATTACK);
+    }
+
+    public void OnAoeAction(float damage, float duration)
+   {
+        StartCoroutine(AoECor(damage, duration));
+    }
+
+    IEnumerator AoECor(float damage, float duration)
+    {
+        int time = 0;
+        while(duration > time)
+        {
+            monster.Hit(damage);
+            Debug.Log("데미지 입힘  : " + damage);
+            yield return new WaitForSeconds(1);
+            Debug.Log("Time 값 " + time);
+            time += 1;
+        }
     }
 
     /// <summary>
@@ -48,26 +70,29 @@ public class MonsterBehaviour : MonoBehaviour
         StartCoroutine(DieSpriteAlphaSettingCor());
     }
 
+
     /// <summary>
     /// 타겟 추적 코루틴
     /// </summary>
+    /// <param name="duration"></param>
     /// <returns></returns>
-    IEnumerator TrackingTargetCor()
+    IEnumerator TrackingTargetCo()
     {
         Vector3 dir = monster.Target.transform.position - transform.position;
         monster.SetFilpX(dir);
+
 
         while (!monster.IsAttacking)
         {
             if (monster.StateMachine.CurState is MonsterDieState)
                 yield break;
 
-            transform.position = Vector3.MoveTowards(transform.position, monster.Target.transform.position, Time.deltaTime * monster.Speed);
+             transform.position = Vector3.MoveTowards(transform.position, monster.Target.transform.position, Time.deltaTime * monster.Speed);
             yield return null;
         }
         trackingCor = null;
-
     }
+
 
     /// <summary>
     /// 죽었을 때 몬스터 스프라이트 이미지 알파값 조절을 통한 죽음 연출
@@ -101,5 +126,11 @@ public class MonsterBehaviour : MonoBehaviour
         monster.trackingAction -= TrackingTarget;
         monster.attackAction -= OnAttack;
         monster.onDieEffect -= DieActionChain;
+        monster.aoeAction -= OnAoeAction;
+    }
+
+    private void OnDrawGizmos()
+    {
+        
     }
 }

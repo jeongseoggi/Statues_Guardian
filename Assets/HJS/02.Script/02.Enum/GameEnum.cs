@@ -91,5 +91,8 @@ public enum DamageType
     AttackUp
 }
 
-
-
+public enum BuffType
+{
+    Attack,
+    Speed
+}

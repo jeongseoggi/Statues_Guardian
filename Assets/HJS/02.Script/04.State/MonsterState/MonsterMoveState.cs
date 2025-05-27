@@ -9,6 +9,7 @@ public class MonsterMoveState : MonsterState
     }
     public override void Enter()
     {
+        monster.trackingAction?.Invoke();
         sm.Animator.SetBool("isWalk", true);
     }
 

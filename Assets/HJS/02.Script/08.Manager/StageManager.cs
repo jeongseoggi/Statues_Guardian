@@ -6,7 +6,7 @@ using UnityEngine;
 public class StageManager : SingleTonDestory<StageManager>
 {
     #region public
-    public GameObject stageObject;
+    public StageObject stageObject;
     #endregion
 
     #region private
@@ -18,7 +18,6 @@ public class StageManager : SingleTonDestory<StageManager>
     {
         shopPanelHandler = GameManager.Instance.ShopPanelHandler;
         waveManager = GameManager.Instance.WaveManager;
-
         shopPanelHandler.Show();
     }
 

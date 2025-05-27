@@ -1,10 +1,15 @@
 using System;
 using UnityEngine;
 
-public class Player : Character, IUseable
+public class Player : Character, IUseable, IHitable
 {
     #region public
     public Func<int> getCombo;
+    public event Action OnCheckMana;
+    #endregion
+
+    #region private
+    [SerializeField] private UIController playerUIController;
     #endregion
 
     #region 프로퍼티
@@ -51,10 +56,12 @@ public class Player : Character, IUseable
             {
                 base.Mp = base.MaxMp;
             }
-
             GameManager.Instance.PlayerStatData.Mp = base.Mp;
+            PlayerUIController.UseSkill(base.Mp);
+            OnCheckMana?.Invoke();
         }
     }
+    public UIController PlayerUIController { get => playerUIController; }
     #endregion
 
     private void Awake()
@@ -78,6 +85,9 @@ public class Player : Character, IUseable
         Def = GameManager.Instance.PlayerStatData.Def;
         Speed = GameManager.Instance.PlayerStatData.Speed;
         weapon.SetOwner(this); 
+        PlayerUIController.GetMaxHp(MaxHp);
+        PlayerUIController.GetMaxMp(MaxMp);
+        StageManager.Instance?.stageObject.Init();
     }
 
     protected override void Start()
@@ -151,5 +161,11 @@ public class Player : Character, IUseable
     private void OnDestroy()
     {
         GameManager.OnPlayerStatDataReady -= Init;
+    }
+
+    public void Hit(float atk)
+    {
+        Hp -= atk;
+        playerUIController.TakeDamage(Hp);
     }
 }

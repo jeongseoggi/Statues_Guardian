@@ -13,15 +13,10 @@ public class AttackDetectRange : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag.Equals("Object") && myCharacter is Monster)
+        if(other.tag.Equals("Object"))
         {
             Monster monster = myCharacter as Monster;
-            monster.attackAction(true);
+            monster.attackAction?.Invoke(true);
         }
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        
     }
 }

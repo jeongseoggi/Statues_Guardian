@@ -1,9 +1,17 @@
+using System.Collections;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class AttackUpStrategy : ISkillUseStrategy
 {
     public void SkillUse(ISkillUable user, SkillData skillData)
     {
-        user.AttackUpApply(skillData.increase, skillData.duration, skillData.mpCost);
+        float resetVal = user.ApplyBuff(BuffType.Attack, skillData.increase, skillData.mpCost);
+        user.RunCoroutine(BuffTime(skillData.duration, resetVal, user));
+    }
+    private IEnumerator BuffTime(float duration, float returnval, ISkillUable user)
+    {
+        yield return new WaitForSeconds(duration);
+        user.ReturnBuffValue(BuffType.Attack, returnval);
     }
 }

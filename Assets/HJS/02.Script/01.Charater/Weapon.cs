@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Transactions;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour, IAttackable
@@ -6,7 +7,7 @@ public class Weapon : MonoBehaviour, IAttackable
     public CircleCollider2D weaponCol;
     public float damage;
     public Character owner;
-    private int[] comboDmgData = new int[] { 3, 5, 10 };
+    private int[] comboDmgData = new int[] { 3000, 5, 10 };
 
     public void Attack(IHitable target)
     {
@@ -22,7 +23,10 @@ public class Weapon : MonoBehaviour, IAttackable
             return;
         }
 
-        if(other.GetComponent<IHitable>() != null)
+        if (owner is Player && other.GetComponent<StageObject>() != null)
+            return;
+
+        if (other.GetComponent<IHitable>() != null)
         {
             Attack(other.GetComponent<IHitable>());
         }

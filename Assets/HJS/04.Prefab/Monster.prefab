@@ -117,7 +117,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.09, y: 0.51364636}
+  m_Offset: {x: 0.09, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -449,7 +449,7 @@ GameObject:
   - component: {fileID: 6134594083305070241}
   - component: {fileID: 2738916853148332580}
   - component: {fileID: 1440827144984540655}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -505,7 +505,7 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.17, y: 0.5}
+  m_Offset: {x: 0.17, y: 0}
   m_Radius: 0.15
 --- !u!114 &2738916853148332580
 MonoBehaviour:
@@ -586,7 +586,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.019999646, y: 0.7}
+  m_AnchoredPosition: {x: -0.019999646, y: 0.2}
   m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &5517509451260374966
@@ -758,7 +758,8 @@ GameObject:
   - component: {fileID: 364461996988680102}
   - component: {fileID: 8724206165802880329}
   - component: {fileID: 5093309503386383238}
-  m_Layer: 22
+  - component: {fileID: 5017527150116832494}
+  m_Layer: 8
   m_Name: Monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -833,7 +834,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.21, y: 0.22}
+  m_Size: {x: 0.25, y: 0.22}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -869,11 +870,11 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0029800336, y: 0.53}
+  m_Offset: {x: 0.0029800336, y: 0}
   m_Size: {x: 0.16596007, y: 0.28000006}
   m_Direction: 0
 --- !u!50 &4966061985791335221
@@ -951,20 +952,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 0
+  mp: 0
   maxHp: 0
+  maxMp: 0
   atk: 0
   def: 0
   animator: {fileID: 6781047442076838895}
   state: 0
   speed: 0
   weapon: {fileID: 2738916853148332580}
+  isAttacking: 0
   spriteRender: {fileID: 6446186343399995392}
   attackDetectRange: {fileID: 8069151720144254906}
   statData: {fileID: 11400000, guid: 51931742de8270444bc463c30fc20dce, type: 2}
-  monsterType: 1
+  monsterType: 5
   monsterUIController: {fileID: 5093309503386383238}
   target: {fileID: 0}
   projectileStartZone: {fileID: 3082374905902874013}
+  isTaunt: 0
+  damageHandler: {fileID: 5017527150116832494}
 --- !u!114 &5093309503386383238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -980,3 +986,15 @@ MonoBehaviour:
   maxHealth: 0
   curHp: 0
   hpText: {fileID: 0}
+--- !u!114 &5017527150116832494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7261356895127166240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd9889d7a2c448c4faf9e4c1104aed83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

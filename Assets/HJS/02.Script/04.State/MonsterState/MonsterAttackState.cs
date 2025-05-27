@@ -16,6 +16,7 @@ public class MonsterAttackState : MonsterState
     public override void Exit()
     {
         sm.Animator.SetBool("isAttack", false);
+        monster.IsAttacking = false;
     }
 
     public override void Update()

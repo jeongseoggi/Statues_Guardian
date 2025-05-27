@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class StageObject : MonoBehaviour, IHitable
 {
-    [SerializeField] float stageObjHp;
-    [SerializeField] float stageObjDef;
+    [SerializeField] float statuesCurHp;
+    [SerializeField] float statuesMaxHp;
+    [SerializeField] float statuesDef;
     [SerializeField] UIController uiController;
+    [SerializeField] Player player;
 
     public float duration = 0.2f;      // Èçµé¸² ½Ã°£
     public float strength = 0.2f;      // Èçµé¸² ¼¼±â
@@ -15,22 +17,25 @@ public class StageObject : MonoBehaviour, IHitable
 
     Tween shakeTween;
 
-    private void OnEnable()
+    public void Init()
     {
-      
-    }
-
-    private void Start()
-    {
-        stageObjHp = 100;
-        uiController.GetMaxHp(stageObjHp);
+        player = GameManager.Instance.GetPlayer();
+        statuesMaxHp = player.MaxHp;
+        statuesDef = player.Def;
+        statuesCurHp = statuesMaxHp;
+        uiController.GetMaxHp(statuesMaxHp);
     }
 
     public void Hit(float atk)
     {
-        stageObjHp -= Mathf.Abs(atk - stageObjDef);
+        float damage = (atk - statuesDef) > 0 ? (atk - statuesDef) : 0;
+
+
+
+        statuesCurHp -= damage;
+        player.Hit(damage);
         TriggerShake();
-        uiController.TakeDamage(stageObjHp);
+        uiController.TakeDamage(statuesCurHp);
     }
 
     public void TriggerShake()

@@ -450,6 +450,7 @@ public class StageImpoterWindow : EditorWindow
 
     public void AddSkillDataList(SkillData skillData, List<SkillData> skillDatas, JSONNode jsonData, int index)
     {
+        Debug.Log(jsonData[index]["Damage"].AsFloat);
         skillData.Init(
             jsonData[index]["SkillName"],
             jsonData[index]["SkillDescription"],

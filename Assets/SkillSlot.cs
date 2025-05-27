@@ -18,16 +18,21 @@ public class SkillSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
     [SerializeField] GameObject dragLayer;
     [SerializeField ]CanvasGroup canvasGroup;
     [SerializeField] GameObject parentObject;
+    [SerializeField] bool isNoMana;
+    [SerializeField] GameObject noManaPanel;
+    #endregion
+
+    #region public
     #endregion
 
     #region 프로퍼티
     public SkillData SkillData { get => skillData; set => skillData = value; }
     public bool IsCoolTime { get => isCoolTime; set => isCoolTime = value; } 
+    public bool IsNoMana { get => isNoMana; set => isNoMana = value; }
     #endregion
 
     private void Start()
     {
-
     }
     
 
@@ -66,7 +71,24 @@ public class SkillSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
         }
         coolTimeObject.SetActive(false);
         IsCoolTime = false;
+        CheckSkillUse(SkillManager.Instance.player.Mp);
     }
+
+    public void CheckSkillUse(float playerMp)
+    {
+        if (skillData.mpCost > playerMp)
+        {
+            noManaPanel.SetActive(true);
+            IsNoMana = true;
+        }
+        else
+        {
+            noManaPanel.SetActive(false);
+            IsNoMana = false;
+        }
+
+    }
+
 
     public void OnDrag(PointerEventData eventData)
     {

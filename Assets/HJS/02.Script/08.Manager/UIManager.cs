@@ -1,14 +1,18 @@
 using JetBrains.Annotations;
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
 public class UIManager : SingleTon<UIManager>
 {
     public QuickSlotManager quickSlotManager;
     public Inventory inventory;
     public DropDownAnimator dropDownAnimator;
+    [SerializeField] TextMeshProUGUI warningText;
+    Coroutine warningTextCor;
 
     private void OnEnable()
     {
@@ -38,6 +42,23 @@ public class UIManager : SingleTon<UIManager>
         {
             qSlot.Init(qSlot.ItemData);
         }
+    }
+
+    public void SetWarningText(string msg)
+    {
+        warningText.text = msg;
+        warningText.gameObject.SetActive(true);
+        if(warningTextCor == null)
+        {
+            warningTextCor = StartCoroutine(ShowWarningText());
+        }
+    }
+
+    IEnumerator ShowWarningText()
+    {
+        yield return new WaitForSeconds(1.5f);
+        warningText.gameObject.SetActive(false);
+        warningTextCor = null;
     }
 
     private void OnDisable()

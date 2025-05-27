@@ -19,7 +19,7 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected Weapon weapon;
     protected StateMachine<Character> stateMachine;
     protected Action<string> waitAnimAction;
-    protected bool isAttacking;
+    [SerializeField] protected bool isAttacking;
 
     //public
     public SpriteRenderer spriteRender;

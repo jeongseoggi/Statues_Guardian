@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,10 +8,13 @@ public class SkillManager : SingleTon<SkillManager>
 {
     public SkillSlot[] skillSlot;
     public Dictionary<int, string> skillSlotSaveDic = new Dictionary<int, string>();
+    public Player player;
 
     private void Start()
     {
         LoadSkillSlotData();
+        player = GameManager.Instance.GetPlayer();
+        player.OnCheckMana += CheckSlot;
     }
 
 
@@ -78,8 +82,28 @@ public class SkillManager : SingleTon<SkillManager>
         if (skillSlot[slotIndex].IsCoolTime)
             return;
 
-        skillSlot[slotIndex].SkillData.SkillUse(user);
+        if (skillSlot[slotIndex].IsNoMana)
+        {
+            UIManager.Instance.SetWarningText("마나가 부족합니다.");
+            return;
+        }
+    
+        skillSlot[slotIndex].SkillData?.SkillUse(user);
         skillSlot[slotIndex].StartCoolTime();
+    }
+
+    public void CheckSlot()
+    {
+        foreach(var slot in skillSlot)
+        {
+            slot.CheckSkillUse(player.Mp);
+        }
+
+    }
+
+    private void OnDestroy()
+    {
+        player.OnCheckMana -= CheckSlot;
     }
 
     /// <summary>

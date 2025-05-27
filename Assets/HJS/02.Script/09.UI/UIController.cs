@@ -8,8 +8,11 @@ using UnityEngine;
 public class UIController : MonoBehaviour
 {
     public event Action<float, int> OnHealthChanged;
+    public event Action<float, int> OnManaChanged;
     public int maxHealth;
+    public int maxMana;
     public int curHp;
+    public int curMp;
     public TextMeshProUGUI hpText;
 
 
@@ -33,6 +36,20 @@ public class UIController : MonoBehaviour
         curHp = maxHealth;
         OnHealthChanged?.Invoke(curHp, maxHealth);
         SetText();
+    }
+
+    public void GetMaxMp(float mp)
+    {
+        maxMana = (int)mp;
+        curMp = maxMana;
+        OnManaChanged?.Invoke(curMp, maxMana);
+        SetText();
+    }
+
+    public void UseSkill(float curMp)
+    {
+        this.curMp = (int)curMp;
+        OnManaChanged?.Invoke(curMp, maxMana);
     }
 
     /// <summary>

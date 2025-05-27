@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -7,6 +8,13 @@ public class SpeedUpStrategy : ISkillUseStrategy
 {
     public void SkillUse(ISkillUable user, SkillData skillData)
     {
-        user.SpeedUpApply(skillData.increase, skillData.duration, skillData.mpCost);
+        float resetVal = user.ApplyBuff(BuffType.Speed, skillData.increase, skillData.mpCost);
+        user.RunCoroutine(BuffTime(skillData.duration, resetVal, user));
+    }
+
+    private IEnumerator BuffTime(float duration, float returnval, ISkillUable user)
+    {
+        yield return new WaitForSeconds(duration);
+        user.ReturnBuffValue(BuffType.Speed, returnval);
     }
 }

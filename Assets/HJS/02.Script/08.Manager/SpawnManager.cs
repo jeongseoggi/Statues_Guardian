@@ -79,7 +79,7 @@ public class SpawnManager : PoolableObject<Monster>
         mon.OnDie += HandleMonsterDie;
         mon.gameObject.SetActive(true);
         mon.ResetUI();
-        mon.trackingAction?.Invoke();
+        mon.StateMachine.SetState(STATE.MOVE);
     }
 
     /// <summary>

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -48,10 +49,13 @@ public interface IUseable
 
 public interface ISkillUable
 {
-    void SpeedUpApply(float speedUpAmount, float duration, int mpCost);
-    void AttackUpApply(float attackUpAmount, float duration, int mpCost);
+    float ApplyBuff(BuffType buffType, float amount, int mpCost);
     void AoEApply(float duration, int mpCost);
     void DotDamageApply(float curseDamage, float duration, int mpCost);
+    Vector3 GetPosition();
+    Coroutine RunCoroutine(IEnumerator coroutine);
+    void ReturnBuffValue(BuffType buffType, float returnVal);
+    Player GetPlayer();
 }
 
 public interface IItemUseStrategy

@@ -21,54 +21,69 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -1866009882268865834, guid: 9098290e006bfdf4fbf71f6525d77f9d,
+      value: {fileID: -7459603669500001941, guid: bc6fca5e782b12b48825daf87eed0ea6,
         type: 3}
-    - time: 0.099999964
-      value: {fileID: 2541644860733848738, guid: 9098290e006bfdf4fbf71f6525d77f9d,
+    - time: 0.083333336
+      value: {fileID: 6166366046247683660, guid: bc6fca5e782b12b48825daf87eed0ea6,
         type: 3}
-    - time: 0.19999999
-      value: {fileID: 8063504249368503947, guid: 9098290e006bfdf4fbf71f6525d77f9d,
+    - time: 0.16666667
+      value: {fileID: 3137527998565041634, guid: bc6fca5e782b12b48825daf87eed0ea6,
         type: 3}
-    - time: 0.29999995
-      value: {fileID: -7487182413020391962, guid: 9098290e006bfdf4fbf71f6525d77f9d,
+    - time: 0.25
+      value: {fileID: 7628613798529611405, guid: bc6fca5e782b12b48825daf87eed0ea6,
         type: 3}
-    - time: 0.39999998
-      value: {fileID: -276186826039229127, guid: 9098290e006bfdf4fbf71f6525d77f9d,
+    - time: 0.33333334
+      value: {fileID: 9211441226706313983, guid: bc6fca5e782b12b48825daf87eed0ea6,
+        type: 3}
+    - time: 0.41666666
+      value: {fileID: -4387257990158484384, guid: bc6fca5e782b12b48825daf87eed0ea6,
         type: 3}
     - time: 0.5
-      value: {fileID: 4741943304038506334, guid: 9098290e006bfdf4fbf71f6525d77f9d,
+      value: {fileID: 4897232894672810715, guid: bc6fca5e782b12b48825daf87eed0ea6,
         type: 3}
-    - time: 0.6
-      value: {fileID: 5804636522912695570, guid: 9098290e006bfdf4fbf71f6525d77f9d,
+    - time: 0.5833333
+      value: {fileID: 770206704810081102, guid: bc6fca5e782b12b48825daf87eed0ea6,
         type: 3}
-    - time: 0.6999999
-      value: {fileID: -7757189577646809275, guid: 9098290e006bfdf4fbf71f6525d77f9d,
-        type: 3}
-    - time: 0.79999995
-      value: {fileID: 3756540815123160672, guid: 9098290e006bfdf4fbf71f6525d77f9d,
-        type: 3}
-    - time: 0.89
-      value: {fileID: 3756540815123160672, guid: 9098290e006bfdf4fbf71f6525d77f9d,
+    - time: 0.6666667
+      value: {fileID: -1877230367031352636, guid: bc6fca5e782b12b48825daf87eed0ea6,
         type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
     flags: 2
-  m_SampleRate: 100
+  m_SampleRate: 12
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   m_ClipBindingConstant:
-    genericBindings: []
-    pptrCurveMapping: []
+    genericBindings:
+    - serializedVersion: 2
+      path: 0
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    pptrCurveMapping:
+    - {fileID: -7459603669500001941, guid: bc6fca5e782b12b48825daf87eed0ea6, type: 3}
+    - {fileID: 6166366046247683660, guid: bc6fca5e782b12b48825daf87eed0ea6, type: 3}
+    - {fileID: 3137527998565041634, guid: bc6fca5e782b12b48825daf87eed0ea6, type: 3}
+    - {fileID: 7628613798529611405, guid: bc6fca5e782b12b48825daf87eed0ea6, type: 3}
+    - {fileID: 9211441226706313983, guid: bc6fca5e782b12b48825daf87eed0ea6, type: 3}
+    - {fileID: -4387257990158484384, guid: bc6fca5e782b12b48825daf87eed0ea6, type: 3}
+    - {fileID: 4897232894672810715, guid: bc6fca5e782b12b48825daf87eed0ea6, type: 3}
+    - {fileID: 770206704810081102, guid: bc6fca5e782b12b48825daf87eed0ea6, type: 3}
+    - {fileID: -1877230367031352636, guid: bc6fca5e782b12b48825daf87eed0ea6, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.9
+    m_StopTime: 0.75
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -79,7 +94,7 @@ AnimationClip:
     m_LoopBlendPositionY: 0
     m_LoopBlendPositionXZ: 0
     m_KeepOriginalOrientation: 0
-    m_KeepOriginalPositionY: 0
+    m_KeepOriginalPositionY: 1
     m_KeepOriginalPositionXZ: 0
     m_HeightFromFeet: 0
     m_Mirror: 0

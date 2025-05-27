@@ -7,43 +7,39 @@ using UnityEngine.Events;
 public class PlayerSkillController : MonoBehaviour, ISkillUable
 {
     [SerializeField] Player player;
-    public void AttackUpApply(float attackUpAmount, float duration, int mpCost)
+
+    public float ApplyBuff(BuffType buffType, float amount, int mpCost)
     {
+        float originValue = 0;
+        switch (buffType)
+        {
+            case BuffType.Attack:
+                originValue = player.Atk;
+                player.Atk *= amount;
+                break;
+            case BuffType.Speed:
+                originValue = player.Speed;
+                player.Speed *= amount;
+                break;
+        }
+
         player.Mp -= mpCost;
-        float originAttackVal = player.Atk;
-        player.Atk *= attackUpAmount;
-        StartCoroutine(InCreaseCor(originAttackVal, duration, () => { player.Atk = originAttackVal; }));
+        return originValue;
     }
+
 
     public void DotDamageApply(float curseDamage, float duration, int mpCost)
     {
-        throw new System.NotImplementedException();
+
     }
 
-    public void SpeedUpApply(float speedUpAmount, float duration, int mpCost)
-    {
-        player.Mp -= mpCost;
-        float originSpeed = player.Speed;
-        player.Speed *= speedUpAmount;
-        StartCoroutine(InCreaseCor(originSpeed, duration, () => { player.Speed = originSpeed; }));
-    }
+
 
     public void AoEApply(float duration, int mpCost)
     {
-
+        player.Mp -= mpCost;
     }
 
-
-    IEnumerator InCreaseCor(float origin, float duration, UnityAction resetAction)
-    {
-        float time = 0;
-        while(duration > time)
-        {
-            time += Time.deltaTime;
-            yield return null;
-        }
-        resetAction?.Invoke();
-    }
 
     /// <summary>
     /// 테스트 코드
@@ -54,5 +50,36 @@ public class PlayerSkillController : MonoBehaviour, ISkillUable
             SkillManager.Instance.UseSkill(0, this);
         if (Input.GetKeyDown(KeyCode.LeftControl))
             SkillManager.Instance.UseSkill(3, this);
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            SkillManager.Instance.UseSkill(2, this);
+        
+    }
+
+    public Vector3 GetPosition()
+    {
+        return transform.position;
+    }
+
+    public Coroutine RunCoroutine(IEnumerator coroutine)
+    {
+        return StartCoroutine(coroutine);
+    }
+
+    public void ReturnBuffValue(BuffType buffType, float returnVal)
+    {
+        switch(buffType) 
+        {
+            case BuffType.Attack:
+                player.Atk = returnVal;
+                break;
+            case BuffType.Speed:
+                player.Speed = returnVal;
+                break;
+        }
+    }
+
+    public Player GetPlayer()
+    {
+        return player;
     }
 }

@@ -1,8 +1,10 @@
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading;
 using TMPro;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Monster : Character, IHitable
 {
@@ -13,6 +15,8 @@ public class Monster : Character, IHitable
     [SerializeField] UIController monsterUIController;
     [SerializeField] GameObject target;
     [SerializeField] GameObject projectileStartZone;
+    [SerializeField] bool isTaunt;
+    [SerializeField] DamageHandler damageHandler;
     #endregion
 
     #region public
@@ -20,6 +24,7 @@ public class Monster : Character, IHitable
     public Action onDieEffect; // 죽음 연출 Action
     public Action<Monster> OnDie; // 죽었을 때 Action
     public Action trackingAction; //추격 Action
+    public Action<float, float> aoeAction; //도발 Action
     #endregion
 
     #region 프로퍼티
@@ -42,6 +47,25 @@ public class Monster : Character, IHitable
             weapon.damage = Atk;
         }
     }
+
+    public override float Hp 
+    { 
+        get => base.Hp; 
+        set
+        {
+            base.Hp = value;
+            if(Hp <= 0)
+            {
+                if (stateMachine.CurState is MonsterDieState)
+                    return;
+                attackAction?.Invoke(false);
+                stateMachine.SetState(STATE.DIE);
+            }
+            monsterUIController.TakeDamage(hp);
+        }
+    }
+
+    public DamageHandler DamageHandler { get => damageHandler; }
     #endregion
 
     void Awake()
@@ -53,7 +77,7 @@ public class Monster : Character, IHitable
         StateMachine.AddState(STATE.ATTACK, new MonsterAttackState());
         StateMachine.AddState(STATE.HIT, new MonsterHitState());
         StateMachine.AddState(STATE.DIE, new MonsterDieState());
-        StateMachine.SetAnimator(animator);
+        StateMachine.SetAnimator(animator); 
         StateMachine.SetState(STATE.IDLE);
     }
 
@@ -91,7 +115,7 @@ public class Monster : Character, IHitable
             }
         }
 
-        Target = StageManager.Instance.stageObject; // 타겟 설정
+        Target = StageManager.Instance?.stageObject.gameObject; // 타겟 설정
         weapon.SetOwner(this); 
         stateMachine.SetState(STATE.IDLE);
     }
@@ -102,15 +126,8 @@ public class Monster : Character, IHitable
     /// <param name="atk"></param>
     public void Hit(float atk)
     {
-        hp -= (atk - Def);
-        if (hp <= 0)
-        {
-            if (stateMachine.CurState is MonsterDieState)
-                return;
-            attackAction(false);
-            stateMachine.SetState(STATE.DIE);
-        }
-        monsterUIController.TakeDamage(hp);
+        float damage = damageHandler.TakeDamage(atk, Def);
+        Hp -= damage;
     }
 
     /// <summary>
@@ -146,5 +163,17 @@ public class Monster : Character, IHitable
     public void ResetUI()
     {
         monsterUIController.GetMaxHp(maxHp);
+    }
+
+
+    /// <summary>
+    /// 테스트 코드
+    /// </summary>
+    public void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Init();
+        }
     }
 }   
