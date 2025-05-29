@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DamageHandler : MonoBehaviour
 {
-    public float TakeDamage(float atk , float def)
+    public float TakeDamage(float atk , float def = 0)
     {
         return Mathf.Max(atk - def, 0);
     }

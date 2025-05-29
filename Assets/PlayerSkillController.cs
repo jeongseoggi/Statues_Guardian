@@ -8,6 +8,7 @@ public class PlayerSkillController : MonoBehaviour, ISkillUable
 {
     [SerializeField] Player player;
 
+
     public float ApplyBuff(BuffType buffType, float amount, int mpCost)
     {
         float originValue = 0;
@@ -30,7 +31,12 @@ public class PlayerSkillController : MonoBehaviour, ISkillUable
 
     public void DotDamageApply(float curseDamage, float duration, int mpCost)
     {
-
+        player.isDotActive = true;
+        player.Weapon.OnDotDamage += (player, monster) =>
+        {
+            player.Weapon.StartCoroutine(player.Weapon.DotDamage(player, curseDamage, duration, monster));
+        };
+        player.Mp -= mpCost ;
     }
 
 
@@ -48,11 +54,12 @@ public class PlayerSkillController : MonoBehaviour, ISkillUable
     {
         if (Input.GetKeyDown(KeyCode.Q))
             SkillManager.Instance.UseSkill(0, this);
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-            SkillManager.Instance.UseSkill(3, this);
+        if (Input.GetKeyDown(KeyCode.E))
+            SkillManager.Instance.UseSkill(1, this);
         if (Input.GetKeyDown(KeyCode.LeftShift))
             SkillManager.Instance.UseSkill(2, this);
-        
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+            SkillManager.Instance.UseSkill(3, this);
     }
 
     public Vector3 GetPosition()

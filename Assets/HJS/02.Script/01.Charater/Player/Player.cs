@@ -6,6 +6,7 @@ public class Player : Character, IUseable, IHitable
     #region public
     public Func<int> getCombo;
     public event Action OnCheckMana;
+    public bool isDotActive;
     #endregion
 
     #region private
@@ -62,6 +63,7 @@ public class Player : Character, IUseable, IHitable
         }
     }
     public UIController PlayerUIController { get => playerUIController; }
+    public Weapon Weapon { get => weapon; }
     #endregion
 
     private void Awake()
@@ -122,6 +124,7 @@ public class Player : Character, IUseable, IHitable
         if(healType == HealType.HP)
         {
             Hp += amount;
+            StageManager.Instance?.stageObject.ActiveEffect();
 #if UNITY_EDITOR
             Debug.Log($"HP 회복: {amount}, 현재 HP: {hp}");
 #endif

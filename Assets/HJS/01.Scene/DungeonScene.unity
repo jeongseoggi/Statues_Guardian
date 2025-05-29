@@ -849,6 +849,16 @@ PrefabInstance:
       propertyPath: stageObjHp
       value: 1000
       objectReference: {fileID: 0}
+    - target: {fileID: 3322887802620626908, guid: d730038d263986f4dac93230e1dd62b0,
+        type: 3}
+      propertyPath: effectPos.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3322887802620626908, guid: d730038d263986f4dac93230e1dd62b0,
+        type: 3}
+      propertyPath: effectPos.y
+      value: -3.8
+      objectReference: {fileID: 0}
     - target: {fileID: 7947911505737750448, guid: d730038d263986f4dac93230e1dd62b0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16662,10 +16672,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 0
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
 --- !u!1 &745891919
 GameObject:
   m_ObjectHideFlags: 0
@@ -16921,6 +16927,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 761953000}
   m_CullTransparentMesh: 1
+--- !u!1 &763760615
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 763760617}
+  - component: {fileID: 763760616}
+  m_Layer: 0
+  m_Name: EffectPoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &763760616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763760615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee4d5e0d3cfecb143903c564065c1b6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefabDic:
+  - {fileID: 970549972314964279, guid: 7519450f4220bde43bc1a6eb66d69798, type: 3}
+  - {fileID: 2278794016901167239, guid: 3b60f757fffb29f46bc5e23f676ca7d1, type: 3}
+  - {fileID: 4871786032182019774, guid: a2df078561de35c40965c5dd6c647b7b, type: 3}
+--- !u!4 &763760617
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763760615}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.1296062, y: -14.487581, z: -0.20354539}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &775896567
 GameObject:
   m_ObjectHideFlags: 0
@@ -20453,6 +20507,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemDataBase: {fileID: 11400000, guid: d917a3be5c498dd40b641e4830178cd3, type: 2}
   skillDatabase: {fileID: 11400000, guid: cd40d6cf60ef08247893b802e57a0dd1, type: 2}
+  effectList:
+  - {fileID: 970549972314964279, guid: 7519450f4220bde43bc1a6eb66d69798, type: 3}
+  - {fileID: 2278794016901167239, guid: 3b60f757fffb29f46bc5e23f676ca7d1, type: 3}
+  - {fileID: 4871786032182019774, guid: a2df078561de35c40965c5dd6c647b7b, type: 3}
+  - {fileID: 4871786032182019774, guid: a2df078561de35c40965c5dd6c647b7b, type: 3}
 --- !u!4 &1165984413
 Transform:
   m_ObjectHideFlags: 0
@@ -28902,10 +28961,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_OverrideArea: 1
-  m_Area: 1
-  m_IgnoreFromBuild: 0
-  m_AffectedAgents: ffffffff
 --- !u!1 &1971142865
 GameObject:
   m_ObjectHideFlags: 0
@@ -30812,3 +30867,4 @@ SceneRoots:
   - {fileID: 1165984413}
   - {fileID: 96553684}
   - {fileID: 1055909917}
+  - {fileID: 763760617}

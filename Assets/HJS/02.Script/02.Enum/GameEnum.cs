@@ -96,3 +96,10 @@ public enum BuffType
     Attack,
     Speed
 }
+
+public enum EffectType
+{
+    HealEffect,
+    DotEffect,
+    AoeEffect
+}

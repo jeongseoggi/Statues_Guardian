@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
@@ -9,9 +11,11 @@ public class DataManager : SingleTon<DataManager>
 
     [SerializeField] ItemScriptableObject itemDataBase;
     [SerializeField] SkillDataList skillDatabase;
+    [SerializeField] List<GameObject> effectList;
 
     public ItemScriptableObject ItemDataBase { get => itemDataBase; }
     public SkillDataList SkillDataBase { get=> skillDatabase; }
+    public List<GameObject> EffectList { get=> effectList; }
 
     private void Start()
     {

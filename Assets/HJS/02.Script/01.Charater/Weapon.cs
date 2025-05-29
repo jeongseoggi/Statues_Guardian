@@ -1,16 +1,30 @@
+using Mono.Cecil;
 using NUnit.Framework;
+using System;
+using System.Collections;
 using System.Transactions;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Weapon : MonoBehaviour, IAttackable
 {
     public CircleCollider2D weaponCol;
     public float damage;
     public Character owner;
-    private int[] comboDmgData = new int[] { 3000, 5, 10 };
+    private int[] comboDmgData = new int[] { 3, 5, 10 };
+    public event Action<Player,Monster> OnDotDamage;
+    private IHitable target;
 
     public void Attack(IHitable target)
     {
+        if(owner is Player player && player.isDotActive)
+        {
+            if (target is Monster monster && !monster.isDotState)
+            {
+                OnDotDamage?.Invoke(player, monster);
+            }
+
+        }
         target.Hit(damage);
     }
 
@@ -28,7 +42,8 @@ public class Weapon : MonoBehaviour, IAttackable
 
         if (other.GetComponent<IHitable>() != null)
         {
-            Attack(other.GetComponent<IHitable>());
+            target = other.GetComponent<IHitable>();
+            Attack(target);
         }
     }
 
@@ -49,4 +64,22 @@ public class Weapon : MonoBehaviour, IAttackable
     {
         damage = comboDmgData[combo];
     }
+
+    public IEnumerator DotDamage(Player player, float damage, float duration, Monster target)
+    {
+        float time = 0;
+        GameObject effectObject = EffectPoolManager.Instance?.GetEffect(EffectType.DotEffect, target.gameObject.transform);
+        while(time < duration) 
+        {
+            yield return new WaitForSeconds(0.5f);
+            time += 0.5f;
+            Debug.Log("도트 데미지 입히는 중");
+            target.Hit(damage);
+        }
+        player.isDotActive = false;
+        target.isDotState = false;
+        EffectPoolManager.Instance?.ReturnEffect(EffectType.DotEffect, effectObject);
+    }
+
+
 }

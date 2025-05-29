@@ -9,6 +9,7 @@ public class StageObject : MonoBehaviour, IHitable
     [SerializeField] float statuesDef;
     [SerializeField] UIController uiController;
     [SerializeField] Player player;
+    [SerializeField] Vector3 effectPos;
 
     public float duration = 0.2f;      // Èçµé¸² ½Ã°£
     public float strength = 0.2f;      // Èçµé¸² ¼¼±â
@@ -24,6 +25,7 @@ public class StageObject : MonoBehaviour, IHitable
         statuesDef = player.Def;
         statuesCurHp = statuesMaxHp;
         uiController.GetMaxHp(statuesMaxHp);
+        ActiveEffect();
     }
 
     public void Hit(float atk)
@@ -44,6 +46,12 @@ public class StageObject : MonoBehaviour, IHitable
         {
             shakeTween = transform.DOShakePosition(duration, strength, vibrato, randomness, false, true);
         }
+    }
+
+    public void ActiveEffect()
+    {
+        GameObject effectObj = EffectPoolManager.Instance.GetEffect(EffectType.HealEffect, gameObject.transform);
+        effectObj.transform.localPosition = Vector2.up;
     }
 }
 

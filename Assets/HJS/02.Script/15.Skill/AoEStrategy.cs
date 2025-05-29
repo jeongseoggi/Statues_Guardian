@@ -18,7 +18,8 @@ public class AoEStrategy : ISkillUseStrategy
             }
         }
 
-
+        GameObject effectObj = EffectPoolManager.Instance?.GetEffect(EffectType.AoeEffect);
+        effectObj.transform.position = pos;
         user.AoEApply(skillData.duration, skillData.mpCost);
     }
 }

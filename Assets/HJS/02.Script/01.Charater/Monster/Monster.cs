@@ -17,6 +17,7 @@ public class Monster : Character, IHitable
     [SerializeField] GameObject projectileStartZone;
     [SerializeField] bool isTaunt;
     [SerializeField] DamageHandler damageHandler;
+    [SerializeField] bool isDotDamageHit;
     #endregion
 
     #region public
@@ -25,6 +26,7 @@ public class Monster : Character, IHitable
     public Action<Monster> OnDie; // 죽었을 때 Action
     public Action trackingAction; //추격 Action
     public Action<float, float> aoeAction; //도발 Action
+    public bool isDotState;
     #endregion
 
     #region 프로퍼티
@@ -64,6 +66,7 @@ public class Monster : Character, IHitable
             monsterUIController.TakeDamage(hp);
         }
     }
+    public bool IsDotDamageHit { get => isDotDamageHit; set => isDotDamageHit = value; }
 
     public DamageHandler DamageHandler { get => damageHandler; }
     #endregion
