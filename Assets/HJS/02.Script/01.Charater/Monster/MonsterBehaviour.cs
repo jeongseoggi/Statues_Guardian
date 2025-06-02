@@ -57,7 +57,6 @@ public class MonsterBehaviour : MonoBehaviour
             monster.Hit(damage);
             Debug.Log("데미지 입힘  : " + damage);
             yield return new WaitForSeconds(1);
-            Debug.Log("Time 값 " + time);
             time += 1;
         }
     }

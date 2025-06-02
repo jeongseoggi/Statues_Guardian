@@ -46,9 +46,18 @@ public class PointBar : MonoBehaviour
 
     private void OnDisable()
     {
-        targetUI.OnHealthChanged -= UpdateUISlider;
-        targetUI.OnHealthChanged -= UpdateHpImage;
-        targetUI.OnManaChanged -= UpdateMpImage;
+        if (targetUI != null)
+        {
+            targetUI.OnHealthChanged -= UpdateUISlider;
+        }
+        if (hpSliderImg != null)
+        {
+            targetUI.OnHealthChanged -= UpdateHpImage;
+        }
+        if(mpSliderImg != null)
+        {
+            targetUI.OnManaChanged -= UpdateMpImage;
+        }
 
     }
 }

@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System.Collections;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class StageObject : MonoBehaviour, IHitable
@@ -7,9 +8,8 @@ public class StageObject : MonoBehaviour, IHitable
     [SerializeField] float statuesCurHp;
     [SerializeField] float statuesMaxHp;
     [SerializeField] float statuesDef;
-    [SerializeField] UIController uiController;
-    [SerializeField] Player player;
     [SerializeField] Vector3 effectPos;
+    Player player;
 
     public float duration = 0.2f;      // Èçµé¸² ½Ã°£
     public float strength = 0.2f;      // Èçµé¸² ¼¼±â
@@ -18,27 +18,29 @@ public class StageObject : MonoBehaviour, IHitable
 
     Tween shakeTween;
 
-    public void Init()
+    public void Init(float maxHp, float def)
     {
-        player = GameManager.Instance.GetPlayer();
-        statuesMaxHp = player.MaxHp;
-        statuesDef = player.Def;
+        statuesMaxHp = maxHp;
+        statuesDef = def;
         statuesCurHp = statuesMaxHp;
-        uiController.GetMaxHp(statuesMaxHp);
+        player = GameManager.Instance.GetPlayer();
+        StageManager.Instance.sharedHp.OnHealthChanged += UpdateUI;
         ActiveEffect();
     }
 
     public void Hit(float atk)
     {
         float damage = (atk - statuesDef) > 0 ? (atk - statuesDef) : 0;
-
-
-
-        statuesCurHp -= damage;
-        player.Hit(damage);
+        StageManager.Instance.sharedHp.TakeDamage(damage);
         TriggerShake();
-        uiController.TakeDamage(statuesCurHp);
     }
+
+    public void UpdateUI(float changeHp)
+    {
+        statuesCurHp = changeHp;
+        player.PlayerUIController.TakeDamage(statuesCurHp);
+    }
+
 
     public void TriggerShake()
     {
@@ -52,6 +54,11 @@ public class StageObject : MonoBehaviour, IHitable
     {
         GameObject effectObj = EffectPoolManager.Instance.GetEffect(EffectType.HealEffect, gameObject.transform);
         effectObj.transform.localPosition = Vector2.up;
+    }
+
+    public void OnDestroy()
+    {
+        StageManager.Instance.sharedHp.OnHealthChanged -= UpdateUI;
     }
 }
 

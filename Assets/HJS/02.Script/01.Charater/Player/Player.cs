@@ -43,6 +43,10 @@ public class Player : Character, IUseable, IHitable
             {
                 base.Hp = base.MaxHp;
             }
+            else if(base.Hp <= 0)
+            {
+                StageManager.Instance?.StageFail();
+            }
             GameManager.Instance.PlayerStatData.Hp = base.Hp;
         }
     }
@@ -86,10 +90,13 @@ public class Player : Character, IUseable, IHitable
         Atk = GameManager.Instance.PlayerStatData.Atk;
         Def = GameManager.Instance.PlayerStatData.Def;
         Speed = GameManager.Instance.PlayerStatData.Speed;
-        weapon.SetOwner(this); 
+        weapon.SetOwner(this);
+        weapon.damage = Atk;
         PlayerUIController.GetMaxHp(MaxHp);
         PlayerUIController.GetMaxMp(MaxMp);
-        StageManager.Instance?.stageObject.Init();
+        StageManager.Instance?.sharedHp.SetHp(MaxHp, Def);
+        StageManager.Instance.sharedHp.OnHealthChanged += UpdateHp;
+
     }
 
     protected override void Start()
@@ -168,7 +175,14 @@ public class Player : Character, IUseable, IHitable
 
     public void Hit(float atk)
     {
-        Hp -= atk;
+        float damage = (atk - Def) > 0 ? (atk - Def) : 0;
+        StageManager.Instance.sharedHp.TakeDamage(damage);
+    }
+
+    public void UpdateHp(float current)
+    {
+        Hp = current;
         playerUIController.TakeDamage(Hp);
     }
+
 }

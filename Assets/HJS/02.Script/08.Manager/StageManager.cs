@@ -7,6 +7,9 @@ public class StageManager : SingleTonDestory<StageManager>
 {
     #region public
     public StageObject stageObject;
+    public static event Action OnStageClear;
+    public static event Action OnStageFail;
+    public SharedHP sharedHp;
     #endregion
 
     #region private
@@ -29,6 +32,19 @@ public class StageManager : SingleTonDestory<StageManager>
     public void EndWave()
     {
         shopPanelHandler.Show();
+    }
+
+    public void StageClear()
+    {
+        OnStageClear?.Invoke();
+    }
+
+    /// <summary>
+    /// 스테이지 실패 처리
+    /// </summary>
+    public void StageFail()
+    {
+        OnStageFail?.Invoke();
     }
 
 }

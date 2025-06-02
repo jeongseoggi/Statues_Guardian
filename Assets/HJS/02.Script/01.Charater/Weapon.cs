@@ -14,6 +14,7 @@ public class Weapon : MonoBehaviour, IAttackable
     private int[] comboDmgData = new int[] { 3, 5, 10 };
     public event Action<Player,Monster> OnDotDamage;
     private IHitable target;
+    private float comboDmg;
 
     public void Attack(IHitable target)
     {
@@ -25,7 +26,7 @@ public class Weapon : MonoBehaviour, IAttackable
             }
 
         }
-        target.Hit(damage);
+        target.Hit(damage + comboDmg);
     }
 
 
@@ -62,7 +63,7 @@ public class Weapon : MonoBehaviour, IAttackable
     /// <param name="combo"></param>
     public void SetComboDmg(int combo)
     {
-        damage = comboDmgData[combo];
+        comboDmg = comboDmgData[combo];
     }
 
     public IEnumerator DotDamage(Player player, float damage, float duration, Monster target)

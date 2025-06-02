@@ -52,7 +52,7 @@ public class WaveManager : MonoBehaviour
     {
         if (isFinalWave)
         {
-            DungeonUIManager.Instance.WaveText.SetText("Stage Clear!", () => { });
+            StageManager.Instance.StageClear();
         }
         else
         {

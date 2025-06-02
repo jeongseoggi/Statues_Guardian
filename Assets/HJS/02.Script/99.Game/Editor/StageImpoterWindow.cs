@@ -158,6 +158,11 @@ public class StageImpoterWindow : EditorWindow
             so.itemUseStrategy = data.itemUseStrategy;
             so.price = data.price;
             so.spriteName = data.spriteName;
+
+            if(so is HealItemData healItem)
+            {
+                healItem.healRatio = (data as HealItemData).healRatio;
+            }
         },
         itemDataList.itemData,
         itemDataList);

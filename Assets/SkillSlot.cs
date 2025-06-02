@@ -16,7 +16,7 @@ public class SkillSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
     [SerializeField] TextMeshProUGUI coolTimeText;
     [SerializeField] bool isCoolTime;
     [SerializeField] GameObject dragLayer;
-    [SerializeField ]CanvasGroup canvasGroup;
+    [SerializeField] CanvasGroup canvasGroup;
     [SerializeField] GameObject parentObject;
     [SerializeField] bool isNoMana;
     [SerializeField] GameObject noManaPanel;
@@ -117,6 +117,7 @@ public class SkillSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        canvasGroup = dragLayer.GetComponent<CanvasGroup>();
         canvasGroup.blocksRaycasts = false;
     }
 }

@@ -17,9 +17,13 @@ public class UIManager : SingleTon<UIManager>
     private void OnEnable()
     {
         if(GameManager.Instance?.PlayerInventoryData != null)
+        {
             RegisterSlots(GameManager.Instance.PlayerInventoryData);
+        }
         else
+        {
             GameManager.OnInventoryDataReady += RegisterSlots;
+        }
     }
 
     public void ActiveInventory()
@@ -61,9 +65,10 @@ public class UIManager : SingleTon<UIManager>
         warningTextCor = null;
     }
 
+
     private void OnDisable()
     {
         GameManager.OnInventoryDataReady -= RegisterSlots;
-    }
 
+    }
 }
