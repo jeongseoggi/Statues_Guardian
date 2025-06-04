@@ -162,6 +162,7 @@ public class StageImpoterWindow : EditorWindow
             if(so is HealItemData healItem)
             {
                 healItem.healRatio = (data as HealItemData).healRatio;
+                healItem.healType = (data as HealItemData).healType;
             }
         },
         itemDataList.itemData,
@@ -196,6 +197,9 @@ public class StageImpoterWindow : EditorWindow
                 so.damage = data.damage;
                 so.duration = data.duration;
                 so.increase = data.increase;
+                so.damagePerLevel = data.damagePerLevel;
+                so.increasePerLevel = data.increasePerLevel;
+                so.skillMasterLevel = data.skillMasterLevel;
                 so.assetName = data.assetName;
             },
             skillDataList.skillDatas,
@@ -225,15 +229,19 @@ public class StageImpoterWindow : EditorWindow
 
         if (File.Exists(itemPath))
         {
-            Debug.LogWarning($"[SO Importer] 파일 중복으로 생성 건너뜀: {itemPath}");
-            var existing = AssetDatabase.LoadAssetAtPath<T>(itemPath);
-            if (existing != null)
+            T pasteAsset = AssetDatabase.LoadAssetAtPath<T>(itemPath);
+            if (pasteAsset != null)
             {
-                addList.Add(existing);
-                EditorUtility.SetDirty(soListClass);  // ScriptableObject로 캐스팅해서 처리
+                Debug.LogWarning($"[SO Importer] 기존 파일 덮어씌움: {itemPath}");
+                copyData?.Invoke(pasteAsset);
+
+                EditorUtility.SetDirty(pasteAsset);
                 AssetDatabase.SaveAssets();
+
+                addList.Add(pasteAsset);
+                EditorUtility.SetDirty(soListClass);
+                return;
             }
-            return;
         }
 
         var asset = createFunc.Invoke();
@@ -464,6 +472,9 @@ public class StageImpoterWindow : EditorWindow
             jsonData[index]["Damage"].AsFloat,
             jsonData[index]["Duration"].AsFloat,
             jsonData[index]["Increase"].AsFloat,
+            jsonData[index]["DamagePerLevel"].AsFloat,
+            jsonData[index]["IncreasePerLevel"].AsFloat,
+            jsonData[index]["MasterLevel"].AsInt,
             jsonData[index]["SpriteName"],
             jsonData[index]["AssetName"],
             (SkillType)jsonData[index]["SkillType"].AsInt,

@@ -1,6 +1,7 @@
 using SimpleJSON;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -30,7 +31,7 @@ public class Inventory : MonoBehaviour, IBeginDragHandler, IDragHandler
         int index = 0;
         foreach(string itemName in GameManager.Instance.PlayerInventoryData.itemDict.Keys)
         {
-            if(!invenSlotData.ContainsKey(index))
+            if (!invenSlotData.ContainsKey(index))
             {
                 invenSlotData.Add(index, DataManager.Instance.GetItemData(itemName));
                 inventorySlots[index].ItemSetting(invenSlotData[index]);

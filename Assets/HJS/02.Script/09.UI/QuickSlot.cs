@@ -84,7 +84,7 @@ public class QuickSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
         if(ItemData != null && ItemData.itemName.Equals(itemName))
         {
             int count = UIManager.Instance.quickSlotManager.GetItemCount(this.ItemData.itemName);
-            if(count == 0)
+            if(count <= 0)
             {
                 ClearSlot();
             }

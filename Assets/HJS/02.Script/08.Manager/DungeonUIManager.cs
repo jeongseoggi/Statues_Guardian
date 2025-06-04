@@ -16,24 +16,19 @@ public class DungeonUIManager : SingleTonDestory<DungeonUIManager>
     }
     private void OnEnable()
     {
-        StageManager.OnStageClear += ShowClearUI;
-        StageManager.OnStageFail += ShowFailUI;
+        StageManager.OnStageResult += ShowResultUI;
     }
 
 
-    public void ShowClearUI()
+    public void ShowResultUI(string resultText, bool isClear)
     {
-        stageResultText.ShowResult("Stage Clear!");
+        GetComponent<Canvas>().sortingOrder = 10;
+        stageResultText.ShowResult(resultText, isClear);
     }
 
-    public void ShowFailUI()
-    {
-        stageResultText.ShowResult("Stage Fail!");
-    }
 
     public void OnDestroy()
     {
-        StageManager.OnStageClear -= ShowClearUI;
-        StageManager.OnStageFail -= ShowFailUI;
+        StageManager.OnStageResult -= ShowResultUI;
     }
 }

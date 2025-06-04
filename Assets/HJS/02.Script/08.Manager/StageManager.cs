@@ -7,8 +7,7 @@ public class StageManager : SingleTonDestory<StageManager>
 {
     #region public
     public StageObject stageObject;
-    public static event Action OnStageClear;
-    public static event Action OnStageFail;
+    public static event Action<string, bool> OnStageResult;
     public SharedHP sharedHp;
     #endregion
 
@@ -34,9 +33,12 @@ public class StageManager : SingleTonDestory<StageManager>
         shopPanelHandler.Show();
     }
 
+    /// <summary>
+    /// 스테이지 성공 처리
+    /// </summary>
     public void StageClear()
     {
-        OnStageClear?.Invoke();
+        OnStageResult?.Invoke("Stage Clear!", true);
     }
 
     /// <summary>
@@ -44,7 +46,7 @@ public class StageManager : SingleTonDestory<StageManager>
     /// </summary>
     public void StageFail()
     {
-        OnStageFail?.Invoke();
+        OnStageResult?.Invoke("Stage Fail...", false);
     }
 
 }

@@ -22,6 +22,9 @@ public class PlayerInventoryData
     /// <param name="addCount"></param>
     public void AddItem(ItemData itemData, int addCount = 1)
     {
+        if (addCount <= 0)
+            return;
+
         if(itemDict.ContainsKey(itemData.itemName))
         {
             itemDict[itemData.itemName].ItemCount += addCount;
@@ -52,8 +55,6 @@ public class PlayerInventoryData
 
     public void SendToItemChangeData(string itemName, int useCount)
     {
-
-
         string statChanges = $"{GameManager.Instance.PlayerStatData.Hp},{GameManager.Instance.PlayerStatData.Mp},{GameManager.Instance.PlayerStatData.Atk},{GameManager.Instance.PlayerStatData.Def}";
 
         WWWForm form = new WWWForm();

@@ -35,7 +35,7 @@ public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBegi
     /// <param name="itemData"></param>
     public void ItemSetting(ItemData itemData)
     {
-        if (itemData != null)
+        if (itemData != null && UIManager.Instance.quickSlotManager.GetItemCount(itemData.itemName) > 0)
         {
             itemImage.enabled = true;
             ItemData = itemData;
@@ -84,7 +84,7 @@ public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBegi
         if (ItemData != null && ItemData.itemName.Equals(itemName))
         {
             int count = UIManager.Instance.quickSlotManager.GetItemCount(this.ItemData.itemName);
-            if (count == 0)
+            if (count <= 0)
             {
                 ClearSlot();
             }

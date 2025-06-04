@@ -96,7 +96,10 @@ public class SkillManager : SingleTon<SkillManager>
     {
         foreach(var slot in skillSlot)
         {
-            slot.CheckSkillUse(player.Mp);
+            if(slot.SkillData != null && !string.IsNullOrEmpty(slot.SkillData.skillName))
+            {
+                slot.CheckSkillUse(player.Mp);
+            }
         }
 
     }

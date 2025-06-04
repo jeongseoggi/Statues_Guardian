@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 using SimpleJSON;
 using System;
 using System.Collections;
@@ -23,12 +24,14 @@ public class GameManager : SingleTon<GameManager>
     public PlayerData PlayerData { get; private set; }
     public PlayerInventoryData PlayerInventoryData { get; private set; }
     public PlayerStatData PlayerStatData { get; private set; }
+    public PlayerSkillData PlayerSkillData { get; private set; }
     #endregion
 
 
     public static event Action<PlayerInventoryData> OnInventoryDataReady;
     public static event Action<int> OnPlayerDataReady;
     public static event Action OnPlayerStatDataReady;
+    public static event Action OnPlayerSkillDataReady;
 
     protected override void Awake()
     {
@@ -36,6 +39,10 @@ public class GameManager : SingleTon<GameManager>
         StartCoroutine(LoadPlayerData());
     }
 
+    /// <summary>
+    /// 플레이어 정보 저장
+    /// </summary>
+    /// <returns></returns>
     IEnumerator SavePlayerData()
     {
         WWWForm form = new WWWForm();
@@ -53,6 +60,10 @@ public class GameManager : SingleTon<GameManager>
         }));
     }
 
+    /// <summary>
+    /// 플레이어 정보 로드
+    /// </summary>
+    /// <returns></returns>
     IEnumerator LoadPlayerData()
     {
         WWWForm form = new WWWForm();
@@ -63,7 +74,7 @@ public class GameManager : SingleTon<GameManager>
             JSONNode json = JSONNode.Parse(data);
             if (json["id"] != null)
             {
-                PlayerData = new PlayerData(json["id"].AsInt, json["level"].AsInt, json["name"], json["stage"].AsInt, json["gold"].AsInt);
+                PlayerData = new PlayerData(json["id"].AsInt, json["level"].AsInt, json["name"], json["stage"].AsInt, json["gold"].AsInt, json["skillpoints"].AsInt);
                 OnPlayerDataReady?.Invoke(PlayerData.GetMyGold());
                 StartCoroutine(LoadMyInventoryData());
             }
@@ -71,7 +82,10 @@ public class GameManager : SingleTon<GameManager>
     }
 
 
-
+    /// <summary>
+    /// 플레이어 인벤토리 정보 로드
+    /// </summary>
+    /// <returns></returns>
     IEnumerator LoadMyInventoryData()
     {
         WWWForm form = new WWWForm();
@@ -90,7 +104,9 @@ public class GameManager : SingleTon<GameManager>
             {
                 for (int i = 0; i < json["items"].Count; i++)
                 {
-                    PlayerInventoryData.AddItem(DataManager.Instance.GetItemData(json["items"][i]["item_name"]), json["items"][i]["item_count"]);
+                    PlayerInventoryData.AddItem(DataManager.Instance.GetItemData(
+                        json["items"][i]["item_name"]), 
+                        json["items"][i]["item_count"]);
                 }
             }
 
@@ -99,7 +115,10 @@ public class GameManager : SingleTon<GameManager>
         }));
     }
 
-
+    /// <summary>
+    /// 플레이어 스탯 정보 로드
+    /// </summary>
+    /// <returns></returns>
     IEnumerator LoadPlayerStatData()
     {
         WWWForm form = new WWWForm();
@@ -124,6 +143,65 @@ public class GameManager : SingleTon<GameManager>
             {
                 Debug.Log(json["message"]);
             }
+            StartCoroutine(LoadPlayerSkillData());
         }));
+    }
+
+    /// <summary>
+    /// 플레이어 스킬 정보 로드
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator LoadPlayerSkillData()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("id", PlayerData.ID);
+
+        yield return StartCoroutine(DataManager.GameConnect("playerSkill/load", form, data =>
+        {
+            JSONNode json = JSONNode.Parse(data);
+            Debug.Log(json);
+            if (json["success"].AsBool)
+            {
+                PlayerSkillData = new PlayerSkillData();
+                if (json["skills"].Count == 0)
+                {
+                    PlayerSkillData.AddNewSkillData();
+                    StartCoroutine(SavePlayerSkillData());
+                }
+                else
+                {
+                    for(int i =0; i < json["skills"].Count; i++)
+                    {
+                        PlayerSkillData.playerSkillLevelDic.Add(json["skills"][i]["skill_name"], json["skills"][i]["skill_level"].AsInt);
+                    }
+                    OnPlayerSkillDataReady?.Invoke();
+                }
+            }
+            else
+            {
+                Debug.Log(json["message"]);
+            }
+        }));
+    }
+    
+    /// <summary>
+    /// 스킬 정보가 없을 경우 기본 값으로 저장
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator SavePlayerSkillData()
+    {
+        string skillJson = JsonConvert.SerializeObject(PlayerSkillData.playerSkillLevelDic);
+        Debug.Log(skillJson);
+        WWWForm form = new WWWForm();
+        form.AddField("id", PlayerData.ID);
+        form.AddField("skills", skillJson);
+
+        yield return StartCoroutine(DataManager.GameConnect("playerSkill/save", form, data =>
+        {
+            JSONNode json = JSONNode.Parse(data);
+            Debug.Log(json["message"]);
+            OnPlayerSkillDataReady?.Invoke();
+        }));
+
     }
 }
