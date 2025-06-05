@@ -74,7 +74,9 @@ public class Weapon : MonoBehaviour, IAttackable
         {
             yield return new WaitForSeconds(0.5f);
             time += 0.5f;
+#if UNITY_EDITOR
             Debug.Log("도트 데미지 입히는 중");
+#endif
             target.Hit(damage);
         }
         player.isDotActive = false;

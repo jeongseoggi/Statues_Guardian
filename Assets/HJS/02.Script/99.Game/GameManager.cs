@@ -56,7 +56,6 @@ public class GameManager : SingleTon<GameManager>
         yield return StartCoroutine(DataManager.GameConnect("player/save", form, data =>
         {
             JSONNode json = JSONNode.Parse(data);
-            Debug.Log("성공");
         }));
     }
 
@@ -96,16 +95,12 @@ public class GameManager : SingleTon<GameManager>
             JSONNode json = JSONNode.Parse(data);
             PlayerInventoryData = new PlayerInventoryData();
 
-            if (json["items"].Count == 0)
-            {
-                Debug.Log("인벤토리 없으므로 스킵");
-            }
-            else
+            if (json["items"].Count != 0)
             {
                 for (int i = 0; i < json["items"].Count; i++)
                 {
                     PlayerInventoryData.AddItem(DataManager.Instance.GetItemData(
-                        json["items"][i]["item_name"]), 
+                        json["items"][i]["item_name"]),
                         json["items"][i]["item_count"]);
                 }
             }
@@ -141,7 +136,9 @@ public class GameManager : SingleTon<GameManager>
             }
             else
             {
+#if UNITY_EDITOR
                 Debug.Log(json["message"]);
+#endif
             }
             StartCoroutine(LoadPlayerSkillData());
         }));
@@ -159,7 +156,6 @@ public class GameManager : SingleTon<GameManager>
         yield return StartCoroutine(DataManager.GameConnect("playerSkill/load", form, data =>
         {
             JSONNode json = JSONNode.Parse(data);
-            Debug.Log(json);
             if (json["success"].AsBool)
             {
                 PlayerSkillData = new PlayerSkillData();
@@ -179,7 +175,9 @@ public class GameManager : SingleTon<GameManager>
             }
             else
             {
+#if UNITY_EDITOR
                 Debug.Log(json["message"]);
+#endif
             }
         }));
     }
@@ -191,7 +189,6 @@ public class GameManager : SingleTon<GameManager>
     IEnumerator SavePlayerSkillData()
     {
         string skillJson = JsonConvert.SerializeObject(PlayerSkillData.playerSkillLevelDic);
-        Debug.Log(skillJson);
         WWWForm form = new WWWForm();
         form.AddField("id", PlayerData.ID);
         form.AddField("skills", skillJson);
@@ -199,7 +196,6 @@ public class GameManager : SingleTon<GameManager>
         yield return StartCoroutine(DataManager.GameConnect("playerSkill/save", form, data =>
         {
             JSONNode json = JSONNode.Parse(data);
-            Debug.Log(json["message"]);
             OnPlayerSkillDataReady?.Invoke();
         }));
 

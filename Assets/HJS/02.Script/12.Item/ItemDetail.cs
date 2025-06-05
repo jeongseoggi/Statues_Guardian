@@ -123,7 +123,7 @@ public class ItemDetail : SingleTonDestory<ItemDetail>
 
         NoticePopup noticePopup = PopupManager.Instance.noticePopup;
 
-        noticePopup.Init(string.Format("{0} 을 {1} 개 구매하시겠습니까?\n 가격은 {2}원 입니다.",
+        noticePopup.Init(string.Format(GameString.ASK_BUY,
         itemName.text, itemCount, totalBuyPrice.text), ()=>
         {
             StartCoroutine(BuyItem());
@@ -147,13 +147,11 @@ public class ItemDetail : SingleTonDestory<ItemDetail>
         {
 
             JSONNode json = JSONNode.Parse(data);
-            Debug.Log(json);
-
             if (json["success"].AsBool)
             {
                 GameManager.Instance.PlayerInventoryData.AddItem(selectItemData, ItemCount);
                 GameManager.Instance.PlayerData.Gold = json["gold"];
-                noticePopup.Init("구매가 완료되었습니다.", () =>
+                noticePopup.Init(GameString.BUY_SUCCESS, () =>
                 {
                     noticePopup.Close();
                 });

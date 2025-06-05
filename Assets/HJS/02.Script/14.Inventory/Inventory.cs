@@ -8,13 +8,19 @@ using UnityEngine.EventSystems;
 
 public class Inventory : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
-    public RectTransform inventoryPanel; // 드래그할 전체 인벤토리 패널
-    private Vector2 offset;
-    public InventorySlot[] inventorySlots;
-    private Dictionary<int, ItemData> invenSlotData;
-    private float saveInterval = 15f;
+    #region private
+    [Header("InvenMain")]
+    [SerializeField] GameObject invenMainObject;                         // 인벤토리 창 메인 부모 오브젝트
 
-    [SerializeField] GameObject[] invenObject;
+    [SerializeField] private RectTransform inventoryPanel;               // 드래그할 전체 인벤토리 패널
+                     private Vector2 offset;                             // 드래그 Offset
+                     private Dictionary<int, ItemData> invenSlotData;    // 인벤토리 Slot 딕셔너리
+                     private float saveInterval = 15f;                   // 인벤토리 저장 주기(초)
+    #endregion
+
+    #region public
+    public InventorySlot[] inventorySlots;
+    #endregion
 
     private void Start()
     {
@@ -40,15 +46,18 @@ public class Inventory : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
+    /// <summary>
+    /// 인벤토리 창 온/오프 함수
+    /// </summary>
     public void ActiveInventory()
     {
-        foreach(var obj in invenObject)
-        {
-            obj.SetActive(!obj.activeSelf);
-        }
+        invenMainObject.SetActive(!invenMainObject.activeSelf);
 
-        if (invenObject[0].activeSelf)
+        if (invenMainObject.activeSelf)
+        {
             Init();
+            UIManager.Instance.openUIStack.Push(invenMainObject);
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -100,7 +109,9 @@ public class Inventory : MonoBehaviour, IBeginDragHandler, IDragHandler
 
                 yield return StartCoroutine(DataManager.GameConnect("inventory/save", form, (result) =>
                 {
+#if UNITY_EDITOR
                     Debug.Log($"[Inventory] {pair.Key} 저장 완료");
+#endif
                 }));
             }
         }

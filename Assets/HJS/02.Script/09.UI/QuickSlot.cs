@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class QuickSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHandler, IBeginDragHandler
+public class QuickSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     #region private
     [SerializeField] Image itemImage;
@@ -120,5 +120,19 @@ public class QuickSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
     {
         canvasGroup = dragLayer.GetComponent<CanvasGroup>();
         canvasGroup.blocksRaycasts = false;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (ItemData == null)
+            return;
+
+        ToolTipManager.Instance.ShowTooltip(itemImage,
+            ItemData.itemName, ItemData.itemDesc);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ToolTipManager.Instance.HideTooltip();
     }
 }

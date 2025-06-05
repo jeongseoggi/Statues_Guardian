@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
-public class SkillSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHandler, IBeginDragHandler
+public class SkillSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     #region private
     [SerializeField] SkillData skillData;
@@ -23,6 +24,7 @@ public class SkillSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
     #endregion
 
     #region public
+    
     #endregion
 
     #region 프로퍼티
@@ -30,11 +32,6 @@ public class SkillSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
     public bool IsCoolTime { get => isCoolTime; set => isCoolTime = value; } 
     public bool IsNoMana { get => isNoMana; set => isNoMana = value; }
     #endregion
-
-    private void Start()
-    {
-    }
-    
 
     public void SetSkillSlot(SkillData skilldata)
     {
@@ -89,7 +86,7 @@ public class SkillSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
 
     }
 
-
+    #region 인터페이스 구현 함수
     public void OnDrag(PointerEventData eventData)
     {
         skillIcon.transform.position = eventData.position;
@@ -102,9 +99,14 @@ public class SkillSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
     {
         SkillSlot dragSkillSlot = null;
 
+
         if(eventData.pointerDrag.TryGetComponent<SkillSlot>(out dragSkillSlot))
         {
             SkillManager.Instance.SkillSlotSwap(this, dragSkillSlot);
+        }
+        else if(eventData.pointerDrag.TryGetComponent<SkillWindowSlot>(out SkillWindowSlot dragSkillWindowSlot))
+        {
+            SetSkillSlot(dragSkillWindowSlot.SkillData);
         }
     }
 
@@ -120,4 +122,32 @@ public class SkillSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
         canvasGroup = dragLayer.GetComponent<CanvasGroup>();
         canvasGroup.blocksRaycasts = false;
     }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (SkillData == null)
+            return;
+
+        float increase = 0;
+        int skillLevel = GameManager.Instance.PlayerSkillData.playerSkillLevelDic[skillData.skillName] - 1;
+
+        if (SkillData.damageType == DamageType.AttackUp || SkillData.damageType == DamageType.SpeedUp)
+        {
+            increase = SkillData.increase + (SkillData.increasePerLevel * skillLevel);
+        }
+        else
+        {
+            increase = SkillData.damage + (SkillData.damagePerLevel * skillLevel);
+        }
+
+        string skilldesc = string.Format(SkillData.skillDescription, increase);
+
+        ToolTipManager.Instance.ShowTooltip(skillIcon, SkillData.skillName, skilldesc);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ToolTipManager.Instance.HideTooltip();
+    }
+    #endregion
 }

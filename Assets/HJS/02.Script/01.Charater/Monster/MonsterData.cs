@@ -28,7 +28,6 @@ public class MonsterData : ScriptableObject
         }
         else
         {
-            Debug.LogError("몬스터 타입에 따른 스탯 정보 없음!");
             return null;
         }
             

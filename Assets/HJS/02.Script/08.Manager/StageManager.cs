@@ -18,7 +18,7 @@ public class StageManager : SingleTonDestory<StageManager>
 
     private void Start()
     {
-        shopPanelHandler = GameManager.Instance.ShopPanelHandler;
+        shopPanelHandler = DungeonUIManager.Instance.shopPanelHandler;
         waveManager = GameManager.Instance.WaveManager;
         shopPanelHandler.Show();
     }
@@ -38,7 +38,7 @@ public class StageManager : SingleTonDestory<StageManager>
     /// </summary>
     public void StageClear()
     {
-        OnStageResult?.Invoke("Stage Clear!", true);
+        OnStageResult?.Invoke(GameString.STAGE_CLEAR, true);
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ public class StageManager : SingleTonDestory<StageManager>
     /// </summary>
     public void StageFail()
     {
-        OnStageResult?.Invoke("Stage Fail...", false);
+        OnStageResult?.Invoke(GameString.STAGE_FAIL, false);
     }
 
 }

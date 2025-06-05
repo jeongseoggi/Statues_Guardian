@@ -8,7 +8,10 @@ public class SpeedUpStrategy : ISkillUseStrategy
 {
     public void SkillUse(ISkillUable user, SkillData skillData)
     {
-        float resetVal = user.ApplyBuff(BuffType.Speed, skillData.increase, skillData.mpCost);
+        float increase = skillData.increase + 
+            (skillData.increasePerLevel * GameManager.Instance.PlayerSkillData.playerSkillLevelDic[skillData.skillName]);
+
+        float resetVal = user.ApplyBuff(BuffType.Speed, increase, skillData.mpCost);
         user.RunCoroutine(BuffTime(skillData.duration, resetVal, user));
     }
 

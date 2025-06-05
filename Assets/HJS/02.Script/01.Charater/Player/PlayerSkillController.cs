@@ -3,6 +3,7 @@ using System.Collections;
 using System.Xml;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class PlayerSkillController : MonoBehaviour, ISkillUable
 {
@@ -39,28 +40,11 @@ public class PlayerSkillController : MonoBehaviour, ISkillUable
         player.Mp -= mpCost ;
     }
 
-
-
     public void AoEApply(float duration, int mpCost)
     {
         player.Mp -= mpCost;
     }
 
-
-    /// <summary>
-    /// 테스트 코드
-    /// </summary>
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-            SkillManager.Instance.UseSkill(0, this);
-        if (Input.GetKeyDown(KeyCode.E))
-            SkillManager.Instance.UseSkill(1, this);
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-            SkillManager.Instance.UseSkill(2, this);
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-            SkillManager.Instance.UseSkill(3, this);
-    }
 
     public Vector3 GetPosition()
     {

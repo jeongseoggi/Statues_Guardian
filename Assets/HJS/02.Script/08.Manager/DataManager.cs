@@ -7,21 +7,26 @@ using UnityEngine.Networking;
 
 public class DataManager : SingleTon<DataManager>
 {
-    private static string ServerURL = "http://localhost:3000/";
+    #region private
+    private static string ServerURL = "http://localhost:3000/";         // 주소 URL
+    [SerializeField] private ItemScriptableObject itemDataBase;         // 아이템을 담은 ScriptableObject
+    [SerializeField] private SkillDataList skillDatabase;               // 스킬을 담은 ScriptableObject
+    [SerializeField] private List<GameObject> effectList;               // Effect List
 
-    [SerializeField] ItemScriptableObject itemDataBase;
-    [SerializeField] SkillDataList skillDatabase;
-    [SerializeField] List<GameObject> effectList;
+    #endregion
 
-    public ItemScriptableObject ItemDataBase { get => itemDataBase; }
+    #region 프로퍼티
+    public ItemScriptableObject ItemDataBase { get => itemDataBase; }   
     public SkillDataList SkillDataBase { get=> skillDatabase; }
     public List<GameObject> EffectList { get=> effectList; }
+    #endregion
 
     private void Start()
     {
         ItemInit();
         SkillInit();
     }
+
     /// <summary>
     /// 아이템 DB에서 아이템 데이터를 반환합니다.
     /// </summary>
@@ -32,6 +37,11 @@ public class DataManager : SingleTon<DataManager>
         return ItemDataBase.itemData.Find((x) => x.itemName.Equals(itemName));
     }
 
+    /// <summary>
+    /// 스킬 DB에서 스킬 데이터를 반환합니다.
+    /// </summary>
+    /// <param name="assetName"></param>
+    /// <returns></returns>
     public SkillData GetSkillData(string assetName)
     {
         return SkillDataBase.skillDatas.Find((x)=> x.assetName.Equals(assetName));
@@ -84,18 +94,6 @@ public class DataManager : SingleTon<DataManager>
         }
     }
 
-
-    /// <summary>
-    /// 코루틴 사용이 불가능한 클래스에서 사용 가능하도록 만든 함수
-    /// </summary>
-    /// <param name="apiName"></param>
-    /// <param name="form"></param>
-    /// <param name="successAction"></param>
-    public void GameConnectHelper(string apiName, WWWForm form, UnityAction<string> successAction)
-    {
-        StartCoroutine(GameConnect(apiName, form, successAction));
-    }
-    
     /// <summary>
     /// 서버에 데이터를 전송하거나 받을 수 있도록 해주는 코루틴 함수
     /// </summary>
@@ -113,18 +111,17 @@ public class DataManager : SingleTon<DataManager>
 
             if (request.result == UnityWebRequest.Result.Success)
             {
+#if UNITY_EDITOR
                 Debug.Log($"Server Data => {request.downloadHandler.text}");
+#endif
                 successAction?.Invoke(request.downloadHandler.text);
             }
             else
             {
+#if UNITY_EDITOR
                 Debug.LogError($"[GameConnect] 서버 통신 실패: {request.error}");
+#endif
             }
         }
-    }
-
-    public IEnumerator ItemUse(string apiName, WWWForm form, UnityAction<string> successAction)
-    {
-        yield return StartCoroutine(GameConnect(apiName, form, successAction));
     }
 }

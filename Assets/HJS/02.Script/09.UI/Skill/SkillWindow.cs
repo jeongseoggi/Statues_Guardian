@@ -2,15 +2,32 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// 스킬 창 클래스(스킬 창 관련하여 처리되는 로직을 모아놓았습니다)
+/// </summary>
 public class SkillWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
-    public RectTransform skillWindowPanel; // 드래그할 전체 스킬 패널
-    private Vector2 offset;
-    public SkillWindowSlot skillPrefab;
-    public GameObject prefabParent;
-    public TextMeshProUGUI skillPointText;
+    #region private
+    [SerializeField] private RectTransform skillWindowPanel;                  // 드래그할 전체 스킬 패널
+    [SerializeField] private SkillWindowSlot skillPrefab;                     // 스킬 창에 생성 될 prefab
+    [SerializeField] private GameObject prefabParent;                         // 생성 될 위치
+    [SerializeField] private TextMeshProUGUI skillPointText;                  // 스킬 포인트 Text
+                     private Vector2 offset;                                  // 드래그에 사용 될 offest
+
+
+    [Header("SkillWindowMain")]
+    [SerializeField] GameObject skillWindowMainObject;      //스킬 메인 창 부모 오브젝트
+    #endregion
 
     private void Start()
+    {
+        RegisterAction();
+    }
+
+    /// <summary>
+    /// Action 체이닝 함수
+    /// </summary>
+    public void RegisterAction()
     {
         if (GameManager.Instance?.PlayerSkillData != null)
         {
@@ -25,6 +42,18 @@ public class SkillWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
     }
 
     /// <summary>
+    /// 스킬 창 열고 닫기 함수
+    /// </summary>
+    public void ActiveSkillWindow()
+    {
+        skillWindowMainObject.SetActive(!skillWindowMainObject.activeSelf);
+        if(skillWindowMainObject.activeSelf)
+        {
+            UIManager.Instance.openUIStack.Push(skillWindowMainObject);
+        }
+    }
+
+    /// <summary>
     /// 스킬 윈도우 스킬 세팅
     /// </summary>
     public void Init()
@@ -33,15 +62,14 @@ public class SkillWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
         foreach (SkillData skillData in DataManager.Instance.SkillDataBase.skillDatas)
         {
             SkillWindowSlot skillObj = Instantiate(skillPrefab, prefabParent.transform);
-            skillObj.SkillSlotSet(
-                SpriteManager.Instance.GetSkillSprite(skillData.spriteName),
-                skillData.skillName,
-                GameManager.Instance.PlayerSkillData.playerSkillLevelDic[skillData.skillName],
-                DataManager.Instance.GetSkillData(skillData.assetName).skillMasterLevel
-                );
+            skillObj.SkillSlotSet(skillData);
         }
     }
 
+    /// <summary>
+    /// 스킬 포인트 표기 함수
+    /// </summary>
+    /// <param name="value"></param>
     public void SetSkillPoint(int value)
     {
         skillPointText.text = "SP : " + value.ToString();

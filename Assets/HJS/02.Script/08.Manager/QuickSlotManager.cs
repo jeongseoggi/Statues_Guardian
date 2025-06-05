@@ -5,12 +5,20 @@ using UnityEngine;
 
 public class QuickSlotManager : MonoBehaviour
 {
+    #region public
     public QuickSlot[] quickSlots;
     public Dictionary<int, string> quickSlotSaveDic = new Dictionary<int, string>();
+    #endregion
 
     private void Start()
     {
         LoadQuickSlotData();
+        RegisterBinding();
+    }
+
+    public void RegisterBinding()
+    {
+        PlayerActionInput.OnItemlUse += UseItem;
     }
 
     /// <summary>
@@ -69,7 +77,9 @@ public class QuickSlotManager : MonoBehaviour
         else
         {
             string json = PlayerPrefs.GetString("QuickSlotData");
+#if UNITY_EDITOR
             Debug.Log(json);
+#endif
             quickSlotSaveDic = JsonConvert.DeserializeObject<Dictionary<int, string>>(json);
 
             foreach (var pair in quickSlotSaveDic.ToList())
@@ -109,18 +119,8 @@ public class QuickSlotManager : MonoBehaviour
         SaveQuickSlotData(slotIndex, quickSlots[slotIndex].ItemData);
     }
 
-    /// <summary>
-    /// 테스트코드
-    /// </summary>
-    public void Update()
+    public void UseItem(int index, IUseable user)
     {
-        if(Input.GetKeyDown(KeyCode.F12))
-        {
-            if (PlayerPrefs.HasKey("QuickSlotData"))
-            {
-                PlayerPrefs.DeleteKey("QuickSlotData");
-            }
-        }
+        quickSlots[index].ItemData?.Use(user);
     }
-
 }

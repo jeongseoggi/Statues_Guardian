@@ -14,7 +14,9 @@ public class AoEStrategy : ISkillUseStrategy
         {
             if(col.TryGetComponent<Monster>(out Monster monster))
             {
-                monster.aoeAction?.Invoke(skillData.damage, skillData.duration);
+                float damage = skillData.damage +
+                    (skillData.damagePerLevel * GameManager.Instance.PlayerSkillData.playerSkillLevelDic[skillData.skillName]);
+                monster.aoeAction?.Invoke(damage, skillData.duration);
             }
         }
 

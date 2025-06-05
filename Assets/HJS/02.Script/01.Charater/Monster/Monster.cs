@@ -167,16 +167,4 @@ public class Monster : Character, IHitable
     {
         monsterUIController.GetMaxHp(maxHp);
     }
-
-
-    /// <summary>
-    /// 테스트 코드
-    /// </summary>
-    public void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            Init();
-        }
-    }
 }   

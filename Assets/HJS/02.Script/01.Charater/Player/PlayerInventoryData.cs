@@ -49,7 +49,10 @@ public class PlayerInventoryData
         }
         else
         {
+#if UNITY_EDITOR
             Debug.LogError("없는 아이템을 사용하려고 하고 있음 오류!");
+            return;
+#endif
         }
     }
 
@@ -66,9 +69,9 @@ public class PlayerInventoryData
         DataManager.Instance.StartCoroutine(DataManager.GameConnect("inventory/useItem", form, data =>
         {
             JSONNode json = JSONNode.Parse(data);
-
+#if UNITY_EDITOR
             Debug.Log(json);
-
+#endif
             GameManager.Instance.PlayerStatData.Hp = json["updated_stats"]["hp"].AsFloat;
             GameManager.Instance.PlayerStatData.Mp = json["updated_stats"]["mp"].AsFloat;
             GameManager.Instance.PlayerStatData.Atk = json["updated_stats"]["atk"].AsFloat;

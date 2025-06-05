@@ -1,22 +1,38 @@
-using JetBrains.Annotations;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.XR;
 
 public class UIManager : SingleTon<UIManager>
 {
+    #region public
     public QuickSlotManager quickSlotManager;
     public Inventory inventory;
     public DropDownAnimator dropDownAnimator;
-    [SerializeField] TextMeshProUGUI warningText;
-    Coroutine warningTextCor;
+    public Stack<GameObject> openUIStack = new Stack<GameObject>();
+    public GameObject dragLayer;
+    #endregion
+
+    #region private
+    [SerializeField] private TextMeshProUGUI warningText;
+    [SerializeField] private SkillWindow skillWindow;
+                     private Coroutine warningTextCor;
+    #endregion
 
     private void OnEnable()
     {
-        if(GameManager.Instance?.PlayerInventoryData != null)
+        RegisterAction();
+    }
+
+    /// <summary>
+    /// Action 체이닝 함수
+    /// </summary>
+    public void RegisterAction()
+    {
+        if (GameManager.Instance?.PlayerInventoryData != null)
         {
             RegisterSlots(GameManager.Instance.PlayerInventoryData);
         }
@@ -24,11 +40,37 @@ public class UIManager : SingleTon<UIManager>
         {
             GameManager.OnInventoryDataReady += RegisterSlots;
         }
+
+        InputManager.OnInventoryToggle += ActiveInventory;
+        InputManager.OnCloseOpenTab += CloseTab;
+        InputManager.OnOpenSkillWindow += ActiveSkillWindow;
     }
 
+    /// <summary>
+    /// 인벤토리 창 Active 함수
+    /// </summary>
     public void ActiveInventory()
     {
         inventory.ActiveInventory();
+    }
+
+    /// <summary>
+    /// 스킬 창 Active 함수
+    /// </summary>
+    public void ActiveSkillWindow()
+    {
+        skillWindow.ActiveSkillWindow();
+    }
+
+    /// <summary>
+    /// ESC -> 입력 시 창 하나씩 닫아 줄 수 있도록 해주는 함수
+    /// </summary>
+    public void CloseTab()
+    {
+        if (openUIStack.Count > 0)
+        {
+            openUIStack.Pop().gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -48,6 +90,10 @@ public class UIManager : SingleTon<UIManager>
         }
     }
 
+    /// <summary>
+    /// 경고 메시지
+    /// </summary>
+    /// <param name="msg"></param>
     public void SetWarningText(string msg)
     {
         warningText.text = msg;
@@ -58,6 +104,10 @@ public class UIManager : SingleTon<UIManager>
         }
     }
 
+    /// <summary>
+    /// 경고 메시지 코루틴 함수
+    /// </summary>
+    /// <returns></returns>
     IEnumerator ShowWarningText()
     {
         yield return new WaitForSeconds(1.5f);
@@ -69,6 +119,7 @@ public class UIManager : SingleTon<UIManager>
     private void OnDisable()
     {
         GameManager.OnInventoryDataReady -= RegisterSlots;
-
+        InputManager.OnInventoryToggle -= ActiveInventory;
+        InputManager.OnCloseOpenTab -= CloseTab;
     }
 }

@@ -35,7 +35,7 @@ public class ShopPanelHandler : MonoBehaviour
 
     public void Show()
     {
-        DungeonUIManager.Instance.WaveText.SetText("Shopping Time!", ()=>
+        DungeonUIManager.Instance.WaveText.SetText(GameString.SHOP_TIME, ()=>
         {
             StartCoroutine(ShoppingTime());
         });
@@ -62,14 +62,7 @@ public class ShopPanelHandler : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        shopObj.SetActive(true);
-
-        var seq = DOTween.Sequence();
-
-        seq.Append(shopObj.transform.DOScale(1.1f, 0.2f));
-        seq.Append(shopObj.transform.DOScale(1f, 0.1f));
-
-        seq.Play();
+        ShowShopPanel();
         DungeonUIManager.Instance.WaveText.gameObject.SetActive(false);
         DungeonUIManager.Instance.nextWaveStartBTN.gameObject.SetActive(true);
     }
@@ -79,7 +72,7 @@ public class ShopPanelHandler : MonoBehaviour
         myGoldText.text = gold.ToString();
     }
 
-    public void Test()
+    public void ShowShopPanel()
     {
         shopObj.SetActive(true);
 
@@ -89,15 +82,6 @@ public class ShopPanelHandler : MonoBehaviour
         seq.Append(shopObj.transform.DOScale(1f, 0.1f));
 
         seq.Play();
-    }
-
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            Test();
-        }
     }
 
     private void OnDisable()

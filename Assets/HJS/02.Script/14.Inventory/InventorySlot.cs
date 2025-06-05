@@ -4,7 +4,7 @@ using UnityEngine.Android;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerClickHandler
+public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
     #region private
@@ -49,30 +49,7 @@ public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBegi
         }
     }
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        Color color = itemImage.color;
-        color.a = 0.3f;
-        itemImage.color = color;
 
-        itemImage.transform.position = eventData.position;
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        Color originColor = itemImage.color;
-        originColor.a = 1;
-        itemImage.color = originColor;
-        canvasGroup.blocksRaycasts = true;
-
-        itemImage.transform.localPosition = Vector2.zero;
-    }
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        canvasGroup = GetComponent<CanvasGroup>();
-        canvasGroup.blocksRaycasts = false;
-    }
 
     /// <summary>
     /// 아이템 카운트 관련 함수
@@ -101,6 +78,32 @@ public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBegi
         ItemSetting(ItemData);
     }
 
+    #region 인터페이스 구현 함수
+    public void OnDrag(PointerEventData eventData)
+    {
+        Color color = itemImage.color;
+        color.a = 0.3f;
+        itemImage.color = color;
+
+        itemImage.transform.position = eventData.position;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        Color originColor = itemImage.color;
+        originColor.a = 1;
+        itemImage.color = originColor;
+        canvasGroup.blocksRaycasts = true;
+
+        itemImage.transform.localPosition = Vector2.zero;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        canvasGroup = GetComponent<CanvasGroup>();
+        canvasGroup.blocksRaycasts = false;
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if(eventData.button == PointerEventData.InputButton.Right)
@@ -120,5 +123,19 @@ public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBegi
             dropDownAnimator.ActiveDropDownObject(eventData.position, eventData.pressEventCamera);
         }
     }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (ItemData == null)
+            return;
+
+        ToolTipManager.Instance.ShowTooltip(itemImage, ItemData.itemName, ItemData.itemDesc);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ToolTipManager.Instance.HideTooltip();
+    }
+    #endregion
 }
 

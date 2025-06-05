@@ -53,11 +53,6 @@ public class PlayerController : MonoBehaviour
             ComboAttack();
         }
 
-        if(Input.GetKeyDown(KeyCode.I))
-        {
-            UIManager.Instance.ActiveInventory();
-        }
-
         if (isComboPossible)
         {
             comboTimer += Time.deltaTime;

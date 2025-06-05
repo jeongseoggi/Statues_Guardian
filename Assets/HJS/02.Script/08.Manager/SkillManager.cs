@@ -6,18 +6,26 @@ using UnityEngine;
 
 public class SkillManager : SingleTon<SkillManager>
 {
-    public SkillSlot[] skillSlot;
-    public Dictionary<int, string> skillSlotSaveDic = new Dictionary<int, string>();
-    public Player player;
+    #region public
+    public SkillSlot[]              skillSlot;
+    public Dictionary<int, string>  skillSlotSaveDic;
+    public Player                   player;
+    #endregion
 
     private void Start()
     {
+        skillSlotSaveDic = new Dictionary<int, string>();
         LoadSkillSlotData();
         player = GameManager.Instance.GetPlayer();
         player.OnCheckMana += CheckSlot;
+        PlayerActionInput.OnSkillUse += UseSkill;
     }
 
-
+    /// <summary>
+    /// 스킬 퀵 슬롯 데이터 저장
+    /// </summary>
+    /// <param name="slotIndex"></param>
+    /// <param name="skillData"></param>
     public void SaveSkillSlotData(int slotIndex, SkillData skillData)
     {
         if(skillData == null)
@@ -46,6 +54,9 @@ public class SkillManager : SingleTon<SkillManager>
         PlayerPrefs.SetString("SkillSlotData", skillSlotJson);
     }
 
+    /// <summary>
+    /// 스킬 퀵 슬롯 데이터 로드
+    /// </summary>
     public void LoadSkillSlotData()
     {
         if (!PlayerPrefs.HasKey("SkillSlotData"))
@@ -55,7 +66,9 @@ public class SkillManager : SingleTon<SkillManager>
         else
         {
             string skillSlotJson = PlayerPrefs.GetString("SkillSlotData");
+#if UNITY_EDITOR
             Debug.Log($"스킬 슬롯 데이터 로드 {skillSlotJson}");
+#endif
 
             skillSlotSaveDic = JsonConvert.DeserializeObject<Dictionary<int, string>>(skillSlotJson);
 
@@ -69,6 +82,11 @@ public class SkillManager : SingleTon<SkillManager>
         }
     }
 
+    /// <summary>
+    /// 스킬 퀵 슬롯 스왑
+    /// </summary>
+    /// <param name="targetSlot"></param>
+    /// <param name="swapSlot"></param>
     public void SkillSlotSwap(SkillSlot targetSlot, SkillSlot swapSlot)
     {
         SkillData tempSlot = targetSlot.SkillData;
@@ -76,7 +94,11 @@ public class SkillManager : SingleTon<SkillManager>
         swapSlot.SetSkillSlot(tempSlot);
     }
 
-
+    /// <summary>
+    /// 스킬 사용 함수
+    /// </summary>
+    /// <param name="slotIndex"></param>
+    /// <param name="user"></param>
     public void UseSkill(int slotIndex, ISkillUable user)
     {
         if (skillSlot[slotIndex].IsCoolTime)
@@ -84,7 +106,7 @@ public class SkillManager : SingleTon<SkillManager>
 
         if (skillSlot[slotIndex].IsNoMana)
         {
-            UIManager.Instance.SetWarningText("마나가 부족합니다.");
+            UIManager.Instance.SetWarningText(GameString.NO_MANA);
             return;
         }
     
@@ -92,6 +114,9 @@ public class SkillManager : SingleTon<SkillManager>
         skillSlot[slotIndex].StartCoolTime();
     }
 
+    /// <summary>
+    /// 슬롯 당 마나 체크
+    /// </summary>
     public void CheckSlot()
     {
         foreach(var slot in skillSlot)
@@ -107,19 +132,5 @@ public class SkillManager : SingleTon<SkillManager>
     private void OnDestroy()
     {
         player.OnCheckMana -= CheckSlot;
-    }
-
-    /// <summary>
-    /// 테스트코드
-    /// </summary>
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F11))
-        {
-            if (PlayerPrefs.HasKey("SkillSlotData"))
-            {
-                PlayerPrefs.DeleteKey("SkillSlotData");
-            }
-        }
     }
 }

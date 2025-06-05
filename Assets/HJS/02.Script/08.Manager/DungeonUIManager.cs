@@ -6,6 +6,7 @@ public class DungeonUIManager : SingleTonDestory<DungeonUIManager>
     public WaveText waveText;
     public Button nextWaveStartBTN;
     public StageResultText stageResultText;
+    public ShopPanelHandler shopPanelHandler;
 
     public WaveText WaveText
     {
