@@ -8,6 +8,7 @@ public class ShopPanelHandler : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] GameObject shopObj;
     [SerializeField] TextMeshProUGUI myGoldText;
+    [SerializeField] Canvas parentCanvas;
 
     private void OnEnable()
     {
@@ -55,6 +56,7 @@ public class ShopPanelHandler : MonoBehaviour
         seq.Play().OnComplete(() =>
         {
             shopObj.gameObject.SetActive(false);
+            parentCanvas.sortingOrder = 1;
         });
     }
 
@@ -75,6 +77,7 @@ public class ShopPanelHandler : MonoBehaviour
     public void ShowShopPanel()
     {
         shopObj.SetActive(true);
+        parentCanvas.sortingOrder = 3;
 
         var seq = DOTween.Sequence();
 

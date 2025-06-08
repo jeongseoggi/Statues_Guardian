@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class Player : Character, IUseable, IHitable
+public class Player : Character, IHitable
 {
     #region public
     public Func<int> getCombo;
@@ -126,48 +127,6 @@ public class Player : Character, IUseable, IHitable
         return comboCount;
     }
 
-    public void Heal(float amount, HealType healType)
-    {
-        if(healType == HealType.HP)
-        {
-            Hp += amount;
-            StageManager.Instance?.stageObject.ActiveEffect();
-#if UNITY_EDITOR
-            Debug.Log($"HP 회복: {amount}, 현재 HP: {hp}");
-#endif
-        }
-        else
-        {
-            Mp += amount;
-#if UNITY_EDITOR
-            Debug.Log($"MP 회복: {amount}, 현재 MP: {mp}");
-#endif
-        }
-
-    }
-
-    public void Upgrade(UpgradeType upgradeType, int useCount)
-    {
-        if(upgradeType == UpgradeType.Atk)
-        {
-            Atk += useCount;
-        }
-        else if(upgradeType == UpgradeType.Def)
-        {
-            Def += useCount;
-        }
-    }
-
-    public float GetMaxHp()
-    {
-        return MaxHp;
-    }
-
-    public float GetMaxMp()
-    {
-        return Mp;
-    }
-
     private void OnDestroy()
     {
         GameManager.OnPlayerStatDataReady -= Init;
@@ -184,5 +143,5 @@ public class Player : Character, IUseable, IHitable
         Hp = current;
         playerUIController.TakeDamage(Hp);
     }
-
 }
+

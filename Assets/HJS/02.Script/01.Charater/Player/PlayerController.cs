@@ -62,12 +62,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            UIManager.Instance.quickSlotManager.quickSlots[3].ItemData?.Use(player);
-        }
-
-
         if (moveVelocity.x != 0 || moveVelocity.y != 0)
         {
             player.StateMachine.SetState(STATE.MOVE);

@@ -10,6 +10,7 @@ using System;
 using UnityEditor.VersionControl;
 using UnityEngine.Experimental.AI;
 using Unity.VisualScripting;
+using System.Linq;
 
 public class StageImpoterWindow : EditorWindow
 {
@@ -17,11 +18,12 @@ public class StageImpoterWindow : EditorWindow
     private static StageDataList stageDataList;
     private static ItemScriptableObject itemDataList;
     private static SkillDataList skillDataList;
+    private static BuffDataContainer buffDataContainer;
 
     private static string directory = "Assets/HJS/06.SciptableObject/";
-    private string[] options = { "스테이지", "아이템" , "스킬" };
+    private string[] options = { "스테이지", "아이템" , "스킬", "버프" };
     private int selectedIndex = 0;
-    private string type;
+    private static string type;
 
 
     [MenuItem("Importer/SheetDataImporter")]
@@ -50,11 +52,21 @@ public class StageImpoterWindow : EditorWindow
     private IEnumerator ImportStageDataFromSheet(string url)
     {
         if (selectedIndex == 0)
+        {
             type = "stage";
+        }
         else if (selectedIndex == 1)
+        {
             type = "item";
-        else
+        }
+        else if (selectedIndex == 2)
+        {
             type = "skill";
+        }
+        else
+        {
+            type = "buff";
+        }
 
         string urlAddType = $"{url}?type={type}";
         UnityWebRequest www = UnityWebRequest.Get(urlAddType);
@@ -72,35 +84,188 @@ public class StageImpoterWindow : EditorWindow
 
         if(selectedIndex == 0)
         {
-            GetStageDataList();
-            JSONNode jsonData = JSONNode.Parse(json);
-            List<StageData> stageDataList = JsonParseStageData(jsonData);
+            stageDataList = GetDataList<StageDataList>("StageDataList",
+                (path) =>
+                {
+                    var asset = ScriptableObject.CreateInstance<StageDataList>();
+                    AssetDatabase.CreateAsset(asset, path);
+                    AssetDatabase.SaveAssets();
+                    return asset;
+                },
+                (path) =>
+                {
+                    return AssetDatabase.LoadAssetAtPath<StageDataList>(path);
+                });
+            stageDataList.Initalize();
 
-            foreach (var stage in stageDataList)
+            JSONNode jsonData = JSONNode.Parse(json);
+            List<StageData> parseList = JsonParseData(jsonData,
+                () => 
+                {
+                    List<StageData> stageDataList = new List<StageData>();
+
+                    for (int i = 0; i < jsonData.Count; i++)
+                    {
+                        StageData data = new StageData();
+                        data.stageName = jsonData[i]["StageName"];
+                        data.totalWave = jsonData[i]["TotalWave"];
+
+                        //웨이브 별 몬스터 개수 저장
+                        string monsterStr = jsonData[i]["MonstersPerWave"];
+                        data.monstersPerWave = ParsingDataCovertArray<int>(monsterStr);
+
+                        //스테이지에 등장하는 몬스터 타입 설정
+                        string monsterType = jsonData[i]["SpawnMonsterType"];
+                        data.spawnMonsterType = ParsingDataCovertArray<int>(monsterType);
+
+                        stageDataList.Add(data);
+                        
+                    }
+                    return stageDataList;
+                });
+
+            foreach (var stage in parseList)
             {
                 CreateStageWaveSO(stage);
             }
         }
         else if(selectedIndex == 1)
         {
-            GetItemDataList();
-            JSONNode jsonData = JSONNode.Parse(json);
-            List<ItemData> itemDataList = JsonParseItemData(jsonData);
+            itemDataList = GetDataList<ItemScriptableObject>("ItemDataList",
+                (path)=>
+                {
+                    var asset = ScriptableObject.CreateInstance<ItemScriptableObject>();
+                    AssetDatabase.CreateAsset(asset, path);
+                    AssetDatabase.SaveAssets();
+                    return asset;
+                },
+                (path)=>
+                {
+                    return AssetDatabase.LoadAssetAtPath<ItemScriptableObject>(path);
+                });
+            itemDataList.Initalize();
 
-            foreach (var item in itemDataList)
+            JSONNode jsonData = JSONNode.Parse(json);
+            List<ItemData> parseList = JsonParseData(jsonData,
+                () =>
+                {
+                    List<ItemData> itemDataList = new List<ItemData>();
+
+                    for (int i = 0; i < jsonData.Count; i++)
+                    {
+                        switch ((ItemType)jsonData[i]["ItemType"].AsInt)
+                        {
+                            case ItemType.Heal:
+                                AddItemDataList(ScriptableObject.CreateInstance<HealItemData>(), itemDataList, jsonData, i);
+                                break;
+                            case ItemType.Upgrade:
+                                AddItemDataList(ScriptableObject.CreateInstance<UpgradeItemData>(), itemDataList, jsonData, i);
+                                break;
+                            case ItemType.Buff:
+                                AddItemDataList(ScriptableObject.CreateInstance<BuffItemData>(), itemDataList, jsonData, i);
+                                break;
+                            case ItemType.Gamble:
+                                AddItemDataList(ScriptableObject.CreateInstance<GambleItemData>(), itemDataList, jsonData, i);
+                                break;
+                        }
+                    }
+                    return itemDataList;
+                });
+
+            foreach (var item in parseList)
             {
                 CreateItemDataSO(item);
             }
         }
-        else
+        else if(selectedIndex == 2)
         {
-            GetSkillDataList();
-            JSONNode jsonData = JSONNode.Parse(json);
-            List<SkillData> skillDataList = JsonParseSkillData(jsonData);
+            skillDataList = GetDataList<SkillDataList>("SkillDataList",
+                (path)=>
+                {
+                    var asset = ScriptableObject.CreateInstance<SkillDataList>();
+                    AssetDatabase.CreateAsset(asset, path);
+                    AssetDatabase.SaveAssets();
+                    return asset;
+                },
+                (path)=>
+                {
+                    return AssetDatabase.LoadAssetAtPath<SkillDataList>(path);
+                });
+            skillDataList.Initalize();
 
-            foreach (var skill in skillDataList)
+            JSONNode jsonData = JSONNode.Parse(json);
+            List<SkillData> parseList = JsonParseData(jsonData,
+                () =>
+                {
+                    List<SkillData> skillDataList = new List<SkillData>();
+
+                    for (int i = 0; i < jsonData.Count; i++)
+                    {
+                        switch ((SkillType)jsonData[i]["SkillType"].AsInt)
+                        {
+                            case SkillType.Passive:
+                                AddSkillDataList(ScriptableObject.CreateInstance<PassiveSkill>(), skillDataList, jsonData, i);
+                                break;
+                            case SkillType.Active:
+                                AddSkillDataList(ScriptableObject.CreateInstance<ActiveSkill>(), skillDataList, jsonData, i);
+                                break;
+                        }
+                    }
+
+                    return skillDataList;
+                });
+
+            foreach (var skill in parseList)
             {
                 CreateSkillDataSO(skill);
+            }
+        }
+        else
+        {
+            buffDataContainer = GetDataList<BuffDataContainer>("BuffDataList",
+                (path) =>
+                {
+                    var asset = ScriptableObject.CreateInstance<BuffDataContainer>();
+                    AssetDatabase.CreateAsset(asset, path);
+                    AssetDatabase.SaveAssets();
+                    return asset;
+                },
+                (path) =>
+                {
+                    return AssetDatabase.LoadAssetAtPath<BuffDataContainer>(path);
+                });
+            buffDataContainer.Initalize();
+
+            JSONNode jsonData = JSONNode.Parse(json);
+            List<BuffData> parseList = JsonParseData(jsonData,
+                () =>
+                {
+                    List<BuffData> buffDataList = new List<BuffData>();
+                    for (int i = 0; i < jsonData.Count; i++)
+                    {
+                        BuffData bfData = new BuffData();
+                        bfData.buffName = jsonData[i]["BuffName"];
+                        bfData.buffDesc = jsonData[i]["BuffDescription"];
+                        bfData.duration = jsonData[i]["Duration"].AsFloat;
+                        bfData.increase = jsonData[i]["increase"].AsFloat;
+                        bfData.spriteName = jsonData[i]["SpriteName"];
+                        string buffTypeStr = jsonData[i]["BuffType"];
+                        bfData.buffEfeects = ParsingDataCovertArray<BuffType>(buffTypeStr).ToList();
+
+
+
+                        for (int j =0; j < jsonData[i]["BuffType"].Count; j++)
+                        {
+                            bfData.buffEfeects.Add((BuffType)jsonData[i]["BuffType"][j].AsInt);
+                        }
+                        buffDataList.Add(bfData);
+                    }
+                    return buffDataList;
+                });
+
+            foreach (var buffData in parseList)
+            {
+                CreateBuffDataSO(buffData);
             }
         }
 
@@ -134,7 +299,7 @@ public class StageImpoterWindow : EditorWindow
     /// <param name="data"></param>
     private static void CreateItemDataSO(ItemData data)
     {
-        CreateOrLoadSO<ItemData>(data.spriteName, "Item",
+        CreateOrLoadSO<ItemData>(data.itemName, "Item",
         () =>
         {
             if(data is HealItemData)
@@ -144,6 +309,10 @@ public class StageImpoterWindow : EditorWindow
             else if(data is UpgradeItemData)
             {
                 return ScriptableObject.CreateInstance<UpgradeItemData>();
+            }
+            else if(data is BuffItemData)
+            {
+                return ScriptableObject.CreateInstance<BuffItemData>();
             }
             else
             {
@@ -164,6 +333,10 @@ public class StageImpoterWindow : EditorWindow
                 healItem.healRatio = (data as HealItemData).healRatio;
                 healItem.healType = (data as HealItemData).healType;
             }
+            if(so is BuffItemData buffItem)
+            {
+                buffItem.buffIds = (data as BuffItemData).buffIds;
+            }
         },
         itemDataList.itemData,
         itemDataList);
@@ -171,6 +344,10 @@ public class StageImpoterWindow : EditorWindow
 
     }
 
+    /// <summary>
+    /// 스킬 데이터 추가 함수
+    /// </summary>
+    /// <param name="data"></param>
     public static void CreateSkillDataSO(SkillData data)
     {
         CreateOrLoadSO<SkillData>(data.assetName, "Skill",
@@ -206,6 +383,27 @@ public class StageImpoterWindow : EditorWindow
             skillDataList);
     }
 
+    /// <summary>
+    /// 버프 데이터 추가 함수
+    /// </summary>
+    /// <param name="data"></param>
+    public static void CreateBuffDataSO(BuffData data)
+    {
+        CreateOrLoadSO<BuffData>(data.buffName, "Buff",
+            () => ScriptableObject.CreateInstance<BuffData>(),
+            (so) =>
+            {
+                so.buffName = data.buffName;
+                so.buffDesc = data.buffDesc;
+                so.duration = data.duration;
+                so.increase = data.increase;
+                so.buffEfeects = data.buffEfeects;
+                so.spriteName= data.spriteName;
+            },
+            buffDataContainer.buffDataList,
+            buffDataContainer);
+
+    }
 
     /// <summary>
     /// 스크립터블 오브젝트 생성 통합 함수
@@ -262,155 +460,61 @@ public class StageImpoterWindow : EditorWindow
     /// <summary>
     /// 스테이지 정보 JSON 파싱
     /// </summary>
-    /// <param name="json"></param>
-    /// <returns></returns>
-    public List<StageData> JsonParseStageData(JSONNode json)
+    public static List<T> JsonParseData<T>(JSONNode json, Func<List<T>> parseAction) where T : class
     {
-        List<StageData> stageDataList = new List<StageData>();
-
-        for(int i = 0; i < json.Count; i++)
-        {
-            StageData data = new StageData();
-            data.stageName = json[i]["StageName"];
-            data.totalWave = json[i]["TotalWave"];
-
-            //웨이브 별 몬스터 개수 저장
-            string monsterStr = json[i]["MonstersPerWave"];
-            data.monstersPerWave = ParsingDataCovertArray(monsterStr);
-            
-            //스테이지에 등장하는 몬스터 타입 설정
-            string monsterType = json[i]["SpawnMonsterType"];
-            data.spawnMonsterType = ParsingDataCovertArray(monsterType);
-
-            stageDataList.Add(data);
-        }
-        return stageDataList;
-    }
-
-    public List<ItemData> JsonParseItemData(JSONNode json)
-    {
-        List<ItemData> itemDataList = new List<ItemData>();
-
-        for (int i = 0; i < json.Count; i++)
-        {
-            switch((ItemType)json[i]["ItemType"].AsInt)
-            {
-                case ItemType.Heal:
-                    AddItemDataList(ScriptableObject.CreateInstance<HealItemData>(), itemDataList, json, i);
-                    break;
-                case ItemType.Upgrade:
-                    AddItemDataList(ScriptableObject.CreateInstance<UpgradeItemData>(), itemDataList, json, i);
-                    break;
-                case ItemType.Gamble:
-                    AddItemDataList(ScriptableObject.CreateInstance<GambleItemData>(), itemDataList, json, i);
-                    break;
-                case ItemType.Buff:
-                    break;
-            }
-        }
-        return itemDataList;
-    }
-
-    public List<SkillData> JsonParseSkillData(JSONNode json)
-    {
-        List<SkillData> skillDataList = new List<SkillData>();
-
-        for (int i = 0; i < json.Count; i++)
-        {
-            switch ((SkillType)json[i]["SkillType"].AsInt)
-            {
-                case SkillType.Passive:
-                    AddSkillDataList(ScriptableObject.CreateInstance<PassiveSkill>(), skillDataList, json, i);
-                    break;
-                case SkillType.Active:
-                    AddSkillDataList(ScriptableObject.CreateInstance<ActiveSkill>(), skillDataList, json, i);
-                    break;
-            }
-        }
-
-        return skillDataList;
+        List<T> parselist = parseAction?.Invoke();
+        return parselist;
     }
 
     /// <summary>
-    /// 배열 int 배열 형태로 파싱해서 리턴 해주는 함수
+    /// 배열 형태로 파싱해서 리턴 해주는 함수
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    public int[] ParsingDataCovertArray(string data)
+    public T[] ParsingDataCovertArray<T>(string data)
     {
         data = data.Trim('"'); // 앞뒤 따옴표 제거
 
         string[] split = data.Split(',');
 
-        int[] covertArray = new int[split.Length];
+        T[] covertArray = new T[split.Length];
         for (int j = 0; j < split.Length; j++)
         {
-            int.TryParse(split[j], out covertArray[j]);
+            object value = null;
+            if(typeof(T) == typeof(int))
+            {
+                value = int.Parse(split[j]);
+            }
+            else
+            {
+                value = (BuffType)(int.Parse(split[j]));
+            }
+            covertArray[j] = (T)value;
         }
 
         return covertArray;
     }
 
     /// <summary>
-    /// 스테이지 정보 리스트 스크립터블 오브젝트 가져오기(없으면 생성)
+    ///  데이터 리스트 스크립터블 오브젝트 가져오기(없으면 생성)
     /// </summary>
-    public void GetStageDataList()
+    /// <typeparam name="T"></typeparam>
+    /// <param name="assetName"></param>
+    /// <param name="fileNotExistsFunc"></param>
+    /// <param name="fileExistsFunc"></param>
+    /// <returns></returns>
+    public static T GetDataList<T>(string assetName, Func<string, T> fileNotExistsFunc, Func<string, T> fileExistsFunc) where T : class
     {
-        string path = $"{directory}/{type}/StageDataList.asset";
+        string path = $"{directory}/{type}/{assetName}.asset";
 
-        if (!File.Exists(path))
+        if(!File.Exists(path))
         {
-            var asset = ScriptableObject.CreateInstance<StageDataList>();
-            AssetDatabase.CreateAsset(asset, path);
-            AssetDatabase.SaveAssets();
-            stageDataList = asset;
+            return fileNotExistsFunc?.Invoke(path);
         }
         else
         {
-            stageDataList = AssetDatabase.LoadAssetAtPath<StageDataList>(path);
+            return fileExistsFunc?.Invoke(path);
         }
-        stageDataList.Initalize();
-    }
-
-    /// <summary>
-    /// 아이템 데이터 리스트 스크립터블 오브젝트 가져오기(없으면 생성)
-    /// </summary>
-    public void GetItemDataList()
-    {
-        
-        string path = $"{directory}/{type}/ItemDataList.asset";
-
-        if (!File.Exists(path))
-        {
-            var asset = ScriptableObject.CreateInstance<ItemScriptableObject>();
-            AssetDatabase.CreateAsset(asset, path);
-            AssetDatabase.SaveAssets();
-            itemDataList = asset;
-        }
-        else
-        {
-            itemDataList = AssetDatabase.LoadAssetAtPath<ItemScriptableObject>(path);
-        }
-        itemDataList.Initalize();
-    }
-
-    public void GetSkillDataList()
-    {
-        string path = $"{directory}/{type}/SkillDataList.asset";
-
-
-        if (!File.Exists(path))
-        {
-            var asset = ScriptableObject.CreateInstance<SkillDataList>();
-            AssetDatabase.CreateAsset(asset, path);
-            AssetDatabase.SaveAssets();
-            skillDataList = asset;
-        }
-        else
-        {
-            skillDataList = AssetDatabase.LoadAssetAtPath<SkillDataList>(path);
-        }
-        skillDataList.Initalize();
     }
 
     /// <summary>
@@ -455,9 +559,14 @@ public class StageImpoterWindow : EditorWindow
             }
             itemDataList.Add(upgradeItemData);
         }
-        else
+        else if(itemData is BuffItemData buffItemData)
         {
-            itemDataList.Add(itemData);
+            buffItemData.buffIds = jsonData[index]["BuffId"].AsInt;
+            itemDataList.Add(buffItemData);
+        }
+        else if(itemData is GambleItemData gambleItemData)
+        {
+            itemDataList.Add(gambleItemData);
         }
     }
 

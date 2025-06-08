@@ -1,19 +1,24 @@
-using DG.Tweening.Core.Easing;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class SpawnManager : PoolableObject<Monster>
 {
-    public static SpawnManager instance;
-    public BoxCollider2D[] spawnZone;
-    public int spawnCount;
-    public int spawnZonePerMonster;
-    public MonsterData monsterData;
-    public int aliveCount;
-    public Action OnWaveEnd;
+    #region public
+    public static SpawnManager      instance;
+    public BoxCollider2D[]          spawnZone;
+    public int                      spawnCount;
+    public int                      spawnZonePerMonster;
+    public MonsterData              monsterData;
+    public int                      aliveCount;
+    public Action                   OnWaveEnd;
+    public List<Monster>            spawnMonsterList;
+    #endregion
 
+    #region private
     WaveManager waveManager;
+    #endregion
 
     private void Awake()
     {
@@ -22,6 +27,7 @@ public class SpawnManager : PoolableObject<Monster>
     private void Start()
     {
         waveManager = GameManager.Instance.WaveManager;
+        spawnMonsterList = new List<Monster>();
         waveManager.spawnEvent += SetSpawn;
         OnWaveEnd += waveManager.OnEndWave;
     }
@@ -80,6 +86,8 @@ public class SpawnManager : PoolableObject<Monster>
         mon.gameObject.SetActive(true);
         mon.ResetUI();
         mon.StateMachine.SetState(STATE.MOVE);
+
+        spawnMonsterList.Add(mon);
     }
 
     /// <summary>
@@ -106,6 +114,7 @@ public class SpawnManager : PoolableObject<Monster>
         mon.OnDie -= HandleMonsterDie;
         base.ReturnPool(mon);
         aliveCount--;
+        spawnMonsterList.Remove(mon);
 
         if(aliveCount <= 0)
         {

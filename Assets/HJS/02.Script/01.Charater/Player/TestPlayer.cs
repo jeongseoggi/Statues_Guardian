@@ -1,9 +1,16 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TestPlayer : MonoBehaviour, IUseable
 {
     public float hp;
     public float mp;
+
+    public void ApplyBuff(UnityAction action)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public float GetMaxHp()
     {
         return 100;

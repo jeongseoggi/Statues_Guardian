@@ -35,7 +35,7 @@ public class DropDownAnimator : MonoBehaviour
 
     public void ItemUseButton()
     {
-        curInvenSlot.ItemData?.Use(GameManager.Instance.GetPlayer());
+        curInvenSlot.ItemData?.Use(GameManager.Instance.GetPlayer().GetComponentInChildren<PlayerItemHandler>());
         gameObject.SetActive(false);
     }
 
@@ -52,7 +52,7 @@ public class DropDownAnimator : MonoBehaviour
                     inputPopup.Close();
                     return;
                 }
-                curInvenSlot.ItemData?.Use(GameManager.Instance.GetPlayer(), count);
+                curInvenSlot.ItemData?.Use(GameManager.Instance.GetPlayer().GetComponentInChildren<PlayerItemHandler>(), count);
                 inputPopup.Close();
             }, 
             () => { inputPopup.Close(); });

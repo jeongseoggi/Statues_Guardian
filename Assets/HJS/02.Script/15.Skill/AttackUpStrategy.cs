@@ -9,12 +9,12 @@ public class AttackUpStrategy : ISkillUseStrategy
         float increase = skillData.increase + 
             (skillData.increasePerLevel * GameManager.Instance.PlayerSkillData.playerSkillLevelDic[skillData.skillName]);
 
-        float resetVal = user.ApplyBuff(BuffType.Attack, increase, skillData.mpCost);
+        float resetVal = user.ApplyBuff(BuffType.AttackUp, increase, skillData.mpCost);
         user.RunCoroutine(BuffTime(skillData.duration, resetVal, user));
     }
     private IEnumerator BuffTime(float duration, float returnval, ISkillUable user)
     {
         yield return new WaitForSeconds(duration);
-        user.ReturnBuffValue(BuffType.Attack, returnval);
+        user.ReturnBuffValue(BuffType.AttackUp, returnval);
     }
 }

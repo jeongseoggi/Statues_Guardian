@@ -8,23 +8,37 @@ using UnityEngine.Networking;
 public class DataManager : SingleTon<DataManager>
 {
     #region private
-    private static string ServerURL = "http://localhost:3000/";         // 주소 URL
-    [SerializeField] private ItemScriptableObject itemDataBase;         // 아이템을 담은 ScriptableObject
-    [SerializeField] private SkillDataList skillDatabase;               // 스킬을 담은 ScriptableObject
-    [SerializeField] private List<GameObject> effectList;               // Effect List
-
+    private static string ServerURL = "http://localhost:3000/";             // 주소 URL
+    [SerializeField] private ItemScriptableObject itemDataBase;             // 아이템을 담은 ScriptableObject
+    [SerializeField] private SkillDataList skillDatabase;                   // 스킬을 담은 ScriptableObject
+    [SerializeField] private BuffDataContainer buffDatabase;                // 버프를 담은 ScriptableObject
+    [SerializeField] private List<GameObject> effectList;                   // Effect List
+    [SerializeField] private Dictionary<BuffType, BuffEffectData> buffEffectDic;  // 버프 적용 효과를 담은 딕셔너리
     #endregion
 
     #region 프로퍼티
     public ItemScriptableObject ItemDataBase { get => itemDataBase; }   
     public SkillDataList SkillDataBase { get=> skillDatabase; }
     public List<GameObject> EffectList { get=> effectList; }
+    public BuffDataContainer BuffDatabase { get => buffDatabase; }
+    public Dictionary<BuffType, BuffEffectData> BuffEffectDic { get => buffEffectDic; set => buffEffectDic = value; }
     #endregion
 
     private void Start()
     {
         ItemInit();
         SkillInit();
+        BuffDicInit();
+    }
+
+    public void BuffDicInit()
+    {
+        BuffEffectDic = new Dictionary<BuffType, BuffEffectData>()
+        {
+            {BuffType.AttackUp, new AttackUpBuff() },
+            {BuffType.DefUp, new DefUpBuff() }
+        };
+
     }
 
     /// <summary>
@@ -62,6 +76,9 @@ public class DataManager : SingleTon<DataManager>
                     break;
                 case ItemType.Upgrade:
                     itemData.itemUseStrategy = new UpgradeItemStrategy();
+                    break;
+                case ItemType.Buff:
+                    itemData.itemUseStrategy = new BuffItemStrategy();
                     break;
             }
 

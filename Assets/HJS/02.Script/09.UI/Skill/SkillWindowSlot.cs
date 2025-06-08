@@ -119,7 +119,7 @@ public class SkillWindowSlot : MonoBehaviour, IPointerEnterHandler, IDragHandler
 
         string skilldesc = string.Format(SkillData.skillDescription, increase);
 
-        ToolTipManager.Instance.ShowTooltip(skillIcon, SkillData.skillName, skilldesc);
+        ToolTipManager.Instance.ShowTooltip(skillIcon.sprite, SkillData.skillName, skilldesc);
     }
 
     public void OnPointerExit(PointerEventData eventData)

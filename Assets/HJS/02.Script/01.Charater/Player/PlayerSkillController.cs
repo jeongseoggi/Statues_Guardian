@@ -15,11 +15,11 @@ public class PlayerSkillController : MonoBehaviour, ISkillUable
         float originValue = 0;
         switch (buffType)
         {
-            case BuffType.Attack:
+            case BuffType.AttackUp:
                 originValue = player.Atk;
                 player.Atk *= amount;
                 break;
-            case BuffType.Speed:
+            case BuffType.MoveSpeedUp:
                 originValue = player.Speed;
                 player.Speed *= amount;
                 break;
@@ -60,10 +60,10 @@ public class PlayerSkillController : MonoBehaviour, ISkillUable
     {
         switch(buffType) 
         {
-            case BuffType.Attack:
+            case BuffType.AttackUp:
                 player.Atk = returnVal;
                 break;
-            case BuffType.Speed:
+            case BuffType.MoveSpeedUp:
                 player.Speed = returnVal;
                 break;
         }

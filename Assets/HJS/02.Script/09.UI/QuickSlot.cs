@@ -127,7 +127,7 @@ public class QuickSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
         if (ItemData == null)
             return;
 
-        ToolTipManager.Instance.ShowTooltip(itemImage,
+        ToolTipManager.Instance.ShowTooltip(itemImage.sprite,
             ItemData.itemName, ItemData.itemDesc);
     }
 

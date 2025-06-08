@@ -56,9 +56,9 @@ public class ToolTipManager : SingleTon<ToolTipManager>
     }
 
 
-    public void ShowTooltip(Image img, string itemName, string itemDesc)
+    public void ShowTooltip(Sprite img, string itemName, string itemDesc)
     {
-        itemImage.sprite = img.sprite;
+        itemImage.sprite = img;
         itemNameTMP.text = itemName;
         itemDescTMP.text = itemDesc;
 

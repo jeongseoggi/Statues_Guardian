@@ -93,8 +93,13 @@ public enum DamageType
 
 public enum BuffType
 {
-    Attack,
-    Speed
+    AttackUp,
+    DefUp,
+    AtkSpeed,
+    MoveSpeedUp,
+    Time,
+    DefDown,
+    InfinityMana
 }
 
 public enum EffectType

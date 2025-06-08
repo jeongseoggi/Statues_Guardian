@@ -129,7 +129,7 @@ public class InventorySlot : MonoBehaviour, IDragHandler, IEndDragHandler, IBegi
         if (ItemData == null)
             return;
 
-        ToolTipManager.Instance.ShowTooltip(itemImage, ItemData.itemName, ItemData.itemDesc);
+        ToolTipManager.Instance.ShowTooltip(itemImage.sprite, ItemData.itemName, ItemData.itemDesc);
     }
 
     public void OnPointerExit(PointerEventData eventData)

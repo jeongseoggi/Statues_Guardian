@@ -44,6 +44,7 @@ public interface IUseable
 {
     void Upgrade(UpgradeType upgradeType, int useCount = 1);
     void Heal(float amount, HealType healType);
+    void ApplyBuff(UnityAction action);
     float GetMaxHp();
     float GetMaxMp();
 }
@@ -57,6 +58,14 @@ public interface ISkillUable
     Coroutine RunCoroutine(IEnumerator coroutine);
     void ReturnBuffValue(BuffType buffType, float returnVal);
     Player GetPlayer();
+}
+
+public interface IBuffUsable
+{
+    Coroutine RunCoroutine(IEnumerator coroutine);
+    void ReturnBuffValue(BuffType buffType, float returnVal);
+    float GetReturnValue(BuffType buffType);
+    void ApplyBuff(BuffType buffType, float increse);
 }
 
 public interface IItemUseStrategy

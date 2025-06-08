@@ -14,6 +14,7 @@ public class UIManager : SingleTon<UIManager>
     public DropDownAnimator dropDownAnimator;
     public Stack<GameObject> openUIStack = new Stack<GameObject>();
     public GameObject dragLayer;
+    public BuffManager buffManager;
     #endregion
 
     #region private
