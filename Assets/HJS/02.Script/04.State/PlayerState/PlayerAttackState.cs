@@ -30,6 +30,7 @@ public class PlayerAttackState : PlayerState
     public void SetAnimationPlay()
     { 
         int comboCount = player.GetCombo();
+        sm.Animator.SetFloat("AttackSpeed", player.AttackSpeed);
         switch(comboCount)
         {
             case 0:

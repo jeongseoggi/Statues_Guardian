@@ -132,6 +132,7 @@ public class GameManager : SingleTon<GameManager>
                 PlayerStatData.Atk = json["stats"]["atk"].AsFloat;
                 PlayerStatData.Def = json["stats"]["def"].AsFloat;
                 PlayerStatData.Speed = json["stats"]["speed"].AsFloat;
+                PlayerStatData.AttackSpeed = json["stats"]["atkspeed"].AsFloat;
                 OnPlayerStatDataReady?.Invoke();
             }
             else

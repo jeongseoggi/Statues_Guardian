@@ -1,68 +1,35 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class TestPlayer : MonoBehaviour, IUseable
+public class TestPlayer : MonoBehaviour, IBuffUsable
 {
-    public float hp;
-    public float mp;
-
-    public void ApplyBuff(UnityAction action)
+    public void ApplyBuff(BuffType buffType, float increse)
     {
         throw new System.NotImplementedException();
     }
 
-    public float GetMaxHp()
+    public float GetReturnValue(BuffType buffType)
     {
-        return 100;
+        throw new System.NotImplementedException();
     }
 
-    public float GetMaxMp()
+    public void ReturnBuffValue(BuffType buffType, float returnVal)
     {
-        return 100;
+        throw new System.NotImplementedException();
     }
 
-    public void Heal(float amount, HealType healType)
+    public Coroutine RunCoroutine(IEnumerator coroutine)
     {
-        if (healType == HealType.HP)
-        {
-            hp += amount;
-#if UNITY_EDITOR
-            Debug.Log($"HP 회복: {amount}, 현재 HP: {hp}");
-#endif
-        }
-        else
-        {
-            mp += amount;
-#if UNITY_EDITOR
-            Debug.Log($"MP 회복: {amount}, 현재 MP: {mp}");
-#endif
-        }
-    }
-
-    public void Upgrade(UpgradeType upgradeType, int useCount)
-    {
-
+        throw new System.NotImplementedException();
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if(Input.GetKeyDown(KeyCode.F12))
         {
-            UIManager.Instance.quickSlotManager.quickSlots[0].ItemData?.Use(this);
+            DataManager.Instance.BuffDatabase.buffDataList.Find((x) => x.buffName.Equals("분노")).BuffEffect(this);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            UIManager.Instance.quickSlotManager.quickSlots[1].ItemData?.Use(this);
-
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            UIManager.Instance.quickSlotManager.quickSlots[2].ItemData?.Use(this);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            UIManager.Instance.quickSlotManager.quickSlots[3].ItemData?.Use(this);
-        }
-
     }
+
 }

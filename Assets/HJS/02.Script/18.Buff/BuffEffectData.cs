@@ -5,8 +5,13 @@ using UnityEngine;
 public abstract class BuffEffectData
 {
     public abstract void UseEffect(IBuffUsable user, float duration, float increse, string buffName);
-    public virtual IEnumerator InchantBuff(IBuffUsable user, float duration, float increase, BuffType buffType, string buffName)
+    public virtual IEnumerator StatBuff(IBuffUsable user, float duration, float increase, BuffType buffType, string buffName)
     {
+        if(buffType == BuffType.DefDown)
+        {
+            increase = increase * -1;
+        }
+
         user.ApplyBuff(buffType, increase);
         if (duration <= 0)
         {
@@ -17,22 +22,7 @@ public abstract class BuffEffectData
         {
             yield return new WaitForSeconds(duration);
         }
-        user.ReturnBuffValue(buffType, user.GetReturnValue(buffType));
-        UIManager.Instance.buffManager.UnActiveBuff(buffName);
-    }
-    public virtual IEnumerator SpeedBuff(IBuffUsable user, float duration, float increase, BuffType buffType, string buffName)
-    {
-        user.ApplyBuff(buffType, increase);
-        if (duration <= 0)
-        {
-            int curWave = WaveManager.curWave;
-            yield return new WaitUntil(() => curWave < WaveManager.curWave);
-        }
-        else
-        {
-            yield return new WaitForSeconds(duration);
-        }
-        user.ReturnBuffValue(buffType, user.GetReturnValue(buffType));
+        user.ReturnBuffValue(buffType, increase);
         UIManager.Instance.buffManager.UnActiveBuff(buffName);
     }
     public virtual IEnumerator TimeBuff(IBuffUsable user, float duration, float increase, BuffType buffType, string buffName)

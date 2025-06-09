@@ -36,7 +36,11 @@ public class DataManager : SingleTon<DataManager>
         BuffEffectDic = new Dictionary<BuffType, BuffEffectData>()
         {
             {BuffType.AttackUp, new AttackUpBuff() },
-            {BuffType.DefUp, new DefUpBuff() }
+            {BuffType.DefUp, new DefUpBuff() },
+            {BuffType.AtkSpeed, new AttackSpeedUpBuff() },
+            {BuffType.MoveSpeedUp, new MoveSpeedUpBuff() },
+            {BuffType.DefDown, new DefDownBuff() },
+            {BuffType.Time, new TimeSlowBuff() }
         };
 
     }

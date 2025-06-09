@@ -12,6 +12,7 @@ public class Player : Character, IHitable
 
     #region private
     [SerializeField] private UIController playerUIController;
+                     private float attackSpeed;
     #endregion
 
     #region 프로퍼티
@@ -69,6 +70,7 @@ public class Player : Character, IHitable
     }
     public UIController PlayerUIController { get => playerUIController; }
     public Weapon Weapon { get => weapon; }
+    public float AttackSpeed { get => attackSpeed; set => attackSpeed = value; }
     #endregion
 
     private void Awake()
@@ -91,6 +93,7 @@ public class Player : Character, IHitable
         Atk = GameManager.Instance.PlayerStatData.Atk;
         Def = GameManager.Instance.PlayerStatData.Def;
         Speed = GameManager.Instance.PlayerStatData.Speed;
+        AttackSpeed = GameManager.Instance.PlayerStatData.AttackSpeed;
         weapon.SetOwner(this);
         weapon.damage = Atk;
         PlayerUIController.GetMaxHp(MaxHp);

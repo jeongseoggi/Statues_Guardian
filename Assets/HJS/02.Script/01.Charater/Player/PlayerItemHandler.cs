@@ -7,10 +7,18 @@ public class PlayerItemHandler : MonoBehaviour, IBuffUsable, IUseable
 {
     [SerializeField] Player player;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F12))
+        {
+            DataManager.Instance.BuffDatabase.buffDataList.Find((x) => x.buffName.Equals("라그나로크")).BuffEffect(this);
+        }
+    }
+
     #region IBuffable 인터페이스 구현부
     public void ApplyBuff(BuffType buffType, float increse)
     {
-        SetStatus(buffType, increse);
+        SetStatus(buffType, increse, true);
     }
 
     public float GetReturnValue(BuffType buffType)
@@ -18,7 +26,7 @@ public class PlayerItemHandler : MonoBehaviour, IBuffUsable, IUseable
         switch (buffType)
         {
             case BuffType.AtkSpeed:
-                return 0;
+                return player.AttackSpeed;
             case BuffType.AttackUp:
                 return player.Atk;
             case BuffType.DefUp:
@@ -34,7 +42,7 @@ public class PlayerItemHandler : MonoBehaviour, IBuffUsable, IUseable
 
     public void ReturnBuffValue(BuffType buffType, float returnVal)
     {
-        SetStatus(buffType, returnVal);
+        SetStatus(buffType, returnVal, false);
     }
 
     public Coroutine RunCoroutine(IEnumerator coroutine)
@@ -42,23 +50,26 @@ public class PlayerItemHandler : MonoBehaviour, IBuffUsable, IUseable
         return StartCoroutine(coroutine);
     }
 
-    public void SetStatus(BuffType buffType, float values)
+    public void SetStatus(BuffType buffType, float values, bool isAdd)
     {
+        float setValue = isAdd ? values : values * -1;
+
         switch (buffType)
         {
             case BuffType.AtkSpeed:
+                player.AttackSpeed += setValue;
                 break;
             case BuffType.AttackUp:
-                player.Atk = values;
+                player.Atk += setValue;
                 break;
             case BuffType.DefUp:
-                player.Def = values;
+                player.Def += setValue;
                 break;
             case BuffType.DefDown:
-                player.Def = values;
+                player.Def += setValue;
                 break;
             case BuffType.MoveSpeedUp:
-                player.Speed = values;
+                player.Speed += setValue;
                 break;
             case BuffType.InfinityMana:
                 break;

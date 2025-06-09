@@ -10,6 +10,7 @@ public class PlayerStatData
     float atk;
     float def;
     float speed;
+    float atkSpeed;
 
     public float Hp { get => hp; set => hp = value; }
     public float Mp { get => mp; set => mp = value; }
@@ -18,4 +19,5 @@ public class PlayerStatData
     public float Atk { get => atk; set => atk = value; }
     public float Def { get => def; set => def = value; }
     public float Speed { get => speed; set => speed = value; }
+    public float AttackSpeed { get => atkSpeed; set => atkSpeed = value; }
 }
