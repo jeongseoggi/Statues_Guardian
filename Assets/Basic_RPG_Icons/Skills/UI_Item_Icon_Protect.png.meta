@@ -1,12 +1,5 @@
 fileFormatVersion: 2
-guid: 4637953d65a24364aab3372a525b9ed2
-AssetOrigin:
-  serializedVersion: 1
-  productId: 181301
-  packageName: Basic RPG Icons
-  packageVersion: 1.1
-  assetPath: Assets/Basic_RPG_Icons/Skills/07_Lightning_Strike.png
-  uploadId: 397422
+guid: 31f63678b0f26044fa2b680c127ff20d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}

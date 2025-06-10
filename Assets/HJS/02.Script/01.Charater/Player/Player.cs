@@ -5,6 +5,8 @@ using UnityEngine.Events;
 public class Player : Character, IHitable
 {
     #region public
+    [Space(5)]
+    [Header("플레이어 전용")]
     public Func<int> getCombo;
     public event Action OnCheckMana;
     public bool isDotActive;
@@ -12,7 +14,7 @@ public class Player : Character, IHitable
 
     #region private
     [SerializeField] private UIController playerUIController;
-                     private float attackSpeed;
+    [SerializeField] private bool isInfinityManaActive;
     #endregion
 
     #region 프로퍼티
@@ -70,7 +72,7 @@ public class Player : Character, IHitable
     }
     public UIController PlayerUIController { get => playerUIController; }
     public Weapon Weapon { get => weapon; }
-    public float AttackSpeed { get => attackSpeed; set => attackSpeed = value; }
+    public bool IsInfinityManaActive { get => isInfinityManaActive; set=> isInfinityManaActive = value; }
     #endregion
 
     private void Awake()

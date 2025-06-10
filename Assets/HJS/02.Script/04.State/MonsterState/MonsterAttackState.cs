@@ -10,6 +10,7 @@ public class MonsterAttackState : MonsterState
     public override void Enter()
     {
         monster.state = STATE.ATTACK;
+        sm.Animator.SetFloat("AttackSpeed", monster.AttackSpeed);
         sm.Animator.SetBool("isAttack", true);
     }
 

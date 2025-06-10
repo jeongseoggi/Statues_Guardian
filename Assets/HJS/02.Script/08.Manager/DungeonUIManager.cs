@@ -7,6 +7,7 @@ public class DungeonUIManager : SingleTonDestory<DungeonUIManager>
     public Button nextWaveStartBTN;
     public StageResultText stageResultText;
     public ShopPanelHandler shopPanelHandler;
+    public RandomBuffUI randomBuffUI;
 
     public WaveText WaveText
     {

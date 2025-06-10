@@ -23,24 +23,29 @@ public abstract class BuffEffectData
             yield return new WaitForSeconds(duration);
         }
         user.ReturnBuffValue(buffType, increase);
-        UIManager.Instance.buffManager.UnActiveBuff(buffName);
+        BuffNotifier.NotifyBuffRemoved(buffName);
     }
     public virtual IEnumerator TimeBuff(IBuffUsable user, float duration, float increase, BuffType buffType, string buffName)
     {
-        float returnValue = 0;
+        float returnSpeedValue = 0;
+        float retrurnAtkSpeedValue = 0;
         foreach (Monster mon in SpawnManager.instance.spawnMonsterList)
         {
-            returnValue = mon.Speed;
+            returnSpeedValue = mon.Speed;
+            retrurnAtkSpeedValue = mon.AttackSpeed;
+
+            mon.AttackSpeed -= increase;
             mon.Speed -= increase;
         }
          
         yield return new WaitForSeconds(duration);
         foreach (Monster mon in SpawnManager.instance.spawnMonsterList)
         {
-            mon.Speed = returnValue;
+            mon.Speed = returnSpeedValue;
+            mon.AttackSpeed = retrurnAtkSpeedValue;
         }
 
-        UIManager.Instance.buffManager.UnActiveBuff(buffName);
+        BuffNotifier.NotifyBuffRemoved(buffName);
     }
     public virtual IEnumerator DownBuff(IBuffUsable user, float duration, float increase, BuffType buffType, string buffName)
     {
@@ -56,11 +61,11 @@ public abstract class BuffEffectData
             yield return new WaitForSeconds(duration);
         }
         user.ReturnBuffValue(buffType, user.GetReturnValue(buffType));
-        UIManager.Instance.buffManager.UnActiveBuff(buffName);
+        BuffNotifier.NotifyBuffRemoved(buffName);
     }
-    public virtual IEnumerator InfinityManaBuff(IBuffUsable user, float duration, float increase, BuffType buffType, string buffName)
+    public virtual IEnumerator InfinityManaBuff(IBuffUsable user, float duration, BuffType buffType, string buffName)
     {
-        user.ApplyBuff(buffType, increase);
+        user.ApplyBuff(BuffType.InfinityMana);
         if (duration <= 0)
         {
             int curWave = WaveManager.curWave;
@@ -70,8 +75,8 @@ public abstract class BuffEffectData
         {
             yield return new WaitForSeconds(duration);
         }
-        user.ReturnBuffValue(buffType, user.GetReturnValue(buffType));
-        UIManager.Instance.buffManager.UnActiveBuff(buffName);
+        user.ReturnBuffValue(buffType);
+        BuffNotifier.NotifyBuffRemoved(buffName);
     }
 }
 

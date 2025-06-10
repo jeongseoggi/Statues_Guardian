@@ -7,23 +7,28 @@ public abstract class Character : MonoBehaviour
 {
     #region 변수
     //protected
+    [Header("스탯")]
     [SerializeField] protected float hp;
     [SerializeField] protected float mp;
     [SerializeField] protected float maxHp;
     [SerializeField] protected float maxMp;
     [SerializeField] protected float atk;
     [SerializeField] protected float def;
-    [SerializeField] protected Animator animator;
-    [SerializeField] public STATE state;
     [SerializeField] protected float speed;
-    [SerializeField] protected Weapon weapon;
-    protected StateMachine<Character> stateMachine;
-    protected Action<string> waitAnimAction;
+    [SerializeField] protected float attackSpeed;
     [SerializeField] protected bool isAttacking;
 
+    [Space(5)]
+    [Header("ETC")]
+    [SerializeField] protected Animator animator;
+    [SerializeField] protected Weapon weapon;
+                     protected StateMachine<Character> stateMachine;
+                     protected Action<string> waitAnimAction;
+    
     //public
     public SpriteRenderer spriteRender;
     public Coroutine waitAnimCor;
+    public STATE state;
     #endregion
 
     #region 프로퍼티
@@ -67,6 +72,7 @@ public abstract class Character : MonoBehaviour
     public Animator Animator { get => animator; }    //애니메이터 프로퍼티
     public bool IsAttacking { get => isAttacking; set => isAttacking = value; }    //현재 공격중인지 판단하는 프로퍼티
     public float Speed { get=> speed; set => speed = value; }     //속도 프로퍼티
+    public virtual float AttackSpeed { get => attackSpeed; set => attackSpeed = value; } //공격속도 프로퍼티
     #endregion
 
     protected virtual void Start()

@@ -15,7 +15,6 @@ public class Monster : Character, IHitable
     [SerializeField] UIController monsterUIController;
     [SerializeField] GameObject target;
     [SerializeField] GameObject projectileStartZone;
-    [SerializeField] bool isTaunt;
     [SerializeField] DamageHandler damageHandler;
     [SerializeField] bool isDotDamageHit;
     #endregion
@@ -25,7 +24,7 @@ public class Monster : Character, IHitable
     public Action onDieEffect; // 죽음 연출 Action
     public Action<Monster> OnDie; // 죽었을 때 Action
     public Action trackingAction; //추격 Action
-    public Action<float, float> aoeAction; //도발 Action
+    public Action<float, float> aoeAction; //광역 피해 Action
     public bool isDotState;
     #endregion
 
@@ -49,7 +48,6 @@ public class Monster : Character, IHitable
             weapon.damage = Atk;
         }
     }
-
     public override float Hp 
     { 
         get => base.Hp; 
@@ -67,7 +65,6 @@ public class Monster : Character, IHitable
         }
     }
     public bool IsDotDamageHit { get => isDotDamageHit; set => isDotDamageHit = value; }
-
     public DamageHandler DamageHandler { get => damageHandler; }
     #endregion
 
@@ -103,6 +100,7 @@ public class Monster : Character, IHitable
             Atk = data.attackPower;
             Def = data.defense;
             Speed = data.moveSpeed;
+            AttackSpeed = data.atkSpeed;
             Hp = maxHp;
 
             //공격 범위 조정

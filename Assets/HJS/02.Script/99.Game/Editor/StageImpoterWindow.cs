@@ -244,6 +244,7 @@ public class StageImpoterWindow : EditorWindow
                     for (int i = 0; i < jsonData.Count; i++)
                     {
                         BuffData bfData = new BuffData();
+                        bfData.buffIndex = jsonData[i]["Index"].AsInt;
                         bfData.buffName = jsonData[i]["BuffName"];
                         bfData.buffDesc = jsonData[i]["BuffDescription"];
                         bfData.duration = jsonData[i]["Duration"].AsFloat;
@@ -393,6 +394,7 @@ public class StageImpoterWindow : EditorWindow
             () => ScriptableObject.CreateInstance<BuffData>(),
             (so) =>
             {
+                so.buffIndex = data.buffIndex;
                 so.buffName = data.buffName;
                 so.buffDesc = data.buffDesc;
                 so.duration = data.duration;

@@ -1,34 +1,55 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BuffManager : MonoBehaviour
+public class BuffManager : MonoBehaviour, IBuffObserver
 {
     public BuffWindow buffPrefab;
-    public List<BuffWindow> activeBuffList;
+    public List<BuffWindow> activeBuffWindowList;
+    public List<BuffType> activeBuffs;
+    public Action buffSetAction;
 
     private void Start()
     {
-        activeBuffList = new List<BuffWindow>();
+        activeBuffWindowList = new List<BuffWindow>();
+        activeBuffs = new List<BuffType>();
+        BuffNotifier.Subscribe(this);
     }
 
-    public void SetBuff(Sprite img, string buffName, string buffDesc)
+    /// <summary>
+    /// 버프 사용 구현부
+    /// </summary>
+    /// <param name="img"></param>
+    /// <param name="buffName"></param>
+    /// <param name="buffDesc"></param>
+    public void OnBuffAdded(Sprite img, string buffName, string buffDesc)
     {
         BuffWindow buffWindow = Instantiate(buffPrefab, gameObject.transform);
         buffWindow.Init(img, buffName, buffDesc);
-        activeBuffList.Add(buffWindow);
+        activeBuffWindowList.Add(buffWindow);
     }
 
-    public void UnActiveBuff(string buffName)
+    /// <summary>
+    /// 버프 제거 구현부
+    /// </summary>
+    /// <param name="buffName"></param>
+    public void OnBuffRemoved(string buffName)
     {
-        BuffWindow unActiveBuff = activeBuffList.Find((x) => x.buffName.Equals(buffName));
+        BuffWindow unActiveBuff = activeBuffWindowList.Find((x) => x.buffName.Equals(buffName));
 
-        if(unActiveBuff != null)
+        if (unActiveBuff != null)
         {
             unActiveBuff.gameObject.SetActive(false);
-            activeBuffList.Remove(unActiveBuff);
+            activeBuffWindowList.Remove(unActiveBuff);
         }
     }
+
+    public void OnDestroy()
+    {
+        BuffNotifier.Unsubscribe(this);
+    }
+
 }
 
 

@@ -40,7 +40,8 @@ public class DataManager : SingleTon<DataManager>
             {BuffType.AtkSpeed, new AttackSpeedUpBuff() },
             {BuffType.MoveSpeedUp, new MoveSpeedUpBuff() },
             {BuffType.DefDown, new DefDownBuff() },
-            {BuffType.Time, new TimeSlowBuff() }
+            {BuffType.Time, new TimeSlowBuff() },
+            {BuffType.InfinityMana, new InfinityManaBuff()}
         };
 
     }
@@ -83,6 +84,9 @@ public class DataManager : SingleTon<DataManager>
                     break;
                 case ItemType.Buff:
                     itemData.itemUseStrategy = new BuffItemStrategy();
+                    break;
+                case ItemType.Gamble:
+                    itemData.itemUseStrategy = new GambleItemStrategy();
                     break;
             }
 

@@ -11,12 +11,12 @@ public class PlayerItemHandler : MonoBehaviour, IBuffUsable, IUseable
     {
         if (Input.GetKeyDown(KeyCode.F12))
         {
-            DataManager.Instance.BuffDatabase.buffDataList.Find((x) => x.buffName.Equals("라그나로크")).BuffEffect(this);
+            DataManager.Instance.BuffDatabase.buffDataList.Find((x) => x.buffName.Equals("깨달음")).BuffEffect(this);
         }
     }
 
     #region IBuffable 인터페이스 구현부
-    public void ApplyBuff(BuffType buffType, float increse)
+    public void ApplyBuff(BuffType buffType, float increse = 0)
     {
         SetStatus(buffType, increse, true);
     }
@@ -40,7 +40,7 @@ public class PlayerItemHandler : MonoBehaviour, IBuffUsable, IUseable
         }
     }
 
-    public void ReturnBuffValue(BuffType buffType, float returnVal)
+    public void ReturnBuffValue(BuffType buffType, float returnVal = 0)
     {
         SetStatus(buffType, returnVal, false);
     }
@@ -72,6 +72,7 @@ public class PlayerItemHandler : MonoBehaviour, IBuffUsable, IUseable
                 player.Speed += setValue;
                 break;
             case BuffType.InfinityMana:
+                player.IsInfinityManaActive = isAdd;
                 break;
         }
     }

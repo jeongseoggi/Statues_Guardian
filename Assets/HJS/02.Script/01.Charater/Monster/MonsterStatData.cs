@@ -12,6 +12,7 @@ public class MonsterStatData : ScriptableObject
     public float attackPower;
     public float defense;
     public float moveSpeed;
+    public float atkSpeed;
     public Sprite sprite;
     public RuntimeAnimatorController animator;
     public Vector2 attackRangeSize;

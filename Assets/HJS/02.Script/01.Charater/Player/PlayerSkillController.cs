@@ -25,7 +25,10 @@ public class PlayerSkillController : MonoBehaviour, ISkillUable
                 break;
         }
 
-        player.Mp -= mpCost;
+        if(!player.IsInfinityManaActive)
+        {
+            player.Mp -= mpCost;
+        }
         return originValue;
     }
 
@@ -37,12 +40,19 @@ public class PlayerSkillController : MonoBehaviour, ISkillUable
         {
             player.Weapon.StartCoroutine(player.Weapon.DotDamage(player, curseDamage, duration, monster));
         };
-        player.Mp -= mpCost ;
+
+        if (!player.IsInfinityManaActive)
+        {
+            player.Mp -= mpCost;
+        }
     }
 
     public void AoEApply(float duration, int mpCost)
     {
-        player.Mp -= mpCost;
+        if (!player.IsInfinityManaActive)
+        {
+            player.Mp -= mpCost;
+        }
     }
 
 

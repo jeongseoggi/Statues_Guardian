@@ -63,9 +63,9 @@ public interface ISkillUable
 public interface IBuffUsable
 {
     Coroutine RunCoroutine(IEnumerator coroutine);
-    void ReturnBuffValue(BuffType buffType, float returnVal);
+    void ReturnBuffValue(BuffType buffType, float returnVal = 0);
     float GetReturnValue(BuffType buffType);
-    void ApplyBuff(BuffType buffType, float increse);
+    void ApplyBuff(BuffType buffType, float increse = 0);
 }
 
 public interface IItemUseStrategy
@@ -76,4 +76,10 @@ public interface IItemUseStrategy
 public interface ISkillUseStrategy
 {
     void SkillUse(ISkillUable user, SkillData skillData);
+}
+
+public interface IBuffObserver
+{
+    void OnBuffAdded(Sprite img, string buffName, string buffDesc);
+    void OnBuffRemoved(string buffName);
 }
