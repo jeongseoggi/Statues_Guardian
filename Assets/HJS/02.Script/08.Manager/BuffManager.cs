@@ -7,13 +7,11 @@ public class BuffManager : MonoBehaviour, IBuffObserver
 {
     public BuffWindow buffPrefab;
     public List<BuffWindow> activeBuffWindowList;
-    public List<BuffType> activeBuffs;
     public Action buffSetAction;
 
     private void Start()
     {
         activeBuffWindowList = new List<BuffWindow>();
-        activeBuffs = new List<BuffType>();
         BuffNotifier.Subscribe(this);
     }
 

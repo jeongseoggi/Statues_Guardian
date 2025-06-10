@@ -25180,7 +25180,6 @@ MonoBehaviour:
   buffPrefab: {fileID: 2335313892291549971, guid: ebe240613e646bc4481b080f8dfdf3b9,
     type: 3}
   activeBuffWindowList: []
-  activeBuffs: 
 --- !u!1 &1626807655
 GameObject:
   m_ObjectHideFlags: 0

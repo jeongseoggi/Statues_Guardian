@@ -23,6 +23,11 @@ public class RandomBuffUI : MonoBehaviour
     private string          buffName;           //버프 이름 
     private string          buffDesc;           //버프 설명 
     private Tween           effectTextTween;    //텍스트 효과 Tween
+    private bool            isPlaying;          //연출 진행중인가?
+    #endregion
+
+    #region 프로퍼티
+    public bool IsPlaying { get => isPlaying; set => isPlaying = value; }
     #endregion
 
     public void Init(Sprite randomSprite, string buffName, string buffDesc, Action onComplete = null)
@@ -39,6 +44,7 @@ public class RandomBuffUI : MonoBehaviour
     {
         Time.timeScale = 0f;
 
+        IsPlaying = true;
         effectText.text = "뽑기를 진행하고 있습니다...";
 
         //텍스트 연출
@@ -70,8 +76,8 @@ public class RandomBuffUI : MonoBehaviour
             Time.timeScale = 1f;
 
             MainObjectSetting(false);
+            IsPlaying = false;
             onFinish?.Invoke();
-            Debug.Log("버프 적용 완료!");
         }).SetUpdate(true);
     }
 
