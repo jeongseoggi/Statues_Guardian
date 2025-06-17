@@ -338,6 +338,10 @@ public class StageImpoterWindow : EditorWindow
             {
                 buffItem.buffIds = (data as BuffItemData).buffIds;
             }
+            if(so is UpgradeItemData upgradeItem)
+            {
+                upgradeItem.upgradeType = (data as UpgradeItemData).upgradeType;
+            }
         },
         itemDataList.itemData,
         itemDataList);
@@ -551,14 +555,7 @@ public class StageImpoterWindow : EditorWindow
         }
         else if(itemData is UpgradeItemData upgradeItemData)
         {
-            if (itemData.itemName.Contains("°ø°Ý·Â"))
-            {
-                upgradeItemData.upgradeType = UpgradeType.Atk;
-            }
-            else
-            {
-                upgradeItemData.upgradeType = UpgradeType.Def;
-            }
+            upgradeItemData.upgradeType = (UpgradeType)jsonData[index]["UpgradeType"].AsInt;
             itemDataList.Add(upgradeItemData);
         }
         else if(itemData is BuffItemData buffItemData)

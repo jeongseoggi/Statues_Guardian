@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class TestPlayer : MonoBehaviour, IBuffUsable
+public class TestPlayer : MonoBehaviour
 {
     public void ApplyBuff(BuffType buffType, float increse)
     {
@@ -23,13 +23,4 @@ public class TestPlayer : MonoBehaviour, IBuffUsable
     {
         throw new System.NotImplementedException();
     }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.F12))
-        {
-            DataManager.Instance.BuffDatabase.buffDataList.Find((x) => x.buffName.Equals("ºÐ³ë")).BuffEffect(this);
-        }
-    }
-
 }

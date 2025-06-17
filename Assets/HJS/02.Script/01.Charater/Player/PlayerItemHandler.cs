@@ -1,17 +1,23 @@
 using System.Collections;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class PlayerItemHandler : MonoBehaviour, IBuffUsable, IUseable
 {
     [SerializeField] Player player;
+    public List<BuffType> bucffList;
+
+    private void Start()
+    {
+        bucffList = new List<BuffType>();
+    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F12))
+        if(Input.GetKeyDown(KeyCode.F12))
         {
-            DataManager.Instance.BuffDatabase.buffDataList.Find((x) => x.buffName.Equals("깨달음")).BuffEffect(this);
+            DataManager.Instance.BuffDatabase.buffDataList[1].BuffEffect(this);
         }
     }
 
@@ -76,6 +82,17 @@ public class PlayerItemHandler : MonoBehaviour, IBuffUsable, IUseable
                 break;
         }
     }
+
+    public void AddUsingBuff(BuffType buffType)
+    {
+        bucffList.Add(buffType);
+    }
+
+    public bool IsAlreadyUsingBuff(BuffType buffType)
+    {
+        return bucffList.Contains(buffType);
+    }
+
     #endregion
 
     #region IUsable 인터페이스 구현부

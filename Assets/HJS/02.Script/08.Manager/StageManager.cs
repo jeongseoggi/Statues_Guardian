@@ -27,10 +27,12 @@ public class StageManager : SingleTonDestory<StageManager>
     {
         shopPanelHandler.Hide();
         waveManager.StartWave();
+        GameManager.GameState = GameState.Play;
     }
     public void EndWave()
     {
         shopPanelHandler.Show();
+        GameManager.GameState = GameState.Wait;
     }
 
     /// <summary>

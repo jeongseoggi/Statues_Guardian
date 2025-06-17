@@ -51,7 +51,7 @@ public interface IUseable
 
 public interface ISkillUable
 {
-    float ApplyBuff(BuffType buffType, float amount, int mpCost);
+    void ApplyBuff(BuffType buffType, float amount, int mpCost);
     void AoEApply(float duration, int mpCost);
     void DotDamageApply(float curseDamage, float duration, int mpCost);
     Vector3 GetPosition();
@@ -66,6 +66,8 @@ public interface IBuffUsable
     void ReturnBuffValue(BuffType buffType, float returnVal = 0);
     float GetReturnValue(BuffType buffType);
     void ApplyBuff(BuffType buffType, float increse = 0);
+    void AddUsingBuff(BuffType buffType);
+    bool IsAlreadyUsingBuff(BuffType buffType);
 }
 
 public interface IItemUseStrategy

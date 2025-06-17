@@ -20,7 +20,7 @@ public class PlayerAttackState : PlayerState
 
     public override void Exit()
     {
-        // player.weapon.weaponCol.enabled = false;
+
     }
     public override void Update()
     {

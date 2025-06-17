@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using SimpleJSON;
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : SingleTon<GameManager>
@@ -13,6 +14,8 @@ public class GameManager : SingleTon<GameManager>
     [SerializeField] StageManager stageManager;
     [SerializeField] ShopPanelHandler shopPanelHandler;
     [SerializeField] WaveManager waveManager;
+    private static GameState gameState;
+    private StateMachine<GameManager> stateMachine;
     #endregion
 
     #region 프로퍼티
@@ -25,6 +28,8 @@ public class GameManager : SingleTon<GameManager>
     public PlayerInventoryData PlayerInventoryData { get; private set; }
     public PlayerStatData PlayerStatData { get; private set; }
     public PlayerSkillData PlayerSkillData { get; private set; }
+    public StateMachine<GameManager> StateMachine { get => stateMachine; }
+    public static GameState GameState { get => gameState; set => gameState = value; }
     #endregion
 
 
@@ -32,11 +37,18 @@ public class GameManager : SingleTon<GameManager>
     public static event Action<int> OnPlayerDataReady;
     public static event Action OnPlayerStatDataReady;
     public static event Action OnPlayerSkillDataReady;
+    
 
     protected override void Awake()
     {
         base.Awake();
         StartCoroutine(LoadPlayerData());
+    }
+
+    private void Start()
+    {
+        //후에 로딩 후 게임 상태 바꾸는 코드 필요함
+        GameState = GameState.Wait;
     }
 
     /// <summary>

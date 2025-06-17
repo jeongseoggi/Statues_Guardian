@@ -10,18 +10,15 @@ public class PlayerSkillController : MonoBehaviour, ISkillUable
     [SerializeField] Player player;
 
 
-    public float ApplyBuff(BuffType buffType, float amount, int mpCost)
+    public void ApplyBuff(BuffType buffType, float amount, int mpCost)
     {
-        float originValue = 0;
         switch (buffType)
         {
             case BuffType.AttackUp:
-                originValue = player.Atk;
-                player.Atk *= amount;
+                player.Atk += amount;
                 break;
             case BuffType.MoveSpeedUp:
-                originValue = player.Speed;
-                player.Speed *= amount;
+                player.Speed += amount;
                 break;
         }
 
@@ -29,7 +26,6 @@ public class PlayerSkillController : MonoBehaviour, ISkillUable
         {
             player.Mp -= mpCost;
         }
-        return originValue;
     }
 
 
@@ -71,10 +67,10 @@ public class PlayerSkillController : MonoBehaviour, ISkillUable
         switch(buffType) 
         {
             case BuffType.AttackUp:
-                player.Atk = returnVal;
+                player.Atk -= returnVal;
                 break;
             case BuffType.MoveSpeedUp:
-                player.Speed = returnVal;
+                player.Speed -= returnVal;
                 break;
         }
     }

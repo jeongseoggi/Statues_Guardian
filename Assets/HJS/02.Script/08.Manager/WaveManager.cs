@@ -31,7 +31,7 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     public void StartWave()
     {
-        DungeonUIManager.Instance.nextWaveStartBTN.gameObject.SetActive(false);
+        DungeonUIManager.Instance.DungeonUISetter(false);
         if (curWave == stageDataList.GetStageTotalWave() - 1)
         {
             DungeonUIManager.Instance.WaveText.SetText("Final Wave!");

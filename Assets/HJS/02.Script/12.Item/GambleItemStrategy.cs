@@ -7,7 +7,7 @@ public class GambleItemStrategy : IItemUseStrategy
         //모든 버프가 활성화 되어 있으면 리턴
         if (UIManager.Instance.buffManager.activeBuffWindowList.Count >= DataManager.Instance.BuffDatabase.buffDataList.Count)
         {
-            UIManager.Instance.SetWarningText("이미 모든 버프가 적용되어있습니다.");
+            UIManager.Instance.SetWarningText(GameString.ALL_USE_BUFF);
             return;
         }
 

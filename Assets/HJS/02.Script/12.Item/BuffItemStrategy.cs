@@ -7,7 +7,17 @@ public class BuffItemStrategy : IItemUseStrategy
     {
         if(itemData is BuffItemData buffItem)
         {
-            if(user is IBuffUsable buffUser)
+            BuffData buffData = DataManager.Instance.BuffDatabase.buffDataList[buffItem.buffIds];
+
+            // 해당 버프 아이템이 이미 사용중이라면
+            if (UIManager.Instance.buffManager.activeBuffWindowList.Find((x) => x.buffName.Equals(buffData.buffName)))
+            {
+                UIManager.Instance.SetWarningText(GameString.IS_ALREADY_ITEM);
+                return;
+            }
+
+
+            if (user is IBuffUsable buffUser)
             {
                 DataManager.Instance.BuffDatabase.buffDataList[buffItem.buffIds].BuffEffect(buffUser);
             }

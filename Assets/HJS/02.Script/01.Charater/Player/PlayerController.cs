@@ -48,11 +48,6 @@ public class PlayerController : MonoBehaviour
         player.StateMachine.Update();
         moveVelocity = currentInput;
 
-        if (Input.GetMouseButtonDown(0) && !player.IsAttacking)
-        {
-            ComboAttack();
-        }
-
         if (isComboPossible)
         {
             comboTimer += Time.deltaTime;
@@ -88,6 +83,14 @@ public class PlayerController : MonoBehaviour
         Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector3 dir = mousePos - transform.position;
         player.SetFilpX(dir);
+    }
+
+    void OnAttack()
+    {
+        if(!player.IsAttacking)
+        {
+            ComboAttack();
+        }
     }
 
     void ComboAttack()

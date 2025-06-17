@@ -2,7 +2,7 @@ using Mono.Cecil.Cil;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateMachine<T> : IStateMachine where T : Character
+public class StateMachine<T> : IStateMachine where T : class
 {
     public Animator animator = null;
     T owner;

@@ -65,8 +65,7 @@ public class ShopPanelHandler : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         ShowShopPanel();
-        DungeonUIManager.Instance.WaveText.gameObject.SetActive(false);
-        DungeonUIManager.Instance.nextWaveStartBTN.gameObject.SetActive(true);
+        DungeonUIManager.Instance.DungeonUISetter(true);
     }
 
     public void SetGoldText(int gold)
@@ -76,6 +75,15 @@ public class ShopPanelHandler : MonoBehaviour
 
     public void ShowShopPanel()
     {
+        if (GameManager.GameState == GameState.Play)
+        {
+            return;
+        }
+        if (shopObj.activeSelf)
+        {
+            return;
+        }
+
         shopObj.SetActive(true);
         parentCanvas.sortingOrder = 3;
 

@@ -9,11 +9,13 @@ public class PlayerActionInput : MonoBehaviour
     [SerializeField] private PlayerSkillController  playerskillController;
     [SerializeField] private Player                 player;
     [SerializeField] private PlayerItemHandler      playerItemHandler;
-                     private PlayerInputActions     playerInputActions;
     #endregion
 
+    #region public
     public static event Action<int, ISkillUable> OnSkillUse;
     public static event Action<int, IUseable> OnItemlUse;
+    public PlayerInputActions playerInputActions;
+    #endregion
 
     private void Awake()
     {

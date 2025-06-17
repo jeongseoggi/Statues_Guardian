@@ -9,15 +9,16 @@ public class SpeedUpStrategy : ISkillUseStrategy
     public void SkillUse(ISkillUable user, SkillData skillData)
     {
         float increase = skillData.increase + 
-            (skillData.increasePerLevel * GameManager.Instance.PlayerSkillData.playerSkillLevelDic[skillData.skillName]);
+            (skillData.increasePerLevel * (GameManager.Instance.PlayerSkillData.playerSkillLevelDic[skillData.skillName] - 1));
 
-        float resetVal = user.ApplyBuff(BuffType.MoveSpeedUp, increase, skillData.mpCost);
-        user.RunCoroutine(BuffTime(skillData.duration, resetVal, user));
+        Debug.Log(increase);
+        user.ApplyBuff(BuffType.MoveSpeedUp, increase, skillData.mpCost);
+        user.RunCoroutine(BuffTime(skillData.duration, increase, user));
     }
 
-    private IEnumerator BuffTime(float duration, float returnval, ISkillUable user)
+    private IEnumerator BuffTime(float duration, float increase, ISkillUable user)
     {
         yield return new WaitForSeconds(duration);
-        user.ReturnBuffValue(BuffType.MoveSpeedUp, returnval);
+        user.ReturnBuffValue(BuffType.MoveSpeedUp, increase);
     }
 }

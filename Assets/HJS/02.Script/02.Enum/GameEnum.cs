@@ -38,7 +38,8 @@ public enum GameState
 {
     Play,
     Loading,
-    Paused
+    Paused,
+    Wait
 }
 
 /// <summary>
@@ -67,7 +68,8 @@ public enum HealType
 public enum UpgradeType
 {
     Atk,
-    Def
+    Def,
+    SP
 }
 
 /// <summary>

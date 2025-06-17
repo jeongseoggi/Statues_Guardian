@@ -9,6 +9,7 @@ public class InputManager : SingleTon<InputManager>
     public static event Action OnInventoryToggle;
     public static event Action OnCloseOpenTab;
     public static event Action OnOpenSkillWindow;
+    public static event Action OnOpenShop;
 
     protected override void Awake()
     {
@@ -17,6 +18,7 @@ public class InputManager : SingleTon<InputManager>
         inputActions.UI.OpenInventory.performed += ctx => OnInventoryToggle?.Invoke();
         inputActions.UI.CloseTab.performed += ctx => OnCloseOpenTab?.Invoke();
         inputActions.UI.OpenSkillWindow.performed += ctx => OnOpenSkillWindow?.Invoke();
+        inputActions.UI.OpenShop.performed += ctx => OnOpenShop?.Invoke();
     }
 
     private void OnEnable()
