@@ -111,8 +111,7 @@ public class GameManager : SingleTon<GameManager>
             {
                 for (int i = 0; i < json["items"].Count; i++)
                 {
-                    PlayerInventoryData.AddItem(DataManager.Instance.GetItemData(
-                        json["items"][i]["item_name"]),
+                    PlayerInventoryData.AddItem(DataManager.Instance.GetItemData(json["items"][i]["item_name"].ToString().Trim('"')),
                         json["items"][i]["item_count"]);
                 }
             }

@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "StageData", menuName = "Stage/StageData")]
 public class StageData : ScriptableObject
 {
+    public int stageID;
     public string stageName;
     public int totalWave;
     public int[] monstersPerWave;

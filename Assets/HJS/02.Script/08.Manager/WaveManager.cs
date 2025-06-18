@@ -20,6 +20,7 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
+        stageDataList = DataManager.Instance.StageDatabase;
         curWave = 0;
         spawnMonsterTypes = new int[stageDataList.GetSpawnMonsterType().Length];
         spawnMonsterTypes = stageDataList.GetSpawnMonsterType();

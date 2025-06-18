@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "BuffData", menuName = "Buff/BuffData")]
 public class BuffData : ScriptableObject
 {
-    public int buffIndex;
+    public int buffID;
     public string buffName;
     public string buffDesc;
     public float duration;

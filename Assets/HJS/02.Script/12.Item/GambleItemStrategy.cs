@@ -40,7 +40,7 @@ public class GambleItemStrategy : IItemUseStrategy
                     data.buffName, data.buffDesc,
                 () =>
                 {
-                    DataManager.Instance.BuffDatabase.buffDataList[data.buffIndex].BuffEffect(buffUser);
+                    DataManager.Instance.BuffDatabase.buffDataList[data.buffID].BuffEffect(buffUser);
                 });
                 break;
             }

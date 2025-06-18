@@ -40,12 +40,14 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 35dffbfc1cd5fa24493f3827ee1133a0, type: 3}
     - {fileID: 2800000, guid: 31f63678b0f26044fa2b680c127ff20d, type: 3}
     - {fileID: 2800000, guid: ae496f5dad56ea645b72d374a0376368, type: 3}
+    - {fileID: 2800000, guid: 261d2987a9ff9ff41af2c4e011c47874, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
     packedSpriteRenderDataKeys:
     - 5fd50594014b70e48bd6993443d46b32: 21300000
     - 6592b916f86b19e428db6f6847c7b6dd: 21300000
+    - 261d2987a9ff9ff41af2c4e011c47874: 8003260396191338441
     - 31f63678b0f26044fa2b680c127ff20d: 21300000
     - b97c91e8b348f3f4ebdc11f5c82182cd: 21300000
     - e52ea25af699fd445b7046374f81a5b9: 21300000
@@ -56,6 +58,7 @@ SpriteAtlas:
   m_PackedSprites:
   - {fileID: 21300000, guid: 5fd50594014b70e48bd6993443d46b32, type: 3}
   - {fileID: 21300000, guid: 6592b916f86b19e428db6f6847c7b6dd, type: 3}
+  - {fileID: 8003260396191338441, guid: 261d2987a9ff9ff41af2c4e011c47874, type: 3}
   - {fileID: 21300000, guid: 31f63678b0f26044fa2b680c127ff20d, type: 3}
   - {fileID: 21300000, guid: b97c91e8b348f3f4ebdc11f5c82182cd, type: 3}
   - {fileID: 21300000, guid: e52ea25af699fd445b7046374f81a5b9, type: 3}
@@ -65,6 +68,7 @@ SpriteAtlas:
   m_PackedSpriteNamesToIndex:
   - UI_Item_Icon_AtkUp
   - UI_Item_Icon_MpPotion
+  - coins_0
   - UI_Item_Icon_Protect
   - UI_Item_Icon_DefUp
   - UI_Item_Icon_HpPotion

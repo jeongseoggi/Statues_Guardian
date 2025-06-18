@@ -50,7 +50,8 @@ public enum ItemType
     Buff,
     Heal,
     Gamble,
-    Upgrade
+    Upgrade,
+    Gold
 }
 
 /// <summary>

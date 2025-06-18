@@ -3,6 +3,7 @@ using UnityEngine;
 
 public abstract class ItemData : ScriptableObject
 {
+    public int itemID;
     public string itemName;
     public string itemDesc;
     public int price;
@@ -12,9 +13,10 @@ public abstract class ItemData : ScriptableObject
 
     public abstract void Use(IUseable user, int useCount = 1);
 
-    public virtual void Init(string itemName, string itemDesc, int price, string spriteName,
+    public virtual void Init(int itemID, string itemName, string itemDesc, int price, string spriteName,
         ItemType itemType)
     {
+        this.itemID = itemID;
         this.itemName = itemName;
         this.itemDesc = itemDesc;
         this.price = price;

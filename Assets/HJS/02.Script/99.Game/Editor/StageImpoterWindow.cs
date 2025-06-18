@@ -19,9 +19,10 @@ public class StageImpoterWindow : EditorWindow
     private static ItemScriptableObject itemDataList;
     private static SkillDataList skillDataList;
     private static BuffDataContainer buffDataContainer;
+    private static RewardContainer rewardDataContainer;
 
     private static string directory = "Assets/HJS/06.SciptableObject/";
-    private string[] options = { "스테이지", "아이템" , "스킬", "버프" };
+    private string[] options = { "스테이지", "아이템" , "스킬", "버프", "보상" };
     private int selectedIndex = 0;
     private static string type;
 
@@ -63,9 +64,13 @@ public class StageImpoterWindow : EditorWindow
         {
             type = "skill";
         }
-        else
+        else if (selectedIndex == 3)
         {
             type = "buff";
+        }
+        else if(selectedIndex == 4)
+        {
+            type = "reward";
         }
 
         string urlAddType = $"{url}?type={type}";
@@ -107,6 +112,7 @@ public class StageImpoterWindow : EditorWindow
                     for (int i = 0; i < jsonData.Count; i++)
                     {
                         StageData data = new StageData();
+                        data.stageID = jsonData[i]["StageID"].AsInt;
                         data.stageName = jsonData[i]["StageName"];
                         data.totalWave = jsonData[i]["TotalWave"];
 
@@ -220,7 +226,7 @@ public class StageImpoterWindow : EditorWindow
                 CreateSkillDataSO(skill);
             }
         }
-        else
+        else if(selectedIndex == 3)
         {
             buffDataContainer = GetDataList<BuffDataContainer>("BuffDataList",
                 (path) =>
@@ -244,7 +250,7 @@ public class StageImpoterWindow : EditorWindow
                     for (int i = 0; i < jsonData.Count; i++)
                     {
                         BuffData bfData = new BuffData();
-                        bfData.buffIndex = jsonData[i]["Index"].AsInt;
+                        bfData.buffID = jsonData[i]["BuffID"].AsInt;
                         bfData.buffName = jsonData[i]["BuffName"];
                         bfData.buffDesc = jsonData[i]["BuffDescription"];
                         bfData.duration = jsonData[i]["Duration"].AsFloat;
@@ -254,11 +260,6 @@ public class StageImpoterWindow : EditorWindow
                         bfData.buffEfeects = ParsingDataCovertArray<BuffType>(buffTypeStr).ToList();
 
 
-
-                        for (int j =0; j < jsonData[i]["BuffType"].Count; j++)
-                        {
-                            bfData.buffEfeects.Add((BuffType)jsonData[i]["BuffType"][j].AsInt);
-                        }
                         buffDataList.Add(bfData);
                     }
                     return buffDataList;
@@ -267,6 +268,58 @@ public class StageImpoterWindow : EditorWindow
             foreach (var buffData in parseList)
             {
                 CreateBuffDataSO(buffData);
+            }
+        }
+        else if (selectedIndex == 4)
+        {
+            rewardDataContainer = GetDataList<RewardContainer>("RewardDataList",
+                (path) =>
+                {
+                    var asset = ScriptableObject.CreateInstance<RewardContainer>();
+                    AssetDatabase.CreateAsset(asset, path);
+                    AssetDatabase.SaveAssets();
+                    return asset;
+                },
+                (path) =>
+                {
+                    return AssetDatabase.LoadAssetAtPath<RewardContainer>(path);
+                });
+
+            rewardDataContainer.Initalize();
+
+            JSONNode jsonData = JSONNode.Parse(json);
+
+            List<RewardData> parseList = JsonParseData(jsonData,
+                () =>
+                {
+                    List<RewardData> rewardDataList = new List<RewardData>();
+                    for (int i = 0; i < jsonData.Count; i++)
+                    {
+                        RewardData rewardData = ScriptableObject.CreateInstance<RewardData>();
+                        rewardData.Init(
+                            jsonData[i]["RewardID"].AsInt,
+                            jsonData[i]["StageID"].AsInt,
+                            jsonData[i]["RewardName"],
+                            jsonData[i]["Gold"].AsInt
+                            );
+
+                        string itemIDStr = jsonData[i]["ItemID"];
+                        rewardData.itemIDs = ParsingDataCovertArray<int>(itemIDStr).ToList();
+
+                        string amountStr = jsonData[i]["Amount"];
+                        rewardData.amounts = ParsingDataCovertArray<int>(amountStr).ToList();
+
+                        rewardDataList.Add(rewardData);
+                    }
+                    return rewardDataList;
+                });
+
+
+
+
+            foreach (var rewardData in parseList)
+            {
+                CreateRewardDataSO(rewardData);
             }
         }
 
@@ -285,6 +338,7 @@ public class StageImpoterWindow : EditorWindow
             () => ScriptableObject.CreateInstance<StageData>(),
             (so) =>
             {
+                so.stageID = data.stageID;
                 so.stageName = data.stageName;
                 so.totalWave = data.totalWave;
                 so.monstersPerWave = data.monstersPerWave;
@@ -322,6 +376,7 @@ public class StageImpoterWindow : EditorWindow
         },
         (so) =>
         {
+            so.itemID = data.itemID;
             so.itemName = data.itemName;
             so.itemDesc = data.itemDesc;
             so.itemType = data.itemType;
@@ -369,6 +424,7 @@ public class StageImpoterWindow : EditorWindow
             },
             (so)=>
             {
+                so.skillID = data.skillID;
                 so.skillName = data.skillName;
                 so.skillDescription = data.skillDescription;
                 so.coolTime = data.coolTime;
@@ -398,7 +454,7 @@ public class StageImpoterWindow : EditorWindow
             () => ScriptableObject.CreateInstance<BuffData>(),
             (so) =>
             {
-                so.buffIndex = data.buffIndex;
+                so.buffID = data.buffID;
                 so.buffName = data.buffName;
                 so.buffDesc = data.buffDesc;
                 so.duration = data.duration;
@@ -409,6 +465,23 @@ public class StageImpoterWindow : EditorWindow
             buffDataContainer.buffDataList,
             buffDataContainer);
 
+    }
+
+    public static void CreateRewardDataSO(RewardData data)
+    {
+        CreateOrLoadSO<RewardData>(data.rewardDataName, "Reward",
+            () => ScriptableObject.CreateInstance<RewardData>(),
+            (so) =>
+            {
+                so.rewardID = data.rewardID;
+                so.rewardDataName = data.rewardDataName;
+                so.stageID = data.stageID;
+                so.itemIDs = data.itemIDs;
+                so.amounts = data.amounts;
+                so.gold = data.gold;
+            },
+            rewardDataContainer.rewardList,
+            rewardDataContainer);
     }
 
     /// <summary>
@@ -533,6 +606,7 @@ public class StageImpoterWindow : EditorWindow
     public void AddItemDataList(ItemData itemData, List<ItemData> itemDataList, JSONNode jsonData, int index)
     {
         itemData.Init(
+            jsonData[index]["ItemID"].AsInt,
             jsonData[index]["ItemName"], 
             jsonData[index]["Description"], 
             jsonData[index]["Price"].AsInt,
@@ -573,6 +647,7 @@ public class StageImpoterWindow : EditorWindow
     {
         Debug.Log(jsonData[index]["Damage"].AsFloat);
         skillData.Init(
+            jsonData[index]["SkillID"].AsInt,
             jsonData[index]["SkillName"],
             jsonData[index]["SkillDescription"],
             jsonData[index]["CoolTime"].AsInt,

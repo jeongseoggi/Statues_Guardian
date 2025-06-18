@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SkillData", menuName = "Skill/SkillData")]
 public abstract class SkillData : ScriptableObject
 {
+    public int skillID;                         //스킬 ID
     public string skillName;                    //스킬 이름
     public string skillDescription;             //스킬 설명
     public int coolTime;                        //스킬 쿨타임
@@ -22,10 +23,11 @@ public abstract class SkillData : ScriptableObject
 
     public abstract void SkillUse(ISkillUable user);
 
-    public virtual void Init(string skillName, string skillDesc, int coolTime, int mpCost, float damage, float duration,
+    public virtual void Init(int skillID, string skillName, string skillDesc, int coolTime, int mpCost, float damage, float duration,
         float increase, float damagePerLevel, float increasePerLevel, int skillMasterLevel, 
         string spriteName, string assetName, SkillType skillType, DamageType damageType)
     {
+        this.skillID = skillID;
         this.skillName = skillName;
         this.skillDescription = skillDesc;
         this.coolTime = coolTime;

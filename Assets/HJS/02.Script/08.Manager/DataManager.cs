@@ -9,9 +9,13 @@ public class DataManager : SingleTon<DataManager>
 {
     #region private
     private static string ServerURL = "http://localhost:3000/";             // 주소 URL
+    [SerializeField] private StageDataList stageDatabase;                   // 스테이지 정보를 담은 ScriptableObject
     [SerializeField] private ItemScriptableObject itemDataBase;             // 아이템을 담은 ScriptableObject
     [SerializeField] private SkillDataList skillDatabase;                   // 스킬을 담은 ScriptableObject
     [SerializeField] private BuffDataContainer buffDatabase;                // 버프를 담은 ScriptableObject
+    [SerializeField] private RewardContainer rewardDatabase;                // 보상 정보를 담은 ScriptableObject
+
+
     [SerializeField] private List<GameObject> effectList;                   // Effect List
     [SerializeField] private Dictionary<BuffType, BuffEffectData> buffEffectDic;  // 버프 적용 효과를 담은 딕셔너리
     #endregion
@@ -21,6 +25,8 @@ public class DataManager : SingleTon<DataManager>
     public SkillDataList SkillDataBase { get=> skillDatabase; }
     public List<GameObject> EffectList { get=> effectList; }
     public BuffDataContainer BuffDatabase { get => buffDatabase; }
+    public StageDataList StageDatabase { get => stageDatabase; }
+    public RewardContainer RewardDataBase { get => rewardDatabase; }
     public Dictionary<BuffType, BuffEffectData> BuffEffectDic { get => buffEffectDic; set => buffEffectDic = value; }
     #endregion
 
@@ -46,6 +52,7 @@ public class DataManager : SingleTon<DataManager>
 
     }
 
+
     /// <summary>
     /// 아이템 DB에서 아이템 데이터를 반환합니다.
     /// </summary>
@@ -57,6 +64,16 @@ public class DataManager : SingleTon<DataManager>
     }
 
     /// <summary>
+    /// 아이템 DB에서 아이템 데이터를 반환합니다. 오버로드
+    /// </summary>
+    /// <param name="itemID"></param>
+    /// <returns></returns>
+    public ItemData GetItemData(int itemID)
+    {
+        return ItemDataBase.itemData.Find((x) => x.itemID.Equals(itemID));
+    }
+
+    /// <summary>
     /// 스킬 DB에서 스킬 데이터를 반환합니다.
     /// </summary>
     /// <param name="assetName"></param>
@@ -64,6 +81,16 @@ public class DataManager : SingleTon<DataManager>
     public SkillData GetSkillData(string assetName)
     {
         return SkillDataBase.skillDatas.Find((x)=> x.assetName.Equals(assetName));
+    }
+
+    /// <summary>
+    /// 보상 DB에서 보상 데이터를 반환합니다.
+    /// </summary>
+    /// <param name="assetName"></param>
+    /// <returns></returns>
+    public RewardData GetRewardData()
+    {
+        return RewardDataBase.rewardList.Find((x) => x.stageID.Equals(StageDatabase.StageIndex));
     }
 
     /// <summary>

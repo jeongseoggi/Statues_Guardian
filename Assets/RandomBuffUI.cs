@@ -15,6 +15,7 @@ public class RandomBuffUI : MonoBehaviour
     public TextMeshProUGUI  buffNameTMP;        //표시 될 버프 이름 텍스트
     public TextMeshProUGUI  buffDescTMP;        //표시 될 버프 설명 텍스트
     public TextMeshProUGUI  effectText;         //표시 될 텍스트
+    public Sprite           originSprite;       //기본 이미지 
     #endregion
 
     #region private
@@ -86,7 +87,7 @@ public class RandomBuffUI : MonoBehaviour
         this.gameObject.SetActive(isActive);
         if(!isActive)
         {
-            buffBoxImg.sprite = null;
+            buffBoxImg.sprite = originSprite;
             buffNameTMP.text = string.Empty;
             buffDescTMP.text = string.Empty;
         }
