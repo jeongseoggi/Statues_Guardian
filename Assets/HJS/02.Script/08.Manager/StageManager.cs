@@ -26,13 +26,6 @@ public class StageManager : SingleTonDestory<StageManager>
         shopPanelHandler.Show();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-            StageClear();
-        }
-    }
     public void StartWave()
     {
         shopPanelHandler.Hide();
