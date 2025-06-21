@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class StageResultText : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI resultText;
-    Color[] resultTextColor = new Color[2];
     [SerializeField] Image[] rewardImage; // 보상 UI들 (오른쪽 밖에 배치)
     [SerializeField] TextMeshProUGUI[] rewardAmounTexts; // 보상 UI들 (오른쪽 밖에 배치)
+    [SerializeField] GameObject rewardObject; // 보상 부모 오브젝트
 
 
     public TextMeshProUGUI additionalText; //부가 설명 텍스트
@@ -17,41 +17,43 @@ public class StageResultText : MonoBehaviour
     public float moveDuration = 0.5f;
     public float targetX = 0f; // 왼쪽 이동 목표 x 좌표
 
-    private void Start()
-    {
-        resultTextColor[0] = Color.yellow;
-        resultTextColor[1] = Color.gray;
-    }
 
-    /// <summary>
-    /// 임시코드
-    /// </summary>
-    private void OnEnable()
-    {
-        ShowResult(GameString.STAGE_CLEAR, true);
-
-        PlayRewardSlideIn();
-    }
 
     public void ShowResult(string showText, bool isClear)
     {
         gameObject.SetActive(true);
-        resultText.color = isClear ? resultTextColor[0] : resultTextColor[1];
+        resultText.color = isClear ? Color.yellow : Color.gray;
         resultText.text = showText;
         additionalText.text = isClear ? GameString.STAGE_CLEAR_ADDITIONAL : GameString.STAGE_FAIL_ADDITIONAL;
 
+        ShowClearText();
+
+        if (isClear)
+        {
+            rewardObject.SetActive(true);
+            PlayRewardSlideIn();
+        }
+    }
+
+    
+    /// <summary>
+    /// 스테이지 클리어 여부 텍스트 연출
+    /// </summary>
+    public void ShowClearText()
+    {
         resultText.transform.localScale = Vector3.zero;
         Sequence seq = DOTween.Sequence();
 
+        //연출 코드
         seq.Append(resultText.DOFade(1f, 0.1f)) // 빠르게 나타남
-       .Join(resultText.transform.DOScale(1.3f, 0.2f).SetEase(Ease.OutBack)) // 팡 튀어나옴
-       .Append(resultText.transform.DOShakeScale(0.3f, strength: 0.1f, vibrato: 10)) // 살짝 흔들
-       .Join(resultText.transform.DOScale(1f, 0.2f)); // 원래 크기로 안정화
-
+        .Join(resultText.transform.DOScale(1.3f, 0.2f).SetEase(Ease.OutBack)) // 팡 튀어나옴
+        .Append(resultText.transform.DOShakeScale(0.3f, strength: 0.1f, vibrato: 10)) // 살짝 흔들
+        .Join(resultText.transform.DOScale(1f, 0.2f)); // 원래 크기로 안정화
     }
 
-
-
+    /// <summary>
+    /// 보상 연출 및 보상 이미지 및 수량 표출 함수
+    /// </summary>
     public void PlayRewardSlideIn()
     {
         RewardData rewardData = DataManager.Instance.GetRewardData();
