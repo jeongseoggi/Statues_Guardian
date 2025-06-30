@@ -129,6 +129,10 @@ public class Monster : Character, IHitable
     {
         float damage = damageHandler.TakeDamage(atk, Def);
         Hp -= damage;
+        if(Hp > 0)
+        {
+            DungeonUIManager.Instance?.dmgManager.Show(damage, transform.position + Vector3.up * 1.5f);
+        }
     }
 
     /// <summary>

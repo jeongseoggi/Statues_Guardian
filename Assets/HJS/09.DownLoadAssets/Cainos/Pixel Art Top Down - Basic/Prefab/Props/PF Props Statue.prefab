@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7947911505737750450}
   - component: {fileID: 6885460722385817648}
   - component: {fileID: 3322887802620626908}
-  m_Layer: 22
+  m_Layer: 7
   m_Name: PF Props Statue
   m_TagString: Object
   m_Icon: {fileID: 0}
@@ -33,6 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7947911505844789837}
+  - {fileID: 1655031178973099518}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7947911505737750450
@@ -142,8 +143,8 @@ MonoBehaviour:
   statuesCurHp: 0
   statuesMaxHp: 0
   statuesDef: 0
-  player: {fileID: 0}
-  effectPos: {x: 0, y: 0, z: 0}
+  effectPos: {x: -0.5, y: -3.8, z: 0}
+  damagePos: {fileID: 0}
   duration: 0.2
   strength: 0.2
   vibrato: 10
@@ -235,3 +236,34 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!1 &9184887588627219781
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1655031178973099518}
+  m_Layer: 22
+  m_Name: DamagePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1655031178973099518
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9184887588627219781}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.02, y: 2.37, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7947911505737750448}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

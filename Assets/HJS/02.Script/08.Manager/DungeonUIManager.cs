@@ -10,6 +10,7 @@ public class DungeonUIManager : SingleTonDestory<DungeonUIManager>
     public ShopPanelHandler shopPanelHandler;
     public RandomBuffUI randomBuffUI;
     public Button shopButton;
+    public DamageTextManager dmgManager;
  
 
     public WaveText WaveText

@@ -9,6 +9,7 @@ public class StageObject : MonoBehaviour, IHitable
     [SerializeField] float statuesMaxHp;
     [SerializeField] float statuesDef;
     [SerializeField] Vector3 effectPos;
+    [SerializeField] Transform damagePos;
     Player player;
 
     public float duration = 0.2f;      // Èçµé¸² ½Ã°£
@@ -33,6 +34,7 @@ public class StageObject : MonoBehaviour, IHitable
         float damage = (atk - statuesDef) > 0 ? (atk - statuesDef) : 0;
         StageManager.Instance.sharedHp.TakeDamage(damage);
         TriggerShake();
+        DungeonUIManager.Instance?.dmgManager.Show(damage, damagePos.position);
     }
 
     public void UpdateUI(float changeHp)
