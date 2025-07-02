@@ -88,7 +88,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 770700671558246494}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -218,9 +218,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -105541197
-  m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingLayerID: -1869315837
+  m_SortingLayer: 2
+  m_SortingOrder: 2
   m_Sprite: {fileID: -5711848221618334454, guid: e751eb7d491601f4cb5bc72dc4bf4117,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -273,14 +273,16 @@ MonoBehaviour:
   maxMp: 0
   atk: 0
   def: 0
-  animator: {fileID: 6219590266811406774}
-  state: 0
   speed: 0
-  weapon: {fileID: 5831751898535034135}
+  attackSpeed: 0
   isAttacking: 0
+  animator: {fileID: 6219590266811406774}
+  weapon: {fileID: 5831751898535034135}
   spriteRender: {fileID: 4346577293753698495}
+  state: 0
   isDotActive: 0
   playerUIController: {fileID: 7024121319903271529}
+  isInfinityManaActive: 0
 --- !u!114 &3280548795409050960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,7 +359,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerskillController: {fileID: 4299478958467681155}
   player: {fileID: 4076360261586428306}
-  playerItemHandler: {fileID: 0}
+  playerItemHandler: {fileID: 8319866945532824831}
 --- !u!50 &3163432818099069967
 Rigidbody2D:
   serializedVersion: 5
@@ -466,3 +468,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 4076360261586428306}
+  buffList: 

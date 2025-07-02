@@ -6,11 +6,11 @@ using UnityEngine.Events;
 public class PlayerItemHandler : MonoBehaviour, IBuffUsable, IUseable
 {
     [SerializeField] Player player;
-    public List<BuffType> bucffList;
+    public List<BuffType> buffList;
 
     private void Start()
     {
-        bucffList = new List<BuffType>();
+        buffList = new List<BuffType>();
     }
 
     private void Update()
@@ -85,12 +85,12 @@ public class PlayerItemHandler : MonoBehaviour, IBuffUsable, IUseable
 
     public void AddUsingBuff(BuffType buffType)
     {
-        bucffList.Add(buffType);
+        buffList.Add(buffType);
     }
 
     public bool IsAlreadyUsingBuff(BuffType buffType)
     {
-        return bucffList.Contains(buffType);
+        return buffList.Contains(buffType);
     }
 
     #endregion

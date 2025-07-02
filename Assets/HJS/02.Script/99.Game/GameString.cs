@@ -12,4 +12,5 @@ public static class GameString
     public const string ALL_USE_BUFF = "이미 모든 버프가 적용되어있습니다.";
     public const string STAGE_CLEAR_ADDITIONAL = "모든 몬스터를 처치하였습니다. 잠시 후 마을로 돌아갑니다.";
     public const string STAGE_FAIL_ADDITIONAL = "스테이지 클리어에 실패하였습니다. 잠시 후 마을로 돌아갑니다.";
+    public const string DO_NOT_USE_THIS_SCENE = "마을에서는 사용 불가능합니다.";
 }

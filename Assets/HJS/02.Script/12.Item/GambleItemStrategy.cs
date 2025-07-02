@@ -1,9 +1,17 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GambleItemStrategy : IItemUseStrategy
 {
     public void Use(IUseable user, ItemData itemData, int useCount = 1)
     {
+        //마을이면 리턴 
+        if(SceneManager.GetActiveScene().name.Equals("VillageScene"))
+        {
+            PopupManager.Instance.noticePopup.Init(GameString.DO_NOT_USE_THIS_SCENE, () => { PopupManager.Instance.noticePopup.Close(); }, true);
+            return;
+        }
+
         //모든 버프가 활성화 되어 있으면 리턴
         if (UIManager.Instance.buffManager.activeBuffWindowList.Count >= DataManager.Instance.BuffDatabase.buffDataList.Count)
         {
@@ -16,6 +24,7 @@ public class GambleItemStrategy : IItemUseStrategy
         {
             return;
         }
+
 
         if (user is IBuffUsable buffUser)
         {
