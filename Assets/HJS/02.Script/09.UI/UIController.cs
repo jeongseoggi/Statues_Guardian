@@ -63,4 +63,15 @@ public class UIController : MonoBehaviour
             hpText.text = (ratio * 100f).ToString("F0") + "%";
         }
     }
+
+    public void BeforeDestory()
+    {
+        OnHealthChanged = null;
+        OnManaChanged = null;
+    }
+
+    private void OnDisable()
+    {
+        BeforeDestory();
+    }
 }

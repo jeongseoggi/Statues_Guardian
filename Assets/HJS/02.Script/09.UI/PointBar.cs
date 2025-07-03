@@ -12,8 +12,15 @@ public class PointBar : MonoBehaviour
 
     private void OnEnable()
     {
+        RegisterTarget();
+    }
+
+    public void RegisterTarget()
+    {
         if (targetUI != null)
         {
+            targetUI.BeforeDestory();
+
             if (hpSlider != null)
                 targetUI.OnHealthChanged += UpdateUISlider;
             else if (hpSliderImg != null)
@@ -22,7 +29,22 @@ public class PointBar : MonoBehaviour
                 targetUI.OnManaChanged += UpdateMpImage;
             }
         }
-        
+        else
+        {
+            if (GameManager.Instance?.Player != null)
+            {
+                targetUI = GameManager.Instance.GetPlayer().PlayerUIController;
+                RegisterTarget();
+            }
+            else
+            {
+                GameManager.OnPlayerReady += () =>
+                {
+                    targetUI = GameManager.Instance.GetPlayer().PlayerUIController;
+                    RegisterTarget();
+                };
+            }
+        }
     }
 
 
@@ -49,15 +71,17 @@ public class PointBar : MonoBehaviour
         if (targetUI != null)
         {
             targetUI.OnHealthChanged -= UpdateUISlider;
-        }
-        if (hpSliderImg != null)
-        {
-            targetUI.OnHealthChanged -= UpdateHpImage;
-        }
-        if(mpSliderImg != null)
-        {
-            targetUI.OnManaChanged -= UpdateMpImage;
+
+            if (hpSliderImg != null)
+            {
+                targetUI.OnHealthChanged -= UpdateHpImage;
+            }
+            if (mpSliderImg != null)
+            {
+                targetUI.OnManaChanged -= UpdateMpImage;
+            }
         }
 
+      
     }
 }

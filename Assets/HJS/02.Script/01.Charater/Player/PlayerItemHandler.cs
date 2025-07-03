@@ -135,7 +135,7 @@ public class PlayerItemHandler : MonoBehaviour, IBuffUsable, IUseable
 
     public float GetMaxMp()
     {
-        return player.Mp;
+        return player.MaxMp;
     }
 
     public void ApplyBuff(UnityAction action)

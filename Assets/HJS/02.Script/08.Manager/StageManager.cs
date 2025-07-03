@@ -22,7 +22,7 @@ public class StageManager : SingleTonDestory<StageManager>
     private void Start()
     {
         shopPanelHandler = DungeonUIManager.Instance.shopPanelHandler;
-        waveManager = GameManager.Instance.WaveManager;
+        waveManager = DungeonManager.Instance.WaveManager;
         shopPanelHandler.Show();
     }
 

@@ -16,9 +16,25 @@ public class SkillManager : SingleTon<SkillManager>
     {
         skillSlotSaveDic = new Dictionary<int, string>();
         LoadSkillSlotData();
+        PlayerActionInput.OnSkillUse += UseSkill;
+    }
+
+    private void OnEnable()
+    {
+        if (GameManager.Instance?.PlayerSkillData != null)
+        {
+            SetPlayer();
+        }
+        else
+        {
+            GameManager.OnPlayerSkillDataReady += SetPlayer;
+        }
+    }
+
+    public void SetPlayer()
+    {
         player = GameManager.Instance.GetPlayer();
         player.OnCheckMana += CheckSlot;
-        PlayerActionInput.OnSkillUse += UseSkill;
     }
 
     /// <summary>
@@ -129,7 +145,7 @@ public class SkillManager : SingleTon<SkillManager>
 
     }
 
-    private void OnDestroy()
+    private void OnDestory()
     {
         player.OnCheckMana -= CheckSlot;
     }

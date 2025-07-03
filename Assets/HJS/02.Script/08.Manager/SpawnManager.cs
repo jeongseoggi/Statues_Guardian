@@ -26,7 +26,7 @@ public class SpawnManager : PoolableObject<Monster>
     }
     private void Start()
     {
-        waveManager = GameManager.Instance.WaveManager;
+        waveManager = DungeonManager.Instance.WaveManager;
         spawnMonsterList = new List<Monster>();
         waveManager.spawnEvent += SetSpawn;
         OnWaveEnd += waveManager.OnEndWave;

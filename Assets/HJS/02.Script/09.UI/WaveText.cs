@@ -74,7 +74,7 @@ public class WaveText : MonoBehaviour
         waveTextMsg.text = "Start!";
         yield return new WaitForSeconds(1);
         gameObject.SetActive(false);
-        GameManager.Instance.WaveManager.waitCountDown = false;
+        DungeonManager.Instance.WaveManager.waitCountDown = false;
     }
 
 }

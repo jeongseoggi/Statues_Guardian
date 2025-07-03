@@ -101,9 +101,11 @@ public class Player : Character, IHitable
         PlayerUIController.GetMaxHp(MaxHp);
         PlayerUIController.GetMaxMp(MaxMp);
 
-        //던전 입장 후 Init 이후에 처리 필요 현재 주석
-        //StageManager.Instance?.sharedHp.SetHp(MaxHp, Def);
-        //StageManager.Instance.sharedHp.OnHealthChanged += UpdateHp;
+        if(GameManager.Instance.nextSceneName.Equals("DungeonScene"))
+        {
+            StageManager.Instance?.sharedHp.SetHp(MaxHp, Def);
+            StageManager.Instance.sharedHp.OnHealthChanged += UpdateHp;
+        }
 
     }
 

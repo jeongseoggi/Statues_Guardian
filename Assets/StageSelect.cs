@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StageSelect : MonoBehaviour
@@ -27,5 +28,15 @@ public class StageSelect : MonoBehaviour
             lockObject.SetActive(false);
             stageEnterBtn.interactable = true;
         }
+    }
+
+    public void EnterStage()
+    {
+        GameManager.Instance.selectStageIndex = stageIndex;
+        GameManager.Instance.nextSceneName = "DungeonScene";
+        GameManager.Instance.nextSpawnPointId = "Dungeon";
+
+        VillageUIManager.Instance.stageSelectWindow.SetWindow(false);
+        SceneManager.LoadScene("LoadingScene");
     }
 }

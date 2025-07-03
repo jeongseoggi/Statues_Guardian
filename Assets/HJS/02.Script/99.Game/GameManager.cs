@@ -5,25 +5,34 @@ using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : SingleTon<GameManager>
 {
     #region private
     [SerializeField] Player gamePlayer;
-    [SerializeField] SpawnManager spawnManager;
-    [SerializeField] StageManager stageManager;
-    [SerializeField] ShopPanelHandler shopPanelHandler;
-    [SerializeField] WaveManager waveManager;
     private static GameState gameState;
     private StateMachine<GameManager> stateMachine;
     #endregion
 
+    public string curSceneName;
+    public string nextSceneName;
+    public int selectStageIndex;
+    public string nextSpawnPointId;
+
     #region 프로퍼티
     public Player GetPlayer() => gamePlayer;
-    public SpawnManager SpawnManager { get => spawnManager; }
-    public StageManager StageManager { get => stageManager; }
-    public ShopPanelHandler ShopPanelHandler { get => shopPanelHandler; }
-    public WaveManager WaveManager { get => waveManager; }
+
+    public Player Player 
+    { 
+        get => gamePlayer;
+        set 
+        {
+            gamePlayer = value;
+            gamePlayer.Init();
+            OnPlayerReady?.Invoke();
+        }  
+    }
     public PlayerData PlayerData { get; private set; }
     public PlayerInventoryData PlayerInventoryData { get; private set; }
     public PlayerStatData PlayerStatData { get; private set; }
@@ -37,6 +46,7 @@ public class GameManager : SingleTon<GameManager>
     public static event Action<int> OnPlayerDataReady;
     public static event Action OnPlayerStatDataReady;
     public static event Action OnPlayerSkillDataReady;
+    public static event Action OnPlayerReady;
     
 
     protected override void Awake()
@@ -49,6 +59,8 @@ public class GameManager : SingleTon<GameManager>
     {
         //후에 로딩 후 게임 상태 바꾸는 코드 필요함
         GameState = GameState.Wait;
+
+        curSceneName = SceneManager.GetActiveScene().name;
     }
 
     /// <summary>

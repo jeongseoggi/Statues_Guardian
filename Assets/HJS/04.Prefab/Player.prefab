@@ -360,6 +360,7 @@ MonoBehaviour:
   playerskillController: {fileID: 4299478958467681155}
   player: {fileID: 4076360261586428306}
   playerItemHandler: {fileID: 8319866945532824831}
+  playerController: {fileID: 3280548795409050960}
 --- !u!50 &3163432818099069967
 Rigidbody2D:
   serializedVersion: 5
@@ -438,7 +439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100,
     type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:

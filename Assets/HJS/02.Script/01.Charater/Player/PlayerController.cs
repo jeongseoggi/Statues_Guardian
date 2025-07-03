@@ -40,13 +40,15 @@ public class PlayerController : MonoBehaviour
         player.StateMachine.SetState(STATE.IDLE);
 
         player.getCombo += () => { return attackCombo; };
+
+        cam = Camera.main;
     }
 
 
     void Update()
     {
         player.StateMachine.Update();
-        moveVelocity = currentInput;
+        moveVelocity = PlayerActionInput.CurrentInput;
 
         if (isComboPossible)
         {
@@ -73,10 +75,10 @@ public class PlayerController : MonoBehaviour
          rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime * player.Speed);
     }
 
-    void OnMove(InputValue inputValue)
-    {
-        currentInput = inputValue.Get<Vector2>();
-    }
+    //void OnMove(InputValue inputValue)
+    //{
+    //    currentInput = inputValue.Get<Vector2>();
+    //}
 
     void RotateToMouse()
     {
@@ -93,7 +95,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void ComboAttack()
+    public void ComboAttack()
     {
         player.StateMachine.SetState(STATE.ATTACK);
 
