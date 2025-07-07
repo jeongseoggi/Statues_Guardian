@@ -14,10 +14,9 @@ public class DataManager : SingleTon<DataManager>
     [SerializeField] private SkillDataList skillDatabase;                   // 스킬을 담은 ScriptableObject
     [SerializeField] private BuffDataContainer buffDatabase;                // 버프를 담은 ScriptableObject
     [SerializeField] private RewardContainer rewardDatabase;                // 보상 정보를 담은 ScriptableObject
-
-
     [SerializeField] private List<GameObject> effectList;                   // Effect List
     [SerializeField] private Dictionary<BuffType, BuffEffectData> buffEffectDic;  // 버프 적용 효과를 담은 딕셔너리
+    [SerializeField] private AudioDataBase audioDataBase;                   // 사운드를 담은 ScriptableObject
     #endregion
 
     #region 프로퍼티
@@ -27,6 +26,7 @@ public class DataManager : SingleTon<DataManager>
     public BuffDataContainer BuffDatabase { get => buffDatabase; }
     public StageDataList StageDatabase { get => stageDatabase; }
     public RewardContainer RewardDataBase { get => rewardDatabase; }
+    public AudioDataBase AudioDataBase { get => audioDataBase; }
     public Dictionary<BuffType, BuffEffectData> BuffEffectDic { get => buffEffectDic; set => buffEffectDic = value; }
     #endregion
 
@@ -35,6 +35,7 @@ public class DataManager : SingleTon<DataManager>
         ItemInit();
         SkillInit();
         BuffDicInit();
+        AudioInit();
     }
 
     public void BuffDicInit()
@@ -94,6 +95,16 @@ public class DataManager : SingleTon<DataManager>
     }
 
     /// <summary>
+    /// 오디오 클립 반환
+    /// </summary>
+    /// <param name="audioClipName"></param>
+    /// <returns></returns>
+    public AudioClip GetAudioClip(string audioClipName)
+    {
+        return AudioDataBase.audioDictionary[audioClipName];
+    }
+
+    /// <summary>
     /// 아이템 타입에 따른 전략 저장
     /// </summary>
     public void ItemInit()
@@ -144,6 +155,14 @@ public class DataManager : SingleTon<DataManager>
                     break;
             }
         }
+    }
+
+    /// <summary>
+    /// 오디오 클립을 딕셔너리에 저장
+    /// </summary>
+    public void AudioInit()
+    {
+        AudioDataBase.Init();
     }
 
     /// <summary>

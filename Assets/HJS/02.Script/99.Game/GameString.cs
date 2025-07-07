@@ -13,4 +13,9 @@ public static class GameString
     public const string STAGE_CLEAR_ADDITIONAL = "모든 몬스터를 처치하였습니다. 잠시 후 마을로 돌아갑니다.";
     public const string STAGE_FAIL_ADDITIONAL = "스테이지 클리어에 실패하였습니다. 잠시 후 마을로 돌아갑니다.";
     public const string DO_NOT_USE_THIS_SCENE = "마을에서는 사용 불가능합니다.";
+    public const string VILLAGE_SPAWN_POINT = "Village";
+    public const string DUNGEON_SPAWN_POINT = "Dungeon";
+    public const string SERVER_ERROR = "서버 오류로 인해 게임이 종료됩니다.";
+    public const string VILLAGE_BGM_STRING = "VillageBGM";
+    public const string DUNGEON_BGM_STRING = "VillageBGM";
 }

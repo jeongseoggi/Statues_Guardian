@@ -53,13 +53,13 @@ public class GameManager : SingleTon<GameManager>
     {
         base.Awake();
         StartCoroutine(LoadPlayerData());
+        nextSpawnPointId = GameString.VILLAGE_SPAWN_POINT;
     }
 
     private void Start()
     {
         //후에 로딩 후 게임 상태 바꾸는 코드 필요함
         GameState = GameState.Wait;
-
         curSceneName = SceneManager.GetActiveScene().name;
     }
 
@@ -95,11 +95,18 @@ public class GameManager : SingleTon<GameManager>
         yield return StartCoroutine(DataManager.GameConnect("player/load", form, data =>
         {
             JSONNode json = JSONNode.Parse(data);
-            if (json["id"] != null)
+            try
             {
-                PlayerData = new PlayerData(json["id"].AsInt, json["level"].AsInt, json["name"], json["stage"].AsInt, json["gold"].AsInt, json["skillpoints"].AsInt);
-                OnPlayerDataReady?.Invoke(PlayerData.GetMyGold());
-                StartCoroutine(LoadMyInventoryData());
+                if (json["id"] != null)
+                {
+                    PlayerData = new PlayerData(json["id"].AsInt, json["level"].AsInt, json["name"], json["stage"].AsInt, json["gold"].AsInt, json["skillpoints"].AsInt);
+                    OnPlayerDataReady?.Invoke(PlayerData.GetMyGold());
+                    StartCoroutine(LoadMyInventoryData());
+                }
+            }
+            catch (Exception e)
+            {
+                PopupManager.Instance.noticePopup.ServerErrorNotice();
             }
         }));
     }
@@ -119,17 +126,25 @@ public class GameManager : SingleTon<GameManager>
             JSONNode json = JSONNode.Parse(data);
             PlayerInventoryData = new PlayerInventoryData();
 
-            if (json["items"].Count != 0)
-            {
-                for (int i = 0; i < json["items"].Count; i++)
-                {
-                    PlayerInventoryData.AddItem(DataManager.Instance.GetItemData(json["items"][i]["item_name"].ToString().Trim('"')),
-                        json["items"][i]["item_count"]);
-                }
-            }
 
-            OnInventoryDataReady?.Invoke(PlayerInventoryData);
-            StartCoroutine(LoadPlayerStatData());
+            try
+            {
+                if (json["items"].Count != 0)
+                {
+                    for (int i = 0; i < json["items"].Count; i++)
+                    {
+                        PlayerInventoryData.AddItem(DataManager.Instance.GetItemData(json["items"][i]["item_name"].ToString().Trim('"')),
+                            json["items"][i]["item_count"]);
+                    }
+                }
+
+                OnInventoryDataReady?.Invoke(PlayerInventoryData);
+                StartCoroutine(LoadPlayerStatData());
+            }
+            catch (Exception e)
+            {
+                PopupManager.Instance.noticePopup.ServerErrorNotice();
+            }
         }));
     }
 
@@ -145,26 +160,29 @@ public class GameManager : SingleTon<GameManager>
         yield return StartCoroutine(DataManager.GameConnect("playerStat/load", form, data =>
         {
             JSONNode json = JSONNode.Parse(data);
-            if (json["success"].AsBool)
+            try
             {
-                PlayerStatData = new PlayerStatData();
-                PlayerStatData.Hp = json["stats"]["hp"].AsFloat;
-                PlayerStatData.Mp = json["stats"]["hp"].AsFloat;
-                PlayerStatData.MaxHp = json["stats"]["max_hp"].AsFloat;
-                PlayerStatData.MaxMp = json["stats"]["max_mp"].AsFloat;
-                PlayerStatData.Atk = json["stats"]["atk"].AsFloat;
-                PlayerStatData.Def = json["stats"]["def"].AsFloat;
-                PlayerStatData.Speed = json["stats"]["speed"].AsFloat;
-                PlayerStatData.AttackSpeed = json["stats"]["atkspeed"].AsFloat;
-                OnPlayerStatDataReady?.Invoke();
+                if (json["success"].AsBool)
+                {
+                    PlayerStatData = new PlayerStatData();
+                    PlayerStatData.Hp = json["stats"]["hp"].AsFloat;
+                    PlayerStatData.Mp = json["stats"]["hp"].AsFloat;
+                    PlayerStatData.MaxHp = json["stats"]["max_hp"].AsFloat;
+                    PlayerStatData.MaxMp = json["stats"]["max_mp"].AsFloat;
+                    PlayerStatData.Atk = json["stats"]["atk"].AsFloat;
+                    PlayerStatData.Def = json["stats"]["def"].AsFloat;
+                    PlayerStatData.Speed = json["stats"]["speed"].AsFloat;
+                    PlayerStatData.AttackSpeed = json["stats"]["atkspeed"].AsFloat;
+                    OnPlayerStatDataReady?.Invoke();
+                }
+
+                StartCoroutine(LoadPlayerSkillData());
             }
-            else
+            catch (Exception e)
             {
-#if UNITY_EDITOR
-                Debug.Log(json["message"]);
-#endif
+                PopupManager.Instance.noticePopup.ServerErrorNotice();
             }
-            StartCoroutine(LoadPlayerSkillData());
+            
         }));
     }
 
@@ -180,28 +198,29 @@ public class GameManager : SingleTon<GameManager>
         yield return StartCoroutine(DataManager.GameConnect("playerSkill/load", form, data =>
         {
             JSONNode json = JSONNode.Parse(data);
-            if (json["success"].AsBool)
+            try
             {
-                PlayerSkillData = new PlayerSkillData();
-                if (json["skills"].Count == 0)
+                if (json["success"].AsBool)
                 {
-                    PlayerSkillData.AddNewSkillData();
-                    StartCoroutine(SavePlayerSkillData());
-                }
-                else
-                {
-                    for(int i =0; i < json["skills"].Count; i++)
+                    PlayerSkillData = new PlayerSkillData();
+                    if (json["skills"].Count == 0)
                     {
-                        PlayerSkillData.playerSkillLevelDic.Add(json["skills"][i]["skill_name"], json["skills"][i]["skill_level"].AsInt);
+                        PlayerSkillData.AddNewSkillData();
+                        StartCoroutine(SavePlayerSkillData());
                     }
-                    OnPlayerSkillDataReady?.Invoke();
+                    else
+                    {
+                        for (int i = 0; i < json["skills"].Count; i++)
+                        {
+                            PlayerSkillData.playerSkillLevelDic.Add(json["skills"][i]["skill_name"], json["skills"][i]["skill_level"].AsInt);
+                        }
+                        OnPlayerSkillDataReady?.Invoke();
+                    }
                 }
             }
-            else
+            catch (Exception e) 
             {
-#if UNITY_EDITOR
-                Debug.Log(json["message"]);
-#endif
+                PopupManager.Instance.noticePopup.ServerErrorNotice();
             }
         }));
     }

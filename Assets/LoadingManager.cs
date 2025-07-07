@@ -13,6 +13,7 @@ public class LoadingManager : MonoBehaviour
     void Start()
     {
         UIManager.Instance.gameObject.SetActive(false);
+        SoundManager.Instance.StopBGM();
         StartCoroutine(Loading());
 
     }
