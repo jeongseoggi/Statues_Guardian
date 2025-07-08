@@ -111,3 +111,9 @@ public enum EffectType
     DotEffect,
     AoeEffect
 }
+
+public enum SoundType
+{
+    BGM,
+    SFX
+}

@@ -4,6 +4,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
@@ -48,6 +49,7 @@ public class SkillSlot : MonoBehaviour, IDropHandler, IDragHandler, IEndDragHand
         }
         SkillManager.Instance.SaveSkillSlotData(slotIndex, SkillData);
     }
+
 
     public void StartCoolTime()
     {

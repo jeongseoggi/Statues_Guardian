@@ -18,4 +18,5 @@ public static class GameString
     public const string SERVER_ERROR = "서버 오류로 인해 게임이 종료됩니다.";
     public const string VILLAGE_BGM_STRING = "VillageBGM";
     public const string DUNGEON_BGM_STRING = "VillageBGM";
+    public const string UI_CLICK_SOUND = "Confirm";
 }

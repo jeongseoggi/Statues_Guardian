@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -21,6 +22,7 @@ public class UIManager : SingleTon<UIManager>
     #region private
     [SerializeField] private TextMeshProUGUI warningText;
     [SerializeField] private SkillWindow skillWindow;
+    [SerializeField] private SettingWindow settingWindow;
                      private Coroutine warningTextCor;
     #endregion
 
@@ -28,6 +30,7 @@ public class UIManager : SingleTon<UIManager>
     {
         RegisterAction();
     }
+
 
     /// <summary>
     /// Action 체이닝 함수
@@ -46,6 +49,7 @@ public class UIManager : SingleTon<UIManager>
         InputManager.OnInventoryToggle += ActiveInventory;
         InputManager.OnCloseOpenTab += CloseTab;
         InputManager.OnOpenSkillWindow += ActiveSkillWindow;
+        //InputManager.OnSettingWindow += ActiveSettingWindow;
     }
 
     /// <summary>
@@ -65,6 +69,17 @@ public class UIManager : SingleTon<UIManager>
     }
 
     /// <summary>
+    /// 스킬 창 Active 함수
+    /// </summary>
+    public void ActiveSettingWindow()
+    {
+        //if(openUIStack.Count <= 0)
+        //{
+        //    settingWindow.ActiveSettingWindow();
+        //}
+    }
+
+    /// <summary>
     /// ESC -> 입력 시 창 하나씩 닫아 줄 수 있도록 해주는 함수
     /// </summary>
     public void CloseTab()
@@ -72,6 +87,10 @@ public class UIManager : SingleTon<UIManager>
         if (openUIStack.Count > 0)
         {
             openUIStack.Pop().gameObject.SetActive(false);
+        }
+        else
+        {
+            settingWindow.ActiveSettingWindow();
         }
     }
 
@@ -123,5 +142,7 @@ public class UIManager : SingleTon<UIManager>
         GameManager.OnInventoryDataReady -= RegisterSlots;
         InputManager.OnInventoryToggle -= ActiveInventory;
         InputManager.OnCloseOpenTab -= CloseTab;
+        InputManager.OnOpenSkillWindow -= ActiveSkillWindow;
+        //InputManager.OnSettingWindow -= ActiveSettingWindow;
     }
 }

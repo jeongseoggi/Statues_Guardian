@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class SoundManager : SingleTon<SoundManager>, IObjectPool<Sound>
 {
@@ -12,9 +13,17 @@ public class SoundManager : SingleTon<SoundManager>, IObjectPool<Sound>
     public AudioSource bgmSource;
     public AudioSource sfxSource;
 
+    public AudioMixer mixer;
+
+    public Slider bgmSlider;
+    public Slider sfxSlider;
+
     private void Start()
     {
         Init(poolsize);
+
+        bgmSlider.onValueChanged.AddListener((vol) => { SetVolume(SoundType.BGM, vol); });
+        sfxSlider.onValueChanged.AddListener((vol) => { SetVolume(SoundType.SFX, vol); });
     }
 
     public void Init(int size)
@@ -68,6 +77,11 @@ public class SoundManager : SingleTon<SoundManager>, IObjectPool<Sound>
     public void StopBGM()
     {
         bgmSource.Stop();
+    }
+
+    public void SetVolume(SoundType soundType, float volume)
+    {
+        mixer.SetFloat(soundType.ToString(), Mathf.Log10(volume) * 20);
     }
 }
 

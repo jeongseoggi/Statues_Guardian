@@ -10,6 +10,7 @@ public class InputManager : SingleTon<InputManager>
     public static event Action OnCloseOpenTab;
     public static event Action OnOpenSkillWindow;
     public static event Action OnOpenShop;
+    public static event Action OnSettingWindow;
 
     protected override void Awake()
     {

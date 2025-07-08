@@ -76,7 +76,7 @@ public class SkillWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
     }
 
 
-
+    #region 인터페이스 구현부
     public void OnBeginDrag(PointerEventData eventData)
     {
         // 마우스 위치와 패널 좌상단 사이의 거리 저장
@@ -101,6 +101,7 @@ public class SkillWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
             skillWindowPanel.localPosition = localPoint - offset;
         }
     }
+    #endregion
     public void OnDestroy()
     {
         GameManager.OnPlayerSkillDataReady -= Init;

@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 public class SkillManager : SingleTon<SkillManager>
 {
@@ -15,7 +17,6 @@ public class SkillManager : SingleTon<SkillManager>
     private void Start()
     {
         skillSlotSaveDic = new Dictionary<int, string>();
-        LoadSkillSlotData();
         PlayerActionInput.OnSkillUse += UseSkill;
     }
 
@@ -35,6 +36,7 @@ public class SkillManager : SingleTon<SkillManager>
     {
         player = GameManager.Instance.GetPlayer();
         player.OnCheckMana += CheckSlot;
+        LoadSkillSlotData();
     }
 
     /// <summary>
@@ -88,6 +90,7 @@ public class SkillManager : SingleTon<SkillManager>
 
             skillSlotSaveDic = JsonConvert.DeserializeObject<Dictionary<int, string>>(skillSlotJson);
 
+           
             foreach(var pair in skillSlotSaveDic.ToList())
             {
                 int index = pair.Key;
