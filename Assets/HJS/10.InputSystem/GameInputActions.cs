@@ -62,6 +62,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenPlayerInfo"",
+                    ""type"": ""Button"",
+                    ""id"": ""d7987731-6b09-420c-ac43-69befa5d5a15"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -108,6 +117,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""OpenShop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a61f9cc8-a6d0-43e4-854e-7e8602491965"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenPlayerInfo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -120,6 +140,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_UI_CloseTab = m_UI.FindAction("CloseTab", throwIfNotFound: true);
         m_UI_OpenSkillWindow = m_UI.FindAction("OpenSkillWindow", throwIfNotFound: true);
         m_UI_OpenShop = m_UI.FindAction("OpenShop", throwIfNotFound: true);
+        m_UI_OpenPlayerInfo = m_UI.FindAction("OpenPlayerInfo", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
@@ -190,6 +211,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_CloseTab;
     private readonly InputAction m_UI_OpenSkillWindow;
     private readonly InputAction m_UI_OpenShop;
+    private readonly InputAction m_UI_OpenPlayerInfo;
     public struct UIActions
     {
         private @GameInputActions m_Wrapper;
@@ -198,6 +220,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         public InputAction @CloseTab => m_Wrapper.m_UI_CloseTab;
         public InputAction @OpenSkillWindow => m_Wrapper.m_UI_OpenSkillWindow;
         public InputAction @OpenShop => m_Wrapper.m_UI_OpenShop;
+        public InputAction @OpenPlayerInfo => m_Wrapper.m_UI_OpenPlayerInfo;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -219,6 +242,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @OpenShop.started += instance.OnOpenShop;
             @OpenShop.performed += instance.OnOpenShop;
             @OpenShop.canceled += instance.OnOpenShop;
+            @OpenPlayerInfo.started += instance.OnOpenPlayerInfo;
+            @OpenPlayerInfo.performed += instance.OnOpenPlayerInfo;
+            @OpenPlayerInfo.canceled += instance.OnOpenPlayerInfo;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -235,6 +261,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @OpenShop.started -= instance.OnOpenShop;
             @OpenShop.performed -= instance.OnOpenShop;
             @OpenShop.canceled -= instance.OnOpenShop;
+            @OpenPlayerInfo.started -= instance.OnOpenPlayerInfo;
+            @OpenPlayerInfo.performed -= instance.OnOpenPlayerInfo;
+            @OpenPlayerInfo.canceled -= instance.OnOpenPlayerInfo;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -258,5 +287,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         void OnCloseTab(InputAction.CallbackContext context);
         void OnOpenSkillWindow(InputAction.CallbackContext context);
         void OnOpenShop(InputAction.CallbackContext context);
+        void OnOpenPlayerInfo(InputAction.CallbackContext context);
     }
 }

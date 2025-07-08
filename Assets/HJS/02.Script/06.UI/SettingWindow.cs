@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -85,5 +86,16 @@ public class SettingWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
     #endregion
+}
+
+[System.AttributeUsage(AttributeTargets.Field)]
+public class DisplayStatAttribute : Attribute
+{
+    public string DisplayName;
+
+    public DisplayStatAttribute(string displayName)
+    {
+        DisplayName = displayName;
+    }
 }
 

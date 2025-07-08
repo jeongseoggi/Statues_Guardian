@@ -38,7 +38,6 @@ public abstract class Character : MonoBehaviour
         get => stateMachine; set => stateMachine = value;
     }
 
-
     public virtual float Hp //HP 프로퍼티
     {
         get => hp;

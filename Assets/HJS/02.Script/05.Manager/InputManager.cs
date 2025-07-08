@@ -10,7 +10,7 @@ public class InputManager : SingleTon<InputManager>
     public static event Action OnCloseOpenTab;
     public static event Action OnOpenSkillWindow;
     public static event Action OnOpenShop;
-    public static event Action OnSettingWindow;
+    public static event Action OnStatInfoWindow;
 
     protected override void Awake()
     {
@@ -20,6 +20,7 @@ public class InputManager : SingleTon<InputManager>
         inputActions.UI.CloseTab.performed += ctx => OnCloseOpenTab?.Invoke();
         inputActions.UI.OpenSkillWindow.performed += ctx => OnOpenSkillWindow?.Invoke();
         inputActions.UI.OpenShop.performed += ctx => OnOpenShop?.Invoke();
+        inputActions.UI.OpenPlayerInfo.performed += ctx => OnStatInfoWindow?.Invoke();
     }
 
     private void OnEnable()

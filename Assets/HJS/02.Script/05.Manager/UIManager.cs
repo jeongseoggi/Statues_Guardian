@@ -23,6 +23,7 @@ public class UIManager : SingleTon<UIManager>
     [SerializeField] private TextMeshProUGUI warningText;
     [SerializeField] private SkillWindow skillWindow;
     [SerializeField] private SettingWindow settingWindow;
+    [SerializeField] private PlayerStatInfoWindow playerStatInfoWindow;
                      private Coroutine warningTextCor;
     #endregion
 
@@ -49,7 +50,7 @@ public class UIManager : SingleTon<UIManager>
         InputManager.OnInventoryToggle += ActiveInventory;
         InputManager.OnCloseOpenTab += CloseTab;
         InputManager.OnOpenSkillWindow += ActiveSkillWindow;
-        //InputManager.OnSettingWindow += ActiveSettingWindow;
+        InputManager.OnStatInfoWindow += ActiveStatInfoWindow;
     }
 
     /// <summary>
@@ -71,12 +72,12 @@ public class UIManager : SingleTon<UIManager>
     /// <summary>
     /// 스킬 창 Active 함수
     /// </summary>
-    public void ActiveSettingWindow()
+    public void ActiveStatInfoWindow()
     {
-        //if(openUIStack.Count <= 0)
-        //{
-        //    settingWindow.ActiveSettingWindow();
-        //}
+        if(openUIStack.Count <= 0)
+        {
+            playerStatInfoWindow.ActivePlayerStatInfoWindow();
+        }
     }
 
     /// <summary>
@@ -143,6 +144,6 @@ public class UIManager : SingleTon<UIManager>
         InputManager.OnInventoryToggle -= ActiveInventory;
         InputManager.OnCloseOpenTab -= CloseTab;
         InputManager.OnOpenSkillWindow -= ActiveSkillWindow;
-        //InputManager.OnSettingWindow -= ActiveSettingWindow;
+        InputManager.OnStatInfoWindow -= ActiveStatInfoWindow;
     }
 }
