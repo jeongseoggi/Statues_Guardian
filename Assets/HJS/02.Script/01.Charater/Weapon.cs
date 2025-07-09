@@ -24,7 +24,7 @@ public class Weapon : MonoBehaviour, IAttackable
             {
                 OnDotDamage?.Invoke(player, monster);
             }
-
+            
         }
         target.Hit(damage + comboDmg);
     }
@@ -70,7 +70,8 @@ public class Weapon : MonoBehaviour, IAttackable
     {
         float time = 0;
         GameObject effectObject = EffectPoolManager.Instance?.GetEffect(EffectType.DotEffect, target.gameObject.transform);
-        while(time < duration) 
+        SoundManager.Instance.SpawnPool().Play(DataManager.Instance.GetAudioClip("CurseDamage"));
+        while (time < duration) 
         {
             yield return new WaitForSeconds(0.5f);
             time += 0.5f;

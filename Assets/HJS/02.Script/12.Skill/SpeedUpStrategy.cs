@@ -14,6 +14,7 @@ public class SpeedUpStrategy : ISkillUseStrategy
         Debug.Log(increase);
         user.ApplyBuff(BuffType.MoveSpeedUp, increase, skillData.mpCost);
         user.RunCoroutine(BuffTime(skillData.duration, increase, user));
+        SoundManager.Instance.SpawnPool().Play(DataManager.Instance.GetAudioClip("SpeedUp"));
     }
 
     private IEnumerator BuffTime(float duration, float increase, ISkillUable user)

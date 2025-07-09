@@ -6,16 +6,12 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Inventory : MonoBehaviour, IBeginDragHandler, IDragHandler
+public partial class Inventory : ActiveUI
 {
     #region private
     [Header("InvenMain")]
-    [SerializeField] GameObject invenMainObject;                         // 인벤토리 창 메인 부모 오브젝트
-
-    [SerializeField] private RectTransform inventoryPanel;               // 드래그할 전체 인벤토리 패널
-                     private Vector2 offset;                             // 드래그 Offset
-                     private Dictionary<int, ItemData> invenSlotData;    // 인벤토리 Slot 딕셔너리
-                     private float saveInterval = 15f;                   // 인벤토리 저장 주기(초)
+    private Dictionary<int, ItemData> invenSlotData;    // 인벤토리 Slot 딕셔너리
+    private float saveInterval = 15f;                   // 인벤토리 저장 주기(초)
     #endregion
 
     #region public
@@ -49,38 +45,18 @@ public class Inventory : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <summary>
     /// 인벤토리 창 온/오프 함수
     /// </summary>
-    public void ActiveInventory()
+    public override void ActiveWindow()
     {
-        invenMainObject.SetActive(!invenMainObject.activeSelf);
+        activeWindowMainObject.SetActive(!activeWindowMainObject.activeSelf);
 
-        if (invenMainObject.activeSelf)
+        if (activeWindowMainObject.activeSelf)
         {
             Init();
-            UIManager.Instance.openUIStack.Push(invenMainObject);
+            UIManager.Instance.openUIStack.Push(activeWindowMainObject);
         }
-    }
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        // 마우스 위치와 패널 좌상단 사이의 거리 저장
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            inventoryPanel,
-            eventData.position,
-            eventData.pressEventCamera,
-            out offset
-        );
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        Vector2 localPoint;
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            inventoryPanel.parent as RectTransform,
-            eventData.position,
-            eventData.pressEventCamera,
-            out localPoint))
+        else
         {
-            inventoryPanel.localPosition = localPoint - offset;
+            UIManager.Instance.RemoveUI(activeWindowMainObject);
         }
     }
 
@@ -116,4 +92,5 @@ public class Inventory : MonoBehaviour, IBeginDragHandler, IDragHandler
             }
         }
     }
+
 }

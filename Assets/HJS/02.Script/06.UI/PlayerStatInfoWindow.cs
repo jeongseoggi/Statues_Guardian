@@ -2,21 +2,26 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerStatInfoWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
-{
-    [SerializeField] private GameObject playerStatInfoMainObject;
-    [SerializeField] private RectTransform playerStatInfoWindowPanel;
+public class PlayerStatInfoWindow : ActiveUI
+{ 
+    //[SerializeField] private GameObject playerStatInfoMainObject;
+    //[SerializeField] private RectTransform playerStatInfoWindowPanel;
+
+
     [SerializeField] private TextMeshProUGUI[] statTexts;
-    private Vector2 offset;
     private Player player;
 
-    public void ActivePlayerStatInfoWindow()
+    public override void ActiveWindow()
     {
-        playerStatInfoMainObject.SetActive(!playerStatInfoMainObject.activeSelf);
-        if (playerStatInfoMainObject.activeSelf)
+        activeWindowMainObject.SetActive(!activeWindowMainObject.activeSelf);
+        if (activeWindowMainObject.activeSelf)
         {
-            UIManager.Instance.openUIStack.Push(playerStatInfoMainObject);
+            UIManager.Instance.openUIStack.Push(activeWindowMainObject);
             SettingInfo();
+        }
+        else
+        {
+            UIManager.Instance.RemoveUI(activeWindowMainObject);
         }
     }
 
@@ -34,32 +39,5 @@ public class PlayerStatInfoWindow : MonoBehaviour, IBeginDragHandler, IDragHandl
         statTexts[7].text = "CLEAR STAGE : " + GameManager.Instance.PlayerData.Stage;
 
     }
-
-    #region 인터페이스 구현부
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        // 마우스 위치와 패널 좌상단 사이의 거리 저장
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            playerStatInfoWindowPanel,
-            eventData.position,
-            eventData.pressEventCamera,
-            out offset
-        );
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-
-        Vector2 localPoint;
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            playerStatInfoWindowPanel.parent as RectTransform,
-            eventData.position,
-            eventData.pressEventCamera,
-            out localPoint))
-        {
-            playerStatInfoWindowPanel.localPosition = localPoint - offset;
-        }
-    }
-    #endregion
 }
 

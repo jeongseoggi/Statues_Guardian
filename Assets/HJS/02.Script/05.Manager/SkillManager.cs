@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
 public class SkillManager : SingleTon<SkillManager>
 {
@@ -146,6 +145,14 @@ public class SkillManager : SingleTon<SkillManager>
             }
         }
 
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.F12))
+        {
+            PlayerPrefs.DeleteKey("SkillSlotData");
+        }
     }
 
     private void OnDestory()

@@ -132,6 +132,7 @@ public class Monster : Character, IHitable
         if(Hp > 0)
         {
             DungeonUIManager.Instance?.dmgManager.Show(damage, transform.position + Vector3.up * 1.5f);
+            SoundManager.Instance.SpawnPool().Play(DataManager.Instance.GetAudioClip("Hit"));
         }
     }
 

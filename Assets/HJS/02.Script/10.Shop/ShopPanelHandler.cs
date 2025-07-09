@@ -41,7 +41,6 @@ public class ShopPanelHandler : MonoBehaviour
             StartCoroutine(ShoppingTime());
         });
 
-       
     }
 
     public void Hide()
@@ -58,6 +57,8 @@ public class ShopPanelHandler : MonoBehaviour
             shopObj.gameObject.SetActive(false);
             parentCanvas.sortingOrder = 1;
         });
+
+        GameManager.Instance.PlayerInput?.SetActionEnabled(true);
     }
 
     IEnumerator ShoppingTime()
@@ -93,6 +94,8 @@ public class ShopPanelHandler : MonoBehaviour
         seq.Append(shopObj.transform.DOScale(1f, 0.1f));
 
         seq.Play();
+
+        GameManager.Instance.PlayerInput?.SetActionEnabled(false);
     }
 
     private void OnDisable()

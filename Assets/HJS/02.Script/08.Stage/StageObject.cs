@@ -35,6 +35,7 @@ public class StageObject : MonoBehaviour, IHitable
         StageManager.Instance.sharedHp.TakeDamage(damage);
         TriggerShake();
         DungeonUIManager.Instance?.dmgManager.Show(damage, damagePos.position);
+        SoundManager.Instance.SpawnPool().Play(DataManager.Instance.GetAudioClip("ObjectHit"));
     }
 
     public void UpdateUI(float changeHp)

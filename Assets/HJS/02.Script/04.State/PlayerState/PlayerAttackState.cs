@@ -35,6 +35,7 @@ public class PlayerAttackState : PlayerState
         {
             case 0:
                 sm.Animator.SetTrigger("AttackCom01");
+                SoundManager.Instance.SpawnPool().Play(DataManager.Instance.GetAudioClip("AttackCom01"));
                 break;
             case 1:
                 sm.Animator.SetTrigger("AttackCom02");

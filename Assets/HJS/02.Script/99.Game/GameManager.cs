@@ -13,6 +13,7 @@ public class GameManager : SingleTon<GameManager>
     [SerializeField] Player gamePlayer;
     private static GameState gameState;
     private StateMachine<GameManager> stateMachine;
+    private PlayerActionInput playerInput;
     #endregion
 
     public string curSceneName;
@@ -31,6 +32,7 @@ public class GameManager : SingleTon<GameManager>
             gamePlayer = value;
             gamePlayer.Init();
             OnPlayerReady?.Invoke();
+            PlayerInput = gamePlayer.GetComponent<PlayerActionInput>();
         }  
     }
     public PlayerData PlayerData { get; private set; }
@@ -39,6 +41,7 @@ public class GameManager : SingleTon<GameManager>
     public PlayerSkillData PlayerSkillData { get; private set; }
     public StateMachine<GameManager> StateMachine { get => stateMachine; }
     public static GameState GameState { get => gameState; set => gameState = value; }
+    public PlayerActionInput PlayerInput { get => playerInput; set => playerInput = value; }
     #endregion
 
 

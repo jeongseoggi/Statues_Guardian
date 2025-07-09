@@ -153,6 +153,7 @@ public class ItemDetail : SingleTonDestory<ItemDetail>
                 GameManager.Instance.PlayerData.Gold = json["gold"];
                 noticePopup.Init(GameString.BUY_SUCCESS, () =>
                 {
+                    SoundManager.Instance.SpawnPool().Play(DataManager.Instance.GetAudioClip("BuyItem"));
                     noticePopup.Close();
                 });
             }

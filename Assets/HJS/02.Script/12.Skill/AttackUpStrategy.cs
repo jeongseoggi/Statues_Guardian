@@ -13,6 +13,7 @@ public class AttackUpStrategy : ISkillUseStrategy
 
         user.ApplyBuff(BuffType.AttackUp, increase, skillData.mpCost);
         user.RunCoroutine(BuffTime(skillData.duration, increase, user));
+        SoundManager.Instance.SpawnPool().Play(DataManager.Instance.GetAudioClip("Berserker"));
     }
 
     //버프 시간 코루틴

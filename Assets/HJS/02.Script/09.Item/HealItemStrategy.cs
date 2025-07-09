@@ -20,6 +20,7 @@ public class HealItemStrategy : IItemUseStrategy
 
             user.Heal(healAmount, healItem.healType);
             GameManager.Instance.PlayerInventoryData.UseItem(itemData, useCount);
+            SoundManager.Instance.SpawnPool().Play(DataManager.Instance.GetAudioClip("UseItem"));
         }
     }
 }

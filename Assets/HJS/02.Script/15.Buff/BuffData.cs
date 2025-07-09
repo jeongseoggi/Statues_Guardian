@@ -21,6 +21,7 @@ public class BuffData : ScriptableObject
             DataManager.Instance.BuffEffectDic[buff].UseEffect(user, duration, increase, buffName);
         }
         BuffNotifier.NotifyBuffAdded(SpriteManager.Instance.GetBuffSprite(spriteName), buffName, buffDesc);
+        SoundManager.Instance.PlaySFX(DataManager.Instance.GetAudioClip("UseBuff"));
     }
 }
 

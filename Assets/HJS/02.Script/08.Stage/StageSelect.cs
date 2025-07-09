@@ -38,5 +38,6 @@ public class StageSelect : MonoBehaviour
 
         VillageUIManager.Instance.stageSelectWindow.SetWindow(false);
         SceneManager.LoadScene("LoadingScene");
+        SoundManager.Instance.SpawnPool().Play(DataManager.Instance.GetAudioClip("Teleport"));
     }
 }

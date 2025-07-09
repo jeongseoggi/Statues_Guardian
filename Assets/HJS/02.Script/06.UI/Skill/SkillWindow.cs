@@ -5,18 +5,12 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// 스킬 창 클래스(스킬 창 관련하여 처리되는 로직을 모아놓았습니다)
 /// </summary>
-public class SkillWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
+public class SkillWindow : ActiveUI
 {
     #region private
-    [SerializeField] private RectTransform skillWindowPanel;                  // 드래그할 전체 스킬 패널
     [SerializeField] private SkillWindowSlot skillPrefab;                     // 스킬 창에 생성 될 prefab
     [SerializeField] private GameObject prefabParent;                         // 생성 될 위치
     [SerializeField] private TextMeshProUGUI skillPointText;                  // 스킬 포인트 Text
-                     private Vector2 offset;                                  // 드래그에 사용 될 offest
-
-
-    [Header("SkillWindowMain")]
-    [SerializeField] GameObject skillWindowMainObject;      //스킬 메인 창 부모 오브젝트
     #endregion
 
     private void Start()
@@ -44,12 +38,16 @@ public class SkillWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <summary>
     /// 스킬 창 열고 닫기 함수
     /// </summary>
-    public void ActiveSkillWindow()
+    public override void ActiveWindow()
     {
-        skillWindowMainObject.SetActive(!skillWindowMainObject.activeSelf);
-        if(skillWindowMainObject.activeSelf)
+        activeWindowMainObject.SetActive(!activeWindowMainObject.activeSelf);
+        if (activeWindowMainObject.activeSelf)
         {
-            UIManager.Instance.openUIStack.Push(skillWindowMainObject);
+            UIManager.Instance.openUIStack.Push(activeWindowMainObject);
+        }
+        else
+        {
+            UIManager.Instance.RemoveUI(activeWindowMainObject);
         }
     }
 
@@ -74,37 +72,11 @@ public class SkillWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         skillPointText.text = "SP : " + value.ToString();
     }
-
-
-    #region 인터페이스 구현부
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        // 마우스 위치와 패널 좌상단 사이의 거리 저장
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            skillWindowPanel,
-            eventData.position,
-            eventData.pressEventCamera,
-            out offset
-        );
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-
-        Vector2 localPoint;
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            skillWindowPanel.parent as RectTransform,
-            eventData.position,
-            eventData.pressEventCamera,
-            out localPoint))
-        { 
-            skillWindowPanel.localPosition = localPoint - offset;
-        }
-    }
-    #endregion
     public void OnDestroy()
     {
         GameManager.OnPlayerSkillDataReady -= Init;
         GameManager.Instance.PlayerData.OnSkillPointValueChanged -= SetSkillPoint;
     }
+
+
 }

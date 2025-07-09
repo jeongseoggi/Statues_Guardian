@@ -58,7 +58,7 @@ public class UIManager : SingleTon<UIManager>
     /// </summary>
     public void ActiveInventory()
     {
-        inventory.ActiveInventory();
+        inventory.ActiveWindow();
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class UIManager : SingleTon<UIManager>
     /// </summary>
     public void ActiveSkillWindow()
     {
-        skillWindow.ActiveSkillWindow();
+        skillWindow.ActiveWindow();
     }
 
     /// <summary>
@@ -74,10 +74,7 @@ public class UIManager : SingleTon<UIManager>
     /// </summary>
     public void ActiveStatInfoWindow()
     {
-        if(openUIStack.Count <= 0)
-        {
-            playerStatInfoWindow.ActivePlayerStatInfoWindow();
-        }
+        playerStatInfoWindow.ActiveWindow();
     }
 
     /// <summary>
@@ -87,11 +84,38 @@ public class UIManager : SingleTon<UIManager>
     {
         if (openUIStack.Count > 0)
         {
-            openUIStack.Pop().gameObject.SetActive(false);
+            openUIStack.Pop().gameObject.GetComponentInParent<ActiveUI>().ActiveWindow();
         }
         else
         {
-            settingWindow.ActiveSettingWindow();
+            settingWindow.ActiveWindow();
+        }
+    }
+
+    /// <summary>
+    /// ESC가 아닌 창 열기 키를 통해 닫았을 때 스택에서 제거 해주는 코드
+    /// </summary>
+    /// <param name="removeObject"></param>
+    public void RemoveUI(GameObject removeObject)
+    {
+        if (openUIStack.Contains(removeObject))
+        {
+            Stack<GameObject> temp = new Stack<GameObject>();
+
+            while (openUIStack.Count > 0)
+            {
+                GameObject top = openUIStack.Pop();
+                if (top == removeObject)
+                {
+                    break;
+                }
+                temp.Push(top);
+            }
+
+            while (temp.Count > 0)
+            {
+                openUIStack.Push(temp.Pop());
+            }
         }
     }
 

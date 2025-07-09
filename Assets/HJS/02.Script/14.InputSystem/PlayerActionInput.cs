@@ -86,7 +86,13 @@ public class PlayerActionInput : MonoBehaviour
         CurrentInput = Vector2.zero;
     }
 
-
+    public void SetActionEnabled(bool enabled)
+    {
+        if (enabled)
+            playerInputActions.Player.Enable();
+        else
+            playerInputActions.Player.Disable();
+    }
 
     private void OnEnable()
     {

@@ -75,11 +75,6 @@ public class PlayerController : MonoBehaviour
          rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime * player.Speed);
     }
 
-    //void OnMove(InputValue inputValue)
-    //{
-    //    currentInput = inputValue.Get<Vector2>();
-    //}
-
     void RotateToMouse()
     {
         Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);

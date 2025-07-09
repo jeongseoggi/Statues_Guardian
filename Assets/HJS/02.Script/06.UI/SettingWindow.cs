@@ -4,14 +4,11 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class SettingWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
+public class SettingWindow : ActiveUI
 {
     [SerializeField] GameObject[] tabMainObjects;
     [SerializeField] TextMeshProUGUI[] tabTexts;
-    [SerializeField] private RectTransform settingWindowPanel;
-    [SerializeField] private GameObject settingMainObject;
     private int curIndex = -1;
-    private Vector2 offset;
 
 
     public void TabButtonAction(int tabIndex)
@@ -41,14 +38,21 @@ public class SettingWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    public void ActiveSettingWindow()
+    public override void ActiveWindow()
     {
-        settingMainObject.SetActive(!settingMainObject.activeSelf);
-        if (settingMainObject.activeSelf)
+        GameManager.Instance.PlayerInput?.SetActionEnabled(activeWindowMainObject.activeSelf);
+        activeWindowMainObject.SetActive(!activeWindowMainObject.activeSelf);
+        if (activeWindowMainObject.activeSelf)
         {
-            UIManager.Instance.openUIStack.Push(settingMainObject);
+            UIManager.Instance.openUIStack.Push(activeWindowMainObject);
+            GameManager.Instance.PlayerInput?.SetActionEnabled(false);
             TabButtonAction(0);
         }
+        else
+        {
+            UIManager.Instance.RemoveUI(activeWindowMainObject);
+        }
+
     }
 
     public void ExitGame()
@@ -58,44 +62,6 @@ public class SettingWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
 #else
         Application.Quit();
 #endif
-    }
-
-    #region 인터페이스 구현부
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        // 마우스 위치와 패널 좌상단 사이의 거리 저장
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            settingWindowPanel,
-            eventData.position,
-            eventData.pressEventCamera,
-            out offset
-        );
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-
-        Vector2 localPoint;
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            settingWindowPanel.parent as RectTransform,
-            eventData.position,
-            eventData.pressEventCamera,
-            out localPoint))
-        {
-            settingWindowPanel.localPosition = localPoint - offset;
-        }
-    }
-    #endregion
-}
-
-[System.AttributeUsage(AttributeTargets.Field)]
-public class DisplayStatAttribute : Attribute
-{
-    public string DisplayName;
-
-    public DisplayStatAttribute(string displayName)
-    {
-        DisplayName = displayName;
     }
 }
 

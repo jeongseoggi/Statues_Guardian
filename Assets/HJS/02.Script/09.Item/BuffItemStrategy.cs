@@ -24,5 +24,6 @@ public class BuffItemStrategy : IItemUseStrategy
         }
 
         GameManager.Instance.PlayerInventoryData.UseItem(itemData, useCount);
+        SoundManager.Instance.SpawnPool().Play(DataManager.Instance.GetAudioClip("UseItem"));
     }
 }

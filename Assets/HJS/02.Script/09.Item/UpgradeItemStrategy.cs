@@ -6,6 +6,7 @@ public class UpgradeItemStrategy : IItemUseStrategy
         {
             user.Upgrade(upgradeItemData.upgradeType, useCount);
             GameManager.Instance.PlayerInventoryData.UseItem(itemData, useCount);
+            SoundManager.Instance.SpawnPool().Play(DataManager.Instance.GetAudioClip("UseItem"));
         }
     }
 }

@@ -7600,8 +7600,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10690db818b4f7d41bb698cccedc0eb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invenMainObject: {fileID: 444584373}
-  inventoryPanel: {fileID: 296335521}
+  activeUIPanel: {fileID: 296335521}
+  activeWindowMainObject: {fileID: 444584373}
   inventorySlots:
   - {fileID: 866313794}
   - {fileID: 1983396272}
@@ -21150,6 +21150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc3e51000cb04c94b8ba68cba73bdb3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activeUIPanel: {fileID: 797348542}
+  activeWindowMainObject: {fileID: 1372510975}
   tabMainObjects:
   - {fileID: 1842508685}
   - {fileID: 1434639753}
@@ -21158,8 +21160,6 @@ MonoBehaviour:
   - {fileID: 769862572}
   - {fileID: 1773656353}
   - {fileID: 1863262898}
-  settingWindowPanel: {fileID: 797348542}
-  settingMainObject: {fileID: 1372510975}
 --- !u!1 &801074687
 GameObject:
   m_ObjectHideFlags: 0
@@ -27433,12 +27433,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fc227077d04e9d4889c76abca82d8bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillWindowPanel: {fileID: 1055805676}
+  activeUIPanel: {fileID: 1055805676}
+  activeWindowMainObject: {fileID: 864885206}
   skillPrefab: {fileID: 682257119615590576, guid: a2bccf7813556604b8fbb4c6c411a731,
     type: 3}
   prefabParent: {fileID: 403634802}
   skillPointText: {fileID: 588269919}
-  skillWindowMainObject: {fileID: 864885206}
 --- !u!224 &1055805676
 RectTransform:
   m_ObjectHideFlags: 0
@@ -51640,8 +51640,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 627e5842adc998a4995ab02578f5254f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStatInfoMainObject: {fileID: 1500801909}
-  playerStatInfoWindowPanel: {fileID: 1958092563}
+  activeUIPanel: {fileID: 1958092563}
+  activeWindowMainObject: {fileID: 1500801909}
   statTexts:
   - {fileID: 1651441116}
   - {fileID: 593702451}
